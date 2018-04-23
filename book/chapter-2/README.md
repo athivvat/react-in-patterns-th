@@ -1,12 +1,12 @@
-# Communication
+# การสื่อสาร
 
-Every React component is like a small system that operates on its own. It has its own state, input and output. In the following section we will explore these characteristics.
+คอมโพเน้นท์ เหมือนกับระบบเล็กๆที่สามารถจัดการหน้าที่ของมันได้ด้วยตัวมันเอง ซึ่งจะประกอบด้วย State, Input, และ Output เนื้อหาต่อไปเราจะมาดูคอมโพเน้นท์อย่างละเอียดกัน
 
 ![Input-Output](./communication.jpg)
 
 ## Input
 
-The input of a React component is its props. That's how we pass data to it:
+เราจะใช้ props ในการส่งผ่านข้อมูลเข้าคอมโพเน้นท์
 
 ```js
 // Title.jsx
@@ -26,9 +26,9 @@ function App() {
 }
 ```
 
-The `Title` component has only one input (prop) - `text`. The parent component (`App`) should provide it as an attribute while using the `<Title>` tag. Alongside the component definition we also have to define at least `propTypes`. In there we define the type of every property and React hints us in the console if something unexpected gets send. `defaultProps` is another useful option. We may use it to set a default value of component's props so that if the developer forgets to pass them we have a meaningful values.
+คอมโพเน้นท์ `Title` มีข้อมูลที่่ส่งผ่านเข้ามา 1 ตัวคือ `text` (prop) ในคอมโพเน้นท์แม่ (`App`) ต้องส่ง prop ตัวนี้เข้ามาผ่านแอทริบิวท์ของ <Title> สิ่งที่สำคัญอย่างยิ่งเราต้องไม่ลืมที่จะกำหนดรูปแบบของ prop ที่ส่งเข้ามาในคอมโพเน้นท์ด้วย `propsTypes` เพื่อที่จะป้องการการส่งรูปแบบของ prop ที่ผิดไปจากรูปแบบที่เราต้องการ ซึ่งในตัวอย่างเรากำหนดรูปแบบของ text เป็น string ถ้าไม่ได้ส่งมาเป็น string จะมีข้อความเตือนในคอนโซล อีกหนึ่งอย่างที่ไม่ควรลืมก็คือ `defaultProps` ซึ่งจะช่วยตั้งค่าตั้งต้นของ prop นั้นๆให้ เพื่อป้องการการลืมใส่ของนักพัฒนาโปรแกรม
 
-React is not defining strictly what should be passed as a prop. It may be whatever we want. It could even be another component:
+React ไม่ได้ตั้งกฏเกณฑ์มาว่าเราควรส่งอะไรเป็น prop อาจจะเป็นคอมโพเน้นท์ หรือจะเป็นอะไรก็ได้ที่เราอยากจะส่ง เช่น
 
 ```js
 function SomethingElse({ answer }) {
@@ -42,7 +42,7 @@ function Answer() {
 <SomethingElse answer={ <Answer /> } />
 ```
 
-There is also a `props.children` property that gives us an access to the child components passed by the owner of the component. For example:
+`props.children` สามารถที่จะเข้าถึงคอมโพเน้นทลูกที่ถูกส่งผ่านมาจากคอมโพเน้นท์แม่ได้ ยกตัวอย่างเช่น:
 
 ```js
 function Title({ text, children }) {
@@ -62,17 +62,15 @@ function App() {
 }
 ```
 
-In this example `<span>community</span>` in `App` component is `children` in `Title` component. Notice that if we don't return `{ children }` as part of the `Title`'s body the `<span>` tag will not be rendered.
+จากตัวอย่างข้างต้น `<span>community</span>` ในคอมโพเน้นท์ `App` คือ `children` ในคอมโพเน้นท์ `Title` สังเกตว่า ถ้าเราไม่ใส่ `{ children }` ในส่วนรีเทิร์นของ `Title` แท็ก `<span>` จะไม่โชว์ค่าออกมา
 
-(prior v16.3) An indirect input to a component may be also the so called `context`. The whole React tree may have a `context` object which is accessible by every component. More about that in the [dependency injection](../chapter-10/README.md) section.
+(ก่อนเวอร์ชั่น 16.3) เราสามารถรับค่าโดยไม่ผ่าน prop มาในคอมโพเน้นท์ได้ด้วย `context` ซึ่งเราจะสามารถเข้าถึง `context` ได้ในทุกๆคอมโพเน้นท์ใน React และเราจะพูดถึง `context` อย่างละเอียดใน [dependency injection](../chapter-10/README.md)
 
 ## Output
 
-The first obvious output of a React component is the rendered HTML. Visually that is what we get. However, because the prop may be everything including a function we could also send out data or trigger a process.
+Output ของคอมโพเน้นท์คือ HTML อย่างไรก็ตามเนื่องจากว่า prop อาจจะเป็นทุกสิ่งอย่างรวมถึงฟังก์ชั่น เราสามารถที่จะส่งข้อมูล หรือเรียกฟังก์ชั่นการทำงานต่างๆได้ด้วย
 
-In the following example we have a component that accepts the user's input and sends it out (`<NameField />`).
-
-<span class="new-page"></span>
+ในตัวอย่างถัดไป เราจะมีคอมโพเน้นท์ที่รับข้อมูลผู้ใช้ และส่งออกไป (`<NameField />`)
 
 ```js
 function NameField({ valueUpdated }) {
@@ -99,7 +97,7 @@ class App extends React.Component {
 };
 ```
 
-Very often we need an entry point of our logic. React comes with some handy lifecycle methods that may be used to trigger a process. For example we have an external resource that needs to be fetched on a specific page.
+React มีสิ่งที่เรียกว่า lifecycle method ไว้เรียกฟังก์ชั่นการทำงานต่างๆ ยกตัวอย่างเช่น ถ้าเราอยากจะดึงข้อมูลจาก Api เราสามารถเรียกได้ผ่าน lifecycle method ได้
 
 ```js
 class ResultsPage extends React.Component {
@@ -116,8 +114,9 @@ class ResultsPage extends React.Component {
 }
 ```
 
-Let's say that we are building a search-results experience. We have a search page and we enter our criteria there. We click submit and the user goes to `/results` where we have to display the result of the search. Once we land on the results page we render some sort of a loading screen and trigger a request for fetching the results in `componentDidMount` lifecycle hook. When the data comes back we pass it to a `<List>` component.
+จากตัวอย่างข้างบน สมมติว่าเราต้องเราที่จะสร้างเว็บที่ไว้ค้นหาข้อมูล เราจะต้องมีหน้าค้นหา จากนั้นเราก็กรอกข้อมูลเข้าไป และกดคลิก submit ผู้ใช้งานจะถูกส่งไปยังหน้า `/results` ซึ่งเป็นหน้าที่จะโชว์ข้อมูลที่ผู้ใช้ค้นหาเข้ามา เมื่อผู้ใช้งานเข้ามาถึงเราจะเรนเดอร์หน้าจอโหลด
+และในเวลาเดียวกันเราจะโหลดข้อมูลที่เกี่ยวข้องกับการค้นหาผ่าน `componentDidMount` เมื่อโหลดข้อมูลเสร็จเราจะส่งข้อมูลให้คอมโพเน้นท์ `<List>` นำไปเรนเดอร์ต่อไป
 
-## Final thoughts
+## ความคิดเห็นสุดท้าย
 
-It is nice that we may think about every React component as a black box. It has its own input, lifecycle and output. It is up to us to compose these boxes. And maybe that is one of the advantages that React offers. Easy to abstract and easy to compose.
+มันเป็นเรื่องที่ดีที่ เราจะเปรียบเทียบคอมโพเน้นท์เป็นเหมือนกล่องดำ มันมี input, lifecycle, และ output ของตัวมันเอง ซึ่งมันอยู่ที่เราว่าเราจะให้กล่องดำนี้เป็นอย่างไร ซึ่งจุดนี้เป็นจุดที่โดดเด่นมากของ React
