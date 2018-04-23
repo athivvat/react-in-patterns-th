@@ -1,5 +1,5 @@
-# In brief
+# โดยย่อ
 
-This cookbook is targeting developers that already have basic understanding of what React is and how it works. It's not meant to be used as a complete how-to guide but as an introduction to popular concepts/design patterns. Paradigms that more or less are introduced by the community. It points you to an abstract thinking. For example, instead of talking about Flux, it talks about data flow. Instead of talking about higher-order components it talks about composition.
+หนังสือเล่มนี้เหมาะกับนักพัฒนาที่มีพื้นฐานของ React มาบ้างแล้ว เนื้อหน้าในเล่มนี้จะไม่ใช่สอนทำตั้งแต่ต้นจนจบ แต่จะเป็นการรวบรวมคอนเซ็ป และดีไซน์แพตเทิร์นของ React ตัวอย่างต่างๆ ในหนังสือเล่มนี้จะมาจากคอมมิวนิตี้ ซึ่งมันจะบอกถึงทฤษฏีเบื้องหลัง ยกตัวอย่างเช่น ถ้าเราจะพูดถึง Flux เราจะพูดถึงการไหลของข้อมูลแทน หรือถ้าเราจะพูดถึง high-order-component เราจะพูดถึง composition แทน
 
-The book is highly opinioned. It represents my own understanding of the described patterns and it is possible that they have a different interpretation around the web. Have this in mind when arguing with someone and using this book as an argument.
+โปรดเข้าใจให้ตรงกันว่า สิ่งที่เขียนในหนังสือเล่มนี้ค่อนข้างจะเป็นความคิด และประสบการ์ความเข้าใจที่ผมเข้าใจมาด้วยตัวเอง ซึ่งมันอาจจะแตกต่างไปจากข้อมูลหรือหนังสือจากแหล่งอื่นๆ ซึ่งอาจจะต้องระวังเวลาไปพูด หรือแลกเปลี่ยนความรู้ต่างๆ โดยการอ้างอิงหนังสือเล่มนี้กับคนอื่นๆด้วย
