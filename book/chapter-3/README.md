@@ -12,7 +12,7 @@ const theLogoIsClicked = () => alert('Clicked');
 <input type='text' onChange={event => theInputIsChanged(event.target.value) } />
 ```
 
-ส่วนใหญ่แล้วเรามักจะจัดการอีเวนท์กันภายใน Component ที่สร้างอีเวนท์นั้นขึ้นมา เช่นในตัวอย่างข้างล่าง เรามี `button` อยู่ในคอมโพเนนท์ `Switcher` แล้วเราต้องการให้การคลิกที่ `button` ไปรันคำสั่งชื่อ `_handleButtonClick` ที่อยู่ในคอมโพเนนท์ `Switcher`:
+ส่วนใหญ่แล้วเรามักจะจัดการอีเวนท์กันภายใน Component ที่สร้างอีเวนท์นั้นขึ้นมา เช่นในตัวอย่างข้างล่าง เรามี `button` อยู่ในคอมโพเนนท์ `Switcher` แล้วเราต้องการให้การคลิกที่ `button` ไปรันคำสั่งชื่อ `_handleButtonClick` ที่อยู่ในคอมโพเนนท์ `Switcher`
 
 ```js
 class Switcher extends React.Component {
