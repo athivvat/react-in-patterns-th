@@ -1,4 +1,4 @@
-# Event handlers
+# การจัดการอีเวนท์
 
 React provides a series of attributes for handling events. The solution is almost the same as the one used in the standard DOM. There are some differences like using camel case or the fact that we pass a function but overall it is pretty similar.
 
