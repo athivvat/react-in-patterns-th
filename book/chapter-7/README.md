@@ -1,4 +1,4 @@
-# One-way direction data flow
+# การไหลของข้อมูลเชิงทิศทางเดี่ยว (One-way direction data flow)
 
 One-way direction data flow is a pattern that works nicely with React. It is around the idea that the components do not modify the data that they receive. They only listen for changes of this data and maybe provide the new value but they do not update the actual data. This update happens following another mechanism in another place and the component just gets re-rendered with the new value.
 
