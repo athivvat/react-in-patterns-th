@@ -1,6 +1,6 @@
-# Styling React components
+# การตกแต่ง React components
 
-React is a view layer. As such it kind of controls the markup rendered in the browser. And we know that the styling with CSS is tightly connected to the markup on the page. There are couple of approaches for styling React applications and in this section we will go through the most popular ones.
+React นั้นเป็นส่วนแสดงผล ซึ่งเป็นการควบคุมรูปแบบนึงของ Markup ซึ่งทำงานบนเบาเซอร์ And we know that the styling with CSS is tightly connected to the markup on the page. There are couple of approaches for styling React applications and in this section we will go through the most popular ones.
 
 ## The good old CSS class
 
