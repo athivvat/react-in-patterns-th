@@ -29,9 +29,9 @@ class Switcher extends React.Component {
 };
 ```
 
-โค้ดชุดจะสามารถทำงานได้ตรงตามที่เราต้องการ เพราะ `_handleButtonClick` นั้นเป็น *Function* และเราก็ส่ง *Function* เข้าไปใน attribute ชื่อ `onClick`.
+โค้ดชุดจะสามารถทำงานได้ตรงตามที่เราต้องการ เพราะ `_handleButtonClick` นั้นเป็น *Function* และเราก็ส่ง *Function* เข้าไปใน attribute ชื่อ `onClick`
 
-That's all fine because `_handleButtonClick` is a function and we indeed pass a function to the `onClick` attribute. The problem is that as it is the code doesn't keep the same context. So, if we have to use `this` inside `_handleButtonClick` to refer the current `Switcher` component we will get an error.
+**แต่!!** เนื่องจากตัวโค้ดไม่ได้อยู่ใน `context` (บริบท) เดียวกัน ส่งผลให้เวลาที่เราต้องการเรียกถึงตัวแปร `this` ข้างในฟังค์ชัน `_handleButtonClick` เพื่อเรียกถึงคอมโพเนนท์ `Switcher` จะทำให้เกิด Error ขึ้นมาทันที
 
 ```js
 class Switcher extends React.Component {
@@ -48,7 +48,7 @@ class Switcher extends React.Component {
   }
   _handleButtonClick() {
     console.log(`Button is clicked inside ${ this.state.name }`);
-    // leads to
+    // ไม่สามารถเรียก this.state.name ได้ เพราะหา this ไม่เจอ
     // Uncaught TypeError: Cannot read property 'state' of null
   }
 };
