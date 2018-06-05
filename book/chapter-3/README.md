@@ -76,7 +76,7 @@ class Switcher extends React.Component {
   }
   render() {
     return (
-      <button onClick={ this._buttonClick }> // เรียกใช้ได้ตามปกติ
+      <button onClick={ this._buttonClick }>
         click me
       </button>
     );
