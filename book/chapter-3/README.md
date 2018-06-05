@@ -71,7 +71,7 @@ class Switcher extends React.Component {
   constructor(props) {
     super(props);
     this.state = { name: 'React in patterns' };
-	// ทำการ binding ที่นี่แทน
+    // ทำการ binding ที่นี่แทน
     this._buttonClick = this._handleButtonClick.bind(this);
   }
   render() {
