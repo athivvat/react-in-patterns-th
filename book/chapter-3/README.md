@@ -1,6 +1,6 @@
 # การจัดการอีเวนท์
 
-React provides a series of attributes for handling events. The solution is almost the same as the one used in the standard DOM. There are some differences like using camel case or the fact that we pass a function but overall it is pretty similar.
+React นั้นได้มีการเตรียม attributes ต่างๆที่ใช้สำหรับการจัดการกับ `event` ไว้เรียบร้อยแล้ว ซึ่งวิธีใช้ทั่วไปนั้นแทบจะเหมือนกับวิธีการจัดการ `event` ใน DOM ที่เราคุ้นเคยเลย โดยจะมีความแตกต่างกันเพียงเล็กน้อย เช่น การใช้ `camelCase` เป็นชื่อ attribute หรือการส่ง *Function* แทนที่จะเป็น *String* เป็นต้น
 
 ```js
 const theLogoIsClicked = () => alert('Clicked');
@@ -11,7 +11,7 @@ const theLogoIsClicked = () => alert('Clicked');
   onChange={event => theInputIsChanged(event.target.value) } />
 ```
 
-Usually we handle events in the component that contains the elements dispatching the events. Like in the example below, we have a click handler and we want to run a function or a method of the same component:
+ส่วนใหญ่แล้วเรามักจะจัดการอีเวนท์กันภายใน Component ที่สร้างอีเวนท์นั้นขึ้นมา เช่นในตัวอย่างข้างล่าง เรามี `button` อยู่ในคอมโพเนนท์ `Switcher` แล้วเราต้องการให้การคลิกที่ `button` ไปรันคำสั่งที่อยู่ในคอมโพเนนท์ `Switcher`:
 
 ```js
 class Switcher extends React.Component {
@@ -27,6 +27,8 @@ class Switcher extends React.Component {
   }
 };
 ```
+
+โค้ดชุดจะสามารถทำงานได้ตรงตามที่เราต้องการ เพราะ `_handleButtonClick` นั้นเป็น *Function* และเราก็ส่ง *Function* เข้าไปใน attribute ชื่อ `onClick`.
 
 That's all fine because `_handleButtonClick` is a function and we indeed pass a function to the `onClick` attribute. The problem is that as it is the code doesn't keep the same context. So, if we have to use `this` inside `_handleButtonClick` to refer the current `Switcher` component we will get an error.
 
