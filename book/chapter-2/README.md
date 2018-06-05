@@ -1,12 +1,12 @@
-# Communication
+# การติดต่อสื่อสาร
 
-Every React component is like a small system that operates on its own. It has its own state, input and output. In the following section we will explore these characteristics.
+ทุกๆ React component เป็นเหมือนระบบเล็กๆที่บริหารจัดการตัวเอง ตัวมันเองจะมีข้อมูลสถานะ (state) เป็นของตัวเอง และมีส่วนของ ข้อมูลนำเข้า (input) และ ข้อมูลส่งออก (output) ในซึ่งเป็นคุณลักษณะที่เราจะกล่าวถึงในหัวข้อนี้
 
 ![Input-Output](./communication.jpg)
 
-## Input
+## ข้อมูลนำเข้า (Input)
 
-The input of a React component is its props. That's how we pass data to it:
+ข้อมูลนำเข้าของ React component คือสิ่งที่เรียกว่า props (Properties หรือข้อมูลคุณลักษณะของมันนั่นเอง) ซึ่งก็คือสิ่งที่กำหนดว่าเราจะเราสามารถส่งข้อมูลอะไรเข้าไปที่ตัว component ได้บ้าง
 
 ```js
 // Title.jsx
@@ -26,9 +26,13 @@ function App() {
 }
 ```
 
-The `Title` component has only one input (prop) - `text`. The parent component (`App`) should provide it as an attribute while using the `<Title>` tag. Alongside the component definition we also have to define at least `propTypes`. In there we define the type of every property and React hints us in the console if something unexpected gets send. `defaultProps` is another useful option. We may use it to set a default value of component's props so that if the developer forgets to pass them we have meaningful values.
+component ข้างต้นที่มีชื่อว่า `Title` และมีการรับข้อมูลนำเข้าเพียงข้อมูลเดียวคือ `text` ซึ่งควรจะถูกส่งมาจาก parent component (component ที่ห่อหุ้ม title อีกทีหนึ่ง)
 
-React is not defining strictly what should be passed as a prop. It may be whatever we want. It could even be another component:
+ตัวอย่างข้างต้นยังได้มีการระบุ `proptypes` หรือชนิดของข้อมูลนำเข้า ซึ่งเป็นสิ่งที่ควรกำหนดให้ถูกต้องตามแต่ละชนิดของข้อมูลคุณลักษณะ เพื่อที่ React จะสามารถแจ้งเตือนเราหากมีการส่งชนิดข้อมูลที่ไม่ตรงกับที่ระบุไว้ให้เราได้ทราบ
+
+`defaultProps` ก็เป็นอีกสิ่งหนึ่งที่มีประโยชน์ในการกำหนดค่าเริ่มต้นให้กับข้อมูลนำเข้า ซึ่งเราอาจจะต้องการกำหนดค่าเริ่มต้นที่เราต้องการเผื่อไว้ในกรณีที่ผู้เรียกใช้ component ของเราลืมส่งข้อมูลมาให้
+
+React ไม่ได้กำหนดเจาะจงชนิดของข้อมูลนำเข้าของ component เลย มันอาจจะเป็นอะไรก็ได้ เราสามารถส่งแม้แต่ component อื่นๆ เข้ามาเป็นข้อมูลนำเข้าของ component ของเราอีกทีหนึ่ง ดังเช่นตัวอย่างด้านล่าง:
 
 ```js
 function SomethingElse({ answer }) {
@@ -42,7 +46,8 @@ function Answer() {
 <SomethingElse answer={ <Answer /> } />
 ```
 
-There is also a `props.children` property that gives us access to the child components passed by the owner of the component. For example:
+ยังมี `props.children` ซึ่งถือเป็นข้อมูลนำเข้าอีกชนิดที่ทำให้เราสามารถที่จะเข้าถึง component ลูก (child components) ที่ถูกระบุอยู่ใน component ที่เรียกใช้ component ของเราอีกที 
+ดังเช่นตัวอย่างด้านล่าง:
 
 ```js
 function Title({ text, children }) {
@@ -62,9 +67,9 @@ function App() {
 }
 ```
 
-In this example `<span>community</span>` in `App` component is `children` in `Title` component. Notice that if we don't return `{ children }` as part of the `Title`'s body the `<span>` tag will not be rendered.
+ในตัวอย่างข้างต้นนี้ ตรง `<span>community</span>` ใน component ชื่อ `App` คือ component ลูก (`children`) ใน component `Title` ท่านจะสังเกตุเห็นได้ว่าถ้าหากเราไม่มีบรรทัด `{ children }` ที่เป็นส่วนนึงของโค้ด `Title` จะทำให้ `<span>community</span>` ไม่ถูกแสดงผล
 
-(prior v16.3) An indirect input to a component may be also the so called `context`. The whole React tree may have a `context` object which is accessible by every component. More about that in the [dependency injection](../chapter-10/README.md) section.
+(ก่อนเวอร์ชั่น 16.3) มีข้อมูลนำเข้าทางอ้อมที่ส่งไปให้ component เรียกว่า `context` ซึ่ง component ทั้งหมดที่อยู่ภายใต้ลำดับชั้นของ context นั้นๆ สามารถที่จะเข้าถึงข้อมูล content นั้นได้ (จะกล่างถึงอย่างละเอียดอีกครั้งในหัวข้อ [dependency injection](../chapter-10/README.md) ) 
 
 ## Output
 
