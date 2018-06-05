@@ -54,7 +54,7 @@ class Switcher extends React.Component {
 };
 ```
 
-What we normally do is to use `bind`:
+เราสามารถแก้ได้โดยการใช้ `bind`
 
 ```js
 <button onClick={ this._handleButtonClick.bind(this) }>
@@ -62,7 +62,7 @@ What we normally do is to use `bind`:
 </button>
 ```
 
-However, this means that the `bind` function is called again and again because we may render the button many times. A better approach would be to create the bindings in the constructor of the component:
+เสียแต่ว่าฟังค์ชัน `bind` ของเรานั้นจะถูกเรียกซ้ำไปซ้ำมาอยู่บ่อยๆ เพราะว่าคอมโพเนนท์ `button` อาจถูก render ใหม่หลายๆครั้ง (หรือที่เราเรียกกันว่า re-render) วิธีที่ดีกว่านี้ก็คือการเปลี่ยนไป `bind` ที่ `constructor` ของคอมโพเนนท์นั้นทีเดียวเลย
 
 <span class="new-page"></span>
 
@@ -71,11 +71,12 @@ class Switcher extends React.Component {
   constructor(props) {
     super(props);
     this.state = { name: 'React in patterns' };
+	// ทำการ binding ที่นี่แทน
     this._buttonClick = this._handleButtonClick.bind(this);
   }
   render() {
     return (
-      <button onClick={ this._buttonClick }>
+      <button onClick={ this._buttonClick }> // เรียกใช้ได้ตามปกติ
         click me
       </button>
     );
