@@ -40,3 +40,5 @@ jspm_packages
 ./code/*.log
 
 .DS_Store
+
+*~
