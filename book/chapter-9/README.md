@@ -1,12 +1,17 @@
 # Redux
 
+[Redux](https://redux.js.org/) เป็น Library ที่ทำตัวเป็นตัวเก็บ state และช่วยจัดการ data ภายใน application เปิดตัวครั้งแรกในงาน ReactEurope conference ([video](https://www.youtube.com/watch?v=xsSnOQynTHs)) ในปี 2015 โดย [Dan Abramov](https://twitter.com/dan_abramov) มีลักษณะการทำงานและการออกแบบคล้าย [Flux architecture](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-8/README.md#flux-architecture-and-its-main-characteristics)
+
 [Redux](https://redux.js.org/) is a library that acts as a state container and helps managing your application data flow. It was introduced back in 2015 at ReactEurope conference ([video](https://www.youtube.com/watch?v=xsSnOQynTHs)) by [Dan Abramov](https://twitter.com/dan_abramov). It is similar to [Flux architecture](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-8/README.md#flux-architecture-and-its-main-characteristics) and has a lot in common with it. In this section we will create a small counter app using Redux alongside React.
 
 <span class="new-page"></span>
 
+## สถาปัตยกรรม Redux และลักษณะสำคัญ
 ## Redux architecture and its main characteristics
 
 ![Redux architecture](./redux-architecture.jpg)
+
+เช่นเดียวกับ Flux เรามี view components (React) ที่คอย dispatch action โดยที่จริงๆแล้ว action สามารถถูก dispatch มาจากส่วนไหนของระบบก็ได้ ยกตัวอย่างเช่น การเรียก bootstrap เป็นตัน action ที่ถูก dispatch จะถูกส่งงตรงไปยัง store ซึ่งมีแต่ตัวเดียวเท่านั้นใน Redux ซึ่งสิ่งนีเป็นสิ่งที่ Redux ไม่เหมือนกับ Flux ส่วนที่จะตัดสินใจว่า data ของเราจะเปลี่ยนไปอย่างไรนั้นขึ้นอยู่กับ reducers ที่เป็น pure functions เมื่อไรก็ตามที่ store ได้รับ action reducers จะทำการรับ state ณ ปัจจุบัน และ action ที่ถูกส่งเข้ามา เพื่อคำนวนและสร้าง state ถัดไป โดยใช้หลัก immutable store จะรับช่วงต่อและเปลี่ยนค่า state ภายใน store สุดท้าย React component ที่ดึง data กมาจาก store ก็จะถูก re-render
 
 Similarly to [Flux](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-8/README.md) architecture we have the view components (React) dispatching an action. Same action may be dispatched by another part of our system. Like a bootstrap logic for example. This action is dispatched not to a central hub but directly to the store. We are saying "store" not "stores" because there is only one in Redux. That is one of the big differences between Flux and Redux. The logic that decided how our data changes lives in pure functions called reducers. Once the store receives an action it asks the reducers about the new version of the state by sending the current state and the given action. Then in immutable fashion the reducer needs to return the new state. The store continues from there and updates its internal state. As a final step, the wired to the store React component gets re-rendered.
 
