@@ -4,7 +4,9 @@ React อาจจะเป็นหนึ่งในตัวเลือก�
 
 ## ตัวอย่าง
 
-กระผมได้เลือกใช้ [*tag-it*](https://github.com/aehlke/tag-it) ซิ่งเป็นส่วนเสริมตัวนึงของ jQuery มาใช้เป็นตัวอย่างนะครับ มันเอาไว้แปลงแท็ก ul ที่เอาไว้แสดงผลข้อมูลรายการที่ไม่เป็นลำดับให้กลายเป็นตัวป้อนข้อมูลที่จะไว้ใช้ในการจัดการแท็ก:
+กระผมได้เลือกใช้ [*tag-it*](https://github.com/aehlke/tag-it) ซิ่งเป็นส่วนเสริมตัวนึงของ jQuery มาใช้เป็นตัวอย่างนะครับ มันเอาไว้แปลงแท็ก ul ที่เอาไว้แสดงผลข้อมูลรายการที่ไม่เป็นลำดับให้กลายเป็นตัวป้อนข้อมูลที่จะไว้ใช้ในการจัดการแท็ก
+
+จากภาษา HTML ด้านล่างนี้:
 
 ```html
 <ul>
@@ -13,19 +15,19 @@ React อาจจะเป็นหนึ่งในตัวเลือก�
 </ul>
 ```
 
-to:
+ไปแสดงผลเป็น:
 
 ![tag-it](./tag-it.png)
 
-To make it work we have to include jQuery, jQuery UI and the *tag-it* plugin code. It works like that:
+เพื่อให้มันทำงานได้ เราจำเป็นจะต้องมี jQuery, jQuery UI และที่ขาดไม่ได้ *tag-it*; tag-it มันใช้งานประมาณนี้ครับ:
 
 ```jsx
 $('<dom element selector>').tagit();
 ```
 
-We select a DOM element and call `tagit()`.
+อธิบายก็คือเราเลือก DOM element และไปเรียกใช้งานฟังก์ชันที่ชื่อ `target()`
 
-Now, let's create a simple React app that will use the plugin:
+เอาละครับ มาสร้าง React app ง่าย ๆ ขึ้นมาตัวนึง ที่จะมาลองใช้กับตัวส่วนขยาย:
 
 ```jsx
 // Tags.jsx
@@ -62,11 +64,11 @@ class App extends React.Component {
 ReactDOM.render(<App />, document.querySelector('#container'));
 ```
 
-The entry point is our `App` class. It uses the `Tags` component that displays an unordered list based on the passed `tags` prop. When React renders the list on the screen we know that we have a `<ul>` tag so we can hook it up to the jQuery plugin.
+เข้าไปที่คลาสที่ชื่อว่า `App` มันใช้งานตัวคอมโพเนนท์ที่ชื่อว่า `Tags` ที่จะทำการแสดงผลเจ้าตัวรายการที่ไม่เป็นลำดับ (unordered list) ด้วยการส่งค่าผ่าน prop ที่ชื่อว่า `tags` แล้วเมื่อ React ทำการแสดงรายการที่ว่าบนหน้าจอ เราจะรู้ว่าเรามีแท็ก `<ul>` เพื่อเราสามารถgเชื่อมมันเข้ากับ jQuery plugin
 
-## Force a single-render
+## บังคับ single-render
 
-The very first thing that we have to do is to force a single-render of the `Tags` component. That is because when React adds the elements in the actual DOM we want to pass the control of them to jQuery. If we skip this both React and jQuery will work on same DOM elements without knowing for each other. To achieve a single-render we have to use the lifecycle method `shouldComponentUpdate` like so:
+สิ่งแรกที่เราจะต้องคือการบังคับ single-render ของคอมโพเนนท์ `Tags` นั่นเพราะเมื่อ React เพิ่ม element ต่าง ๆ เข้าไปที่ DOM จริง ๆ (actual DOM) เราต้องการที่จะส่งการควบคุม element ต่าง ๆ ไปให้ jQuery ถ้าเราข้ามทั้งสอง React และ jQuery จะทำงานอยู่บน DOM ตัวเดียวกัน โดยไม่รู้ซึ่งกันและกัน เพื่อให้ได้ single-render เราจะต้องใช้เมธอดที่อยู่ใน lifecycle ของ React ที่ชื่อว่า `shouldComponentUpdate` อย่างเช่นโค้ดด้านล่างนี้: 
 
 ```jsx
 class Tags extends React.Component {
@@ -76,11 +78,11 @@ class Tags extends React.Component {
   ...
 ```
 
-By always returning `false` here we are saying that our component will never re-render. If defined `shouldComponentUpdate` is used by React to understand whether to trigger `render` or not. That is ideal for our case because we want to place the markup on the page using React but we don't want to rely on it after that.
+โดยการส่งค่ากลับมาเป็น `false` เสมออย่างนี้ เรากล่าวว่าคอมโพเนนท์ของเราจะไม่แสดงผลใหม่อีก ถ้ากำหนด `shouldComponentUpdate` ที่ถูกนำมาใช้โดย React เพื่อที่จะเข้าใจว่ามันเป็นตัวทำให้เกิดการ `render` หรือไม่ นั่นคือสิ่งที่ดีเลิศสำหรับกรณีของเรา เพราะว่าเราต้องการที่จะวางโครงสร้างบนหน้าที่ใช้ React แต่เราไม่ต้องการที่จะวางใจกับมันหลังจากนั้น
 
-## Initializing the plugin
+## การเตรียมพร้อมสำหรับส่วนขยาย
 
-React gives us an [API](https://facebook.github.io/react/docs/refs-and-the-dom.html) for accessing actual DOM nodes. We have to use the `ref` attribute on a node and later reach that node via `this.refs`. `componentDidMount` is the proper lifecycle method for initializing the *tag-it* plugin. That's because we get it called when React mounts the result of the `render` method.
+React ได้ให้ [API](https://facebook.github.io/react/docs/refs-and-the-dom.html) มาตัวนึงสำหรับการเข้าถึง actual DOM nodes เราจะต้องใช้ attribute ที่ชื่อว่า `ref` กับตัว node และถัดมาก็เป็นการเข้าถึงตัว node ด้วย `this.refs` ซึ่ง `componentDidMount` เป็น lifecycle method ที่เหมาะสำหรับการเตรียมการให้ส่วนขยาย *tag-it* นั่นเป็นเพราะว่ามันจะถูกเรียกเมื่อ React สร้างผลลัพธ์ของเมธอด `render`
 
 <br /><br /><br />
 
@@ -105,13 +107,13 @@ class Tags extends React.Component {
   ...
 ```
 
-The code above together with `shouldComponentUpdate` leads to React rendering the `<ul>` with two items and then *tag-it* transforms it to a working tag editing widget.
+ตัวโค้ดที่อยู่ด้านบนกับเมธอด `shouldComponentUpdate` นำไปสู่การที่ React เรนเดอร์ตัว `<ul>` กับสองไอเท็ม และจากนั้น *tag-it* จะทำการแปลงมันเพื่อทำการแก้ไข tag widget
 
-## Controlling the plugin using React
+## การควบคุมส่วนขยายด้วย React
 
-Let's say that we want to programmatically add a new tag to the already running *tag-it* field. Such action will be triggered by the React component and needs to use the jQuery API. We have to find a way to communicate data to `Tags` component but still keep the single-render approach.
+สมมติว่าเราต้องการที่จะโปรแกรมเพิ่ม แท็กตัวใหม่ที่กำลังทำงานอยู่แล้วกับ *tag-it* การกระทำดังกล่าวจะถูกเรียกโดย React คอมโพเนนท์ และต้องใช้ jQuery API; เราจะต้องหาทางที่จะสื่อสารข้อมูลกับ `Tags` คอมโพเนนท์ แต่ยังคงเก็บวิธีการเข้าไป single-render
 
-To illustrate the whole process we will add an input field to the `App` class and a button which if clicked will pass a string to `Tags` component.
+เพื่อแสดงขั้นตอนทั้งหมด เราจะเพิ่มตัวป้อนข้อมูลเข้าไปที่คลาส `class` และปุ่ม ซึ่งถ้าปุ่มถูกคลิกจะส่งตัวอักขระไปให้คอมโพเนนท์ที่ชื่อ `Tags`
 
 <br />
 
@@ -146,7 +148,7 @@ class App extends React.Component {
 }
 ```
 
-We use the internal state as a data storage for the value of the newly added field. Every time when we click the button we update the state and trigger re-rendering of `Tags` component. However, because of `shouldComponentUpdate` we have no any updates on the screen. The only one change is that we get a new value of the `newTag` prop which may be captured via another lifecycle method - `componentWillReceiveProps`:
+เราใช้ state ภายในเป็นเหมือนกับที่เก็บข้อมูลสำหรับค่าของตัวที่พึ่งถูกเพิ่มเข้าในในฟิลด์ใหม่ ทุกครั้งที่เราคลิกตัวปุ่ม ตัว React จะทำการอัปเดต state และจะไปเรียกการ re-rendering ของคอมโพเนนท์ `Tags` อย่างไรก็ตามเพราะว่า `shouldComponentUpdate` เราจึงไม่มีการอัปเดตใด ๆ บนหน้าจอ สิ่งอย่างเดียวที่เปลี่ยนนั่นคือเราได้ค่าใหม่ของ prop ที่ชื่อว่า `newTag` ซึ่งอาจถูกจับมาได้ด้วย lifecycle method ตัวหนึ่งที่ชื่อว่า `componentWillReceiveProps`:
 
 <br /><br /><br />
 
@@ -159,9 +161,9 @@ class Tags extends React.Component {
   ...
 ```
 
-`.tagit('createTag', newProps.newTag)` is a pure jQuery code. `componentWillReceiveProps` is a nice place for calling methods of the third-party library.
+`.tagit('createTag', newProps.newTag)` คือโค้ดที่เป็น pure jQuery; `componentWillReceiveProps` คือที่ที่ดีสำหรับการเรียกเมธอดที่มาจาก third-party library
 
-Here is the full code of the `Tags` component:
+นี่คือโค้ดที่สมบูรณ์ของ `Tags` คอมโพเนนท์:
 
 ```jsx
 class Tags extends React.Component {
@@ -191,6 +193,6 @@ class Tags extends React.Component {
 
 <br />
 
-## Final thoughts
+## สรุปสุดท้าย
 
-Even though React is manipulating the DOM tree we are able to integrate third-party libraries and services. The available lifecycle methods give us enough control on the rendering process so they are the perfect bridge between React and non-React code.
+ถึงแม้นว่า React เป็นการจัดการเจ้า DOM tree เราสามารถที่จะเชื่อมผสานกับ third-party libraries และ services; lifecycle method ที่ให้เรามาเพียงพอที่จะควบคุมกระบวนการการแสดงผล ซึ่งสิ่ง lifecycle method จะเป็นสะพานสมบูรณ์ที่เชื่อมระหว่าง React และโค้ดที่ไม่ใช่ React
