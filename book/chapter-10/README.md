@@ -1,4 +1,4 @@
-# Dependency injection
+# การส่งต่อ Dependency (Dependency injection)
 
 Big part of the modules/components that we write have dependencies. A proper management of these dependencies is critical for the success of the project. There is a technique (most people consider it a *pattern*) called [*dependency injection*](http://krasimirtsonev.com/blog/article/Dependency-injection-in-JavaScript) that helps solving the problem.
 
