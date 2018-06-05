@@ -1,6 +1,6 @@
 # การผสานกับซอฟแวร์ภายนอก (Third-party)
 
-React is probably one of the best choices for building UI. Good design, support and community. However, there are cases where we want to use an external service or we want to integrate something completely different. We all know that React works heavily with the actual DOM and basically controls what's rendered on the screen. That's why integrating of third-party components may be tricky. In this section we will see how to mix React and jQuery's UI plugin and do it safely.
+React อาจจะเป็นหนึ่งในตัวเลือกที่ดีทีสุดสำหรับการสร้างส่วนประสานกับผู้ใช้ (UI) การออกแบบที่ดี แล้วก็ในเรื่องของการสนับสนุนและชุมชนของนักพัฒนา อย่างไรก็ตามก็ยังมีในหลายกรณีที่เราต้องการจะใช้บริการภายนอก หรือต้องการที่จะเชื่อมต่อผสานกับอะไรสักอย่างที่มันแตกต่างไปอย่างสิ้นเชิง พวกเราทั้งหมดรู้ว่า React ทำงานอย่างหนักกับตัว DOM (Document Object Model) จริง ๆ ของเว็บ ซึ่งพวก HTML, XML มักจะใช้การเก็บ Document เป็นอย่างที่กล่าวมา และการควบคุมอะไรก็ตามที่จะแสดงผลออกมาทางหน้าจอเป็นพื้นฐาน นั่นก็คือเหตุผลที่การเชื่อมต่อผสานของส่วนประกอบจากซอฟแวร์ภายนอก (third-party) ค่อนข้างที่จะต้องใช้เทคนิคที่อาจจะยุ่งยาก ในส่วนนี้เราจะแสดงวิธีที่จะรวม React และส่วนเสริมการประสานงานกับผู้ใช้ (jQuery's UI plugin) และค่อย ๆ ทำมันอย่างปลอดภัย
 
 ## The example
 
