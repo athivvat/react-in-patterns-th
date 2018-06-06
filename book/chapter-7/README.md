@@ -134,7 +134,7 @@ class App extends React.Component {
 };
 ```
 
-Because of this change the `Switcher` becomes really simple. We don't need the internal state and the component may be written as a stateless function.
+เนื่องจากการเปลี่ยนแปลงนี้ การทำงานใน `Switcher` จะง่ายมาก เราไม่จำเป็นต้องมีสถานะภายใน และคอมโพเนนท์นี้อาจจะเขียนในรูปของฟังก์ช้่นแบบ `stateless` ได้อีกด้วย
 
 ```js
 function Switcher({ value, onChange }) {
