@@ -85,13 +85,13 @@ constructor(props) {
   ...
 ```
 
-Our workflow changes to the following:
+รูปแบบการทำงานของเราจะเปลี่ยนไปเป็นลักษณะตามภาพดังนี้
 
-![one-direction data flow](./one-direction-2.jpg)
+![การไหลข้อมูลแบบสองทิศทาง](./one-direction-2.jpg)
 
-All this leads to managing two states instead of one. What if the `Store` changes its value based on other actions in the system. We have to propagate that change to the `Switcher` and we increase the complexity of our app.
+จากรูปแบบของการทำงานทั้งหมดนี้ทำให้เราต้องจัดการสถานะสองที่แทนที่จะจัดการภายในที่เดียว ดังนั้นจะเกิดอะไรขึ้นถ้าค่าใน `Store` มีการเปลี่ยนแปลงโดยขึ้นอยู่กับการกระทำอื่นๆในระบบ เราต้องส่งการเปลี่ยนแปลงนั้นกลับมาที่ `Switcher` และเราก็เพิ่มความซับซ้อนของแอพ
 
-One-way direction data flow solves this problem. It eliminates the multiple places where we manage states and deals with only one which is usually the store. To achieve that we have to tweak our `Store` object a little bit. We need logic that allows us to subscribe for changes:
+การไหลข้อมูลแบบทิศทางเดียวสามารถแก้ปัญหานี้ได้ มันกำจัดการจัดการสถานะหลายๆที่ด้วยการจัดการสถานะเพียงที่เดียว ซึ่งปกติแล้วที่ๆนั้นมักจะเป็น store เพื่อที่จะทำแบบนั้นได้เราต้องปรับปรุงออบเจ็ค `Store` เล็กน้อย และเราจำเป็นต้องมีลอจิกที่สามารถให้เราติดตามการเปลี่ยนแปลงได้ด้วย
 
 <span class="new-page"></span>
 
