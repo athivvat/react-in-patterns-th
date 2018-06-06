@@ -150,6 +150,6 @@ function Switcher({ value, onChange }) {
   onChange={ Store.set.bind(Store) } />
 ```
 
-## Final thoughts
+## ข้อคิดสุดท้าย
 
-The benefit that comes with this pattern is that our components become dummy representation of the store's data. There is only one source of truth and this makes the development easier. If you are going to take one thing from this book I would prefer to be this chapter. The one-direction data flow drastically changed the way of how I think when designing a feature so I believe it will have the same effect on you.
+ประโยชน์จากรูปแบบนี้คือ คอมโพเนนท์ของเราจะเป็นเพียงคอมโพเนนท์ง่ายๆที่ทำหน้าที่แสดงข้อมูลใน store เนื่องจากแหล่งเก็บข้อมูลมีเพียงแค่ที่เดียวเท่านั้น (single source of truth) และนี่จะทำให้การพัฒนาง่ายมากยิ่งขึ้น ถ้าคุณกำลังจะได้สิ่งๆหนึ่งจากหนังสือเล่มนี้ สำหรับฉันแล้วก็จะเป็นเนื้อหาของบทนี้ การไหลข้อมูลแบบทิศทางเดียวจะเปลี่ยนวิธีการคิดของการออกแบบฟีเจอร์อย่างมาก ดังนั้นฉันเชื่อว่ามันจะมีผลเดียวกันนี้กับคุณเช่นกัน
