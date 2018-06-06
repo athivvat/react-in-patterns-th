@@ -15,3 +15,6 @@ class App extends React.Component {
   }
 };
 ```
+ผลลัพธ์ของโค้ดด้านบนจะได้อินพุตที่เราสามารถกำหนดค่าที่อินพุตนั้นแสดงอยู่ได้ แต่จะไม่สามารถเปลี่ยนแปลงค่าของมันได้เลย เพราะว่าเราได้กำหนดค่าให้อินพุตนั้นโดยนำมาจากค่า state ของ component `App`แต่ถ้าจะให้อินพุตนั้นใช้งานได้อย่างปกติอย่างที่ควรจะเป็น (คือสามารถกำหนดค่า และ เปลี่ยนแปลงค่าของมันได้) จำเป็นจะต้องเพิ่ม handler ที่เรียกว่า `onChange` เพื่อทำการจัดการและเปลี่ยนค่า state ของ component `App`(ที่ถูกนำไปกำหนดเป็นค่าของอินพุต) ซึ่งจะทำให้เกิดวัฐจักรของการ render เกิดขึ้นใหม่แล้วจึงจะแสดงผลของค่าที่ได้อัพเดทไปแล้วที่อินพุต
+
+The result of this code is an input element that we can focus but can't change. It is never updated because we have a single source of truth - the `App`'s component state. To make the input works as expected we have to add an `onChange` handler and update the state (the single source of truth). Which will trigger a new rendering cycle and we will see what we typed.
