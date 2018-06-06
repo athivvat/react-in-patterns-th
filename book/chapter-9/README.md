@@ -11,13 +11,17 @@
 
 ![Redux architecture](./redux-architecture.jpg)
 
-เช่นเดียวกับ Flux เรามี view components (React) ที่คอย dispatch action โดยที่จริงๆแล้ว action สามารถถูก dispatch มาจากส่วนไหนของระบบก็ได้ ยกตัวอย่างเช่น การเรียก bootstrap เป็นตัน action ที่ถูก dispatch จะถูกส่งงตรงไปยัง store ซึ่งมีแต่ตัวเดียวเท่านั้นใน Redux ซึ่งสิ่งนีเป็นสิ่งที่ Redux ไม่เหมือนกับ Flux ส่วนที่จะตัดสินใจว่า data ของเราจะเปลี่ยนไปอย่างไรนั้นขึ้นอยู่กับ reducers ที่เป็น pure functions เมื่อไรก็ตามที่ store ได้รับ action reducers จะทำการรับ state ณ ปัจจุบัน และ action ที่ถูกส่งเข้ามา เพื่อคำนวนและสร้าง state ถัดไป โดยใช้หลัก immutable store จะรับช่วงต่อและเปลี่ยนค่า state ภายใน store สุดท้าย React component ที่ดึง data กมาจาก store ก็จะถูก re-render
+เช่นเดียวกับ Flux Redux มี view components (React) ที่คอย dispatch action โดยที่ action เดียวกันสามารถถูก dispatch มาจากส่วนไหนของระบบก็ได้ ยกตัวอย่างเช่น การเรียก bootstrap เป็นต้น action ที่ถูก dispatch จะถูกส่งตรงไปยัง store ซึ่งมีแค่ตัวเดียวเท่านั้นใน Redux ซึ่งสิ่งนี้เป็นสิ่งที่ Redux ไม่เหมือนกับ Flux ส่วนที่จะตัดสินใจว่า data ของเราจะเปลี่ยนไปอย่างไรนั้นขึ้นอยู่กับ reducers ที่เป็น pure functions เมื่อไรก็ตามที่ store ได้รับ action reducers จะทำการรับ state ณ ปัจจุบัน และ action ที่ถูกส่งเข้ามา เพื่อคำนวนและสร้าง state ถัดไป โดยอิงหลัก immutable store จะรับช่วงต่อและเปลี่ยนค่า state ภายใน store สุดท้าย React component ที่ดึง data มาจาก store ก็จะถูก re-render
+
+Concept ของ Redux ค่อนข้างตรงไปตรงมาโดยยึดหลัก [one-direction data flow](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-7/README.md) เรามาเริ่มพูดถึงเรื่องนี้และแนะนำส่วนที่ช่วยสนับสนุน Redux pattern กันดีกว่า
 
 Similarly to [Flux](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-8/README.md) architecture we have the view components (React) dispatching an action. Same action may be dispatched by another part of our system. Like a bootstrap logic for example. This action is dispatched not to a central hub but directly to the store. We are saying "store" not "stores" because there is only one in Redux. That is one of the big differences between Flux and Redux. The logic that decided how our data changes lives in pure functions called reducers. Once the store receives an action it asks the reducers about the new version of the state by sending the current state and the given action. Then in immutable fashion the reducer needs to return the new state. The store continues from there and updates its internal state. As a final step, the wired to the store React component gets re-rendered.
 
 The concept is pretty linear and again follows the [one-direction data flow](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-7/README.md). Let's talk about all these pieces and introduce a couple of new terms that support the work of the Redux pattern.
 
 ### Actions
+
+การจำแนกชนิดของ action ใน Redux จะเหมือนกับ Flux คือแบ่งได้ด้วย property ของ object ที่ชื่อว่า `type` โดยที่ data อื่นๆที่ส่งมากับ object จะใช้กับ logic ของ application เท่านั้น จะไม่เกี่ยวข้องกับ Redux pattern ยกตัวอย่างเช่น
 
 The typical action in Redux (same as Flux) is just an object with a `type` property. Everything else in that object is considered a context specific data and it is not related to the pattern but to your application logic. For example:
 
@@ -28,10 +32,15 @@ const action = {
   visible: false
 }
 ```
+ถือว่าเป็นตัวอย่างที่ดีในการสร้าง action type เป็น constants `CHANGE_VISIBILITY` ซึ่งยังมี tools หรือ libraries หลายๆอย่างที่รองรับ Redux ที่มีวีธีเรียกใช้ที่สะดวกโดยการส่ง action type อย่างเดียว
 
 It is a good practice that we create constants like `CHANGE_VISIBILITY` for our action types. It happens that there are lots of tools/libraries that support Redux and solve different problems which do require the type of the action only. So it is just a convenient way to transfer this information.
 
+ส่วนของ property `visible` เป็น metadata ที่เราได้กล่าวถึงแล้วว่า ไม่ได้ถูกใช้ใน Redux เป็นเพียงแค่ข้อมูลที่ใช้ใน application เท่านั้น
+
 The `visible` property is the meta data that we mentioned above. It has nothing to do with Redux. It means something in the context of the application.
+
+ทุกๆครั้งที่เราต้องการ dispatch method เราต้องใช้ object ซึ่งมันเป็นการยุ่งยากถ้าจะต้องมาเขียนมันซ้ำแล้วซ้ำเล่า ซึ่งเป็นที่มาของ *action creators* ที่เป็น function ที่ return ค่า object และจะรับหรือไม่รับ argument ที่เกี่ยวข้องกับ action นั้นเพิ่มก็ได้ ยกตัวอย่างเช่น action creator ของ action ข้างบน จะมีหน้าตาตามข้างล่าง
 
 Every time when we want to dispatch a method we have to use such objects. However, it becomes too noisy to write them over and over again. That is why there is the concept of *action creators*. An action creator is a function that returns an object and may or may not accept an argument which directly relates to the action properties. For example the action creator for the above action looks like this:
 
@@ -45,9 +54,13 @@ changeVisibility(false);
 // { type: CHANGE_VISIBILITY, visible: false }
 ```
 
+จะสังเกตได้ว่าเราทำการส่งค่าของ `visble` ผ่าน argrument ทำให้เราไม่ต้องจดจำค่าจริงของ action type นั้น ซึ่งการใช้ตัวช่วยพวกนี้จะทำให้ code ของเราสั้นและง่ายต่อการอ่าน
+
 Notice that we pass the value of the `visible` as an argument and we don't have to remember (or import) the exact type of the action. Using such helpers makes the code compact and easy to read.
 
 ### Store
+
+Redux ได้เตรียมตัวช่วยอย่าง `createStore` ไว้สำหรับการสร้าง store โดยมี signature ดังนี้
 
 Redux provides a helper `createStore` for creating a store. Its signature is as follows:
 
@@ -56,6 +69,8 @@ import { createStore } from 'redux';
 
 createStore([reducer], [initial state], [enhancer]);
 ```
+
+เราได้กล่าวถึงไว้แล้วว่า reducer เป็น function ที่รับ state ณ ปัจจุบันและ action และ return ค่าเป็น state ใหม่ ต่อมา argrument ที่สองคือ state เริ่มต้น ซึ่งมีประโยชน์สำหรับในการใช้เป็นการกำหนดค่า state เมื่อ application เริ่มทำงาน 
 
 We already mentioned that the reducer is a function that accepts the current state and action and returns the new state. More about that in a bit. The second argument is the initial state of the store. This comes as a handy instrument to initialize our application with data that we already have. This feature is the essence of processes like server-side rendering or persistent experience. The third parameter, enhancer, provides an API for extending Redux with third party middlewares and basically plug some functionally which is not baked-in. Like for example an instrument for handling async processes.
 
