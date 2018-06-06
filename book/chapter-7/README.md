@@ -28,7 +28,8 @@ function App() {
 };
 ```
 
-At this moment we have the data inside our component. Or in other words, `Switcher` is the only one place that knows about our `flag`. Let's send it out to some kind of a store:
+ในตอนนี้เรามีข้อมูลภายในคอมโพเนนท์ของเราแล้ว หรือพูดอีกอย่างหนึ่งได้ว่า ในคอมโพเนนท์ `Switcher` เป็นที่ๆเดียวที่รู้เกี่ยวกับค่า `flag` ของเรา ดังนั้นมาลองส่งมันออกไปยังตัวเก็บข้อมูล (store) กันเถอะ 
+
 
 ```js
 var Store = {
