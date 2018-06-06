@@ -1,18 +1,12 @@
 # Composition
 
-หนึ่งในความสามารถที่มีประโยชน์ที่สุดของ React ก็คือ composability โดยส่วนตัวผมยังไม่รู้จัก framework ไหนที่มีวีธีในการสร้างและประกอบ component ได้อย่างที่ React ทำได้เลย ซึ่งในบทนี้เราก็จะมาลองดูเทคนิค composition บางตัวที่ได้รับการพิสูจน์ว่าใช้งานได้ดีกันนะครับ
-
 One of the biggest benefits of React is composability. I personally don't know a framework that offers such an easy way to create and combine components. In this section we will explore few composition techniques which proved to work well.
-
-เริ่มจากตัวอย่างง่ายๆกันเลย สมมุติว่าเรามี application ที่มีส่วนของ header อยู่ และเราต้องการที่จะวาง navigation ไว้ข้างใน header นั้น ในกรณีนี้เรามี React component อยู่สามตัว ได้แก่ App, Header, และ Navigation โดยทั้งสามตัวต้องอยู่ในสภาพซ้อนทับกัน (nested) ซึ่งสามารถแสดง dependency ได้ดังนี้
 
 Let's get a simple example. Let's say that we have an application with a header and we want to place a navigation inside. We have three React components - `App`, `Header` and `Navigation`. They have to be nested into each other so we end up with the following dependencies:
 
 ```js
 <App> -> <Header> -> <Navigation>
 ```
-
-วิธีการง่ายๆในการรวม component เล่านี้ก็เข้าด้วยกันคือการอ้างถึง component ทั้งหมดในที่ๆเราจะต้องใช้
 
 The trivial approach for combining these components is to reference them in the places where we need them.
 
