@@ -112,7 +112,7 @@ var Store = {
 };
 ```
 
-Then we will hook our main `App` component and we'll re-render it every time when the `Store` changes its value:
+จากนั้นเราจะให้คอมโพเนนท์ `App` render ใหม่ทุกๆครั้งที่ `Store` มีการเปลี่ยนแปลงค่าของมัน
 
 ```js
 class App extends React.Component {
