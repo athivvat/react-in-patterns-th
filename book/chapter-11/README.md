@@ -1,14 +1,14 @@
 # Styling React components
 
-React is a view layer. As such it kind of controls the markup rendered in the browser. And we know that the styling with CSS is tightly connected to the markup on the page. There are couple of approaches for styling React applications and in this section we will go through the most popular ones.
+React เป็นไลบรารี่ที่จัดอยู่ในเลเยอร์ `View` เนื่องจากมันควบคุมการเรนเดอร์ของ markup บนเบราเซอร์ และเรารู้ว่าการจัด style ด้วย css นั้นเป็นสิ่งที่เชื่อมต่อกับ markup ที่อยู่บนเพจต่างๆอย่างแน่นหนา และมีหลายวิธีด้วยกันในการจัด style สำหรับการพัฒนาแอพพลิเคชั่นด้วย React สำหรับใน section นี้ เราจะมาดูวิธีที่นิยมมากที่สุดกัน
 
 ## The good old CSS class
 
-JSX syntax is pretty close to HTML syntax. As such we have almost the same tag attributes and we may still style using CSS classes. Classes which are defined in an external `.css` file. The only caveat is using `className` and not `class`. For example:
+การเขียนในรูปแบบ `JSX` นั้นจะมีความใกล้เคียงกับ `HTML` เนื่องจากมีชื่อ tag attribute ที่คล้ายคลึงกัน และเดิมทีเราอาจจะยังตกแต่ง style ด้วยคลาส CSS อยู่ ซึ่งมันถูกประกาศเป็นไฟล์ `.css` แยกไว้อีกไฟล์หนึ่ง จุดที่แตกต่างกันหลักๆก็คือรูปแบบ `JSX` จะใช้ tag attribute ชื่อว่า `className` ส่วนรูปแบบ `HTML` จะใช้ tag attribute ชื่อว่า `class` ยกตัวอย่างเช่น
 
-```
+```html
 <h1 className='title'>Styling</h1>
-``` 
+```
 
 ## Inline styling
 
