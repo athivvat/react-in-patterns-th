@@ -1,8 +1,12 @@
 # การส่งต่อ Dependency (Dependency injection)
 
-Big part of the modules/components that we write have dependencies. A proper management of these dependencies is critical for the success of the project. There is a technique (most people consider it a *pattern*) called [*dependency injection*](http://krasimirtsonev.com/blog/article/Dependency-injection-in-JavaScript) that helps solving the problem.
+<!-- Big part of the modules/components that we write have dependencies. A proper management of these dependencies is critical for the success of the project. There is a technique (most people consider it a *pattern*) called [*dependency injection*](http://krasimirtsonev.com/blog/article/Dependency-injection-in-JavaScript) that helps solving the problem. -->
 
-In React the need of dependency injector is easily visible. Let's consider the following application tree:
+Components/modules ที่ถูกเขียนขึ้นมาส่วนใหญ่มักจะมี dependencies ติดมาด้วยเสมอ การที่เราสามารถจัดการ dependencies เหล่านั้น จึงเป็นส่วนสำคัญที่ทำให้โปรเจคของเราสำเร็จลุล่วงไปด้วยดี ปัจจุบัน มีเทคนิคชนิดหนึ่ง (หรือที่หลายๆคนเรียกว่า pattern) ที่สามารถช่วยจัดการ dependencies ของเราได้ นั้นก็คือ dependencies injection
+
+<!-- In React the need of dependency injector is easily visible. Let's consider the following application tree: -->
+
+โดยที่ ใน React เราสามารถมองได้ง่ายๆ ว่าส่วนไหนที่ต้องการ dependency injector (หรือ ส่วนที่ต้องการใช้ dependency) ยกตัวอย่างเช่นโค้ดด้านล่าง
 
 ```js
 // Title.jsx
@@ -35,9 +39,13 @@ class App extends React.Component {
 };
 ```
 
-The string "React in patterns" should somehow reach the `Title` component. The direct way of doing this is to pass it from `App` to `Header` and then `Header` pass it down to `Title`. However, this may work for these three components but what happens if there are multiple properties and deeper nesting. Lots of components will act as proxy passing properties to their children.
+<!-- The string "React in patterns" should somehow reach the `Title` component. The direct way of doing this is to pass it from `App` to `Header` and then `Header` pass it down to `Title`. However, this may work for these three components but what happens if there are multiple properties and deeper nesting. Lots of components will act as proxy passing properties to their children. -->
 
-We already saw how the [higher-order component](https://github.com/krasimir/react-in-patterns/tree/master/patterns/higher-order-components) may be used to inject data. Let's use the same technique to inject the `title` variable:
+จากโค้ดตัวอย่างจะเห็นได้ว่า ค่าสตริง "React in patterns" จะต้องถูกส่งไปหา Title component โดยที่วิธีการตรงๆเลย คือส่งค่าผ่าน props จาก App ไปยัง Header และจาก Header ไปยัง Title สำหรับ components สามตัวอาจจะไม่ใช้เรื่องแปลก แต่หาก components ที่เราต้องทำงานด้วยนั้น มีค่าที่หลากหลาย และ ซ้อนกันหลายๆชั้น จะต้องมี components ระหว่างทางหลายตัวที่จะได้รับค่าไปเพียงเพื่อโยนไปให้ตัวลูก โดยที่ตัวเองไม่ได้ใช้
+
+<!-- We already saw how the [higher-order component](https://github.com/krasimir/react-in-patterns/tree/master/patterns/higher-order-components) may be used to inject data. Let's use the same technique to inject the `title` variable: -->
+
+จากที่ผ่านมา เราได้เห็นแล้วว่า higher-order component นั้น สามารถใช้สำหรับการส่งค่าลงไปได้ เราจะมาลองใช้เทคนิคที่ว่ากับตัวแปร title ดู
 
 ```js
 // inject.jsx
@@ -71,16 +79,23 @@ export default function Header() {
 }
 ```
 
-The `title` is hidden in a middle layer (higher-order component) where we pass it as a prop to the original `Title` component. That's all nice but it solves only half of the problem. Now we don't have to pass the `title` down the tree but how this data reaches the `inject.jsx` helper.
+<!-- The `title` is hidden in a middle layer (higher-order component) where we pass it as a prop to the original `Title` component. That's all nice but it solves only half of the problem. Now we don't have to pass the `title` down the tree but how this data reaches the `inject.jsx` helper. -->
+
+ตอนนี้ตัวแปร title ได้ถูกซ้อนอยู่ในเลเยอร์ตรงกลาง หรือ higher-order component (inject.jsx) โดยที่มันจะถูกส่งไปหา Title component ผ่าน props โดยตรง ท่านี้ีแก้ปัญหาได้ครึ่งทาง เราไม่ต้องกังวลเลยการส่งค่าหลายๆชั้นอีกแล้ว แต่ยังมีปัญหาเรื่องที่ว่า เราจะทำยังไงให้ค่าวิ่งไปหา inject.jsx
 
 ## Using React's context (prior v. 16.3)
 
-*In v16.3 React's team introduced a new version of the context API and if you are going to use that version or above you'd probably skip this section.*
+<!-- *In v16.3 React's team introduced a new version of the context API and if you are going to use that version or above you'd probably skip this section.* -->
 
-React has the concept of [*context*](https://facebook.github.io/react/docs/context.html). The *context* is something that every React component has access to. It's something like an [event bus](https://github.com/krasimir/EventBus) but for data. A single *store* which we access from everywhere.
+ใน เวอร์ชั่น 16.3, ทีมผู้พัฒนา React ได้ เสนอ context API ตัวใหม่ สำหรับคนที่คิดว่าจะใช้ เวอร์ชั่น 16.3 หรือ มากกว่า สามารถข้ามส่วนนี้ไปได้เลย
+
+<!-- React has the concept of [*context*](https://facebook.github.io/react/docs/context.html). The *context* is something that every React component has access to. It's something like an [event bus](https://github.com/krasimir/EventBus) but for data. A single *store* which we access from everywhere. -->
+
+ในโลกของ React นั้น มีแนวคิดที่ชื่อว่า context ซึ่ง context นั้นคือ สิ่งๆหนึ่ง ที่ React component ทุกตัวสามารถหยิบมาใช้ได้  แนวคิดของ context นั้นจะคล้ายๆกับ event bus สำหรับการส่งข้อมูล หรือ store (ส่วนกลาง) ที่สามารถเข้าถึงจากที่ไหนก็ได้
 
 ```js
 // a place where we will define the context
+// จุดที่เราทำการประกาศ context
 var context = { title: 'React in patterns' };
 
 class App extends React.Component {
@@ -94,6 +109,7 @@ App.childContextTypes = {
 };
 
 // a place where we use the context
+// จุดที่เราจะใช้ context
 class Inject extends React.Component {
   render() {
     var title = this.context.title;
@@ -105,7 +121,9 @@ Inject.contextTypes = {
 };
 ```
 
-Notice that we have to specify the exact signature of the context object. With `childContextTypes` and `contextTypes`. If those are not specified then the `context` object will be empty. That may be a little bit frustrating because we may have lots of stuff to put there. That is why it is a good practice that our `context` is not just a plain object but it has an interface that allows us to store and retrieve data. For example:
+<!-- Notice that we have to specify the exact signature of the context object. With `childContextTypes` and `contextTypes`. If those are not specified then the `context` object will be empty. That may be a little bit frustrating because we may have lots of stuff to put there. That is why it is a good practice that our `context` is not just a plain object but it has an interface that allows us to store and retrieve data. For example: -->
+
+จะเห็นได้จากโค้ดด้านบน ว่าเราจะต้องประกาศออบเจ็กต์ context พร้อมตัวแปรที่เราจะใช้ ผ่าน childContextTypes และ contextTypes ถ้าเราไม่ประกาศ ออบเจ็กต์ context จะมาเป็น ออบเจ็กต์เปล่าๆ ซึ่งบางครั้งก็ทำให้รู้สึกหงุดหงิดที่ต้องมานั่งใส่ตัวแปรหลายๆตัวลงไปในนั้น เพราะฉะนั้นวิธีการที่ดีคือ การเปลี่ยน context ให้มี interface ที่สามารถเก็บ และ ส่งค่าได้ ดังตัวอย่างด้านล่าง
 
 ```js
 // dependencies.js
@@ -119,7 +137,9 @@ export default {
   }
 }
 ```
-Then, if we go back to our example, the `App` component may look like that:
+
+<!-- Then, if we go back to our example, the `App` component may look like that: -->
+ถ้านำกลับไปใช้กับตัวอย่างเดิม หน้าตาของ App component จะเป็นเหมือนด้านล่าง
 
 ```js
 import dependencies from './dependencies';
@@ -141,7 +161,8 @@ App.childContextTypes = {
 };
 ```
 
-And our `Title` component gets it's data through the context:
+<!-- And our `Title` component gets it's data through the context: -->
+และ Title component ของเรา จะสามารถนำค่าจาก context ออกมาใช้ได้
 
 ```js
 // Title.jsx
@@ -157,7 +178,10 @@ Title.contextTypes = {
 };
 ```
 
-Ideally we don't want to specify the `contextTypes` every time when we need an access to the context. This detail may be wrapped again in a higher-order component. And even better, we may write an utility function that is more descriptive and helps us declare the exact wiring. I.e instead of accessing the context directly with `this.context.get('title')` we ask the higher-order component to get what we need and pass it as props to our component. For example:
+<!-- Ideally we don't want to specify the `contextTypes` every time when we need an access to the context. This detail may be wrapped again in a higher-order component. And even better, we may write an utility function that is more descriptive and helps us declare the exact wiring. I.e instead of accessing the context directly with `this.context.get('title')` we ask the higher-order component to get what we need and pass it as props to our component. For example: -->
+
+ตามหลักการแล้ว เราไม่อยากที่จะนั่งประกาศ contextTypes ในทุกๆครั้ง ที่เราอยากจะเข้าถึง context ในส่วนนี้ เราสามารถนำ higher-order component มาครอบได้ และที่ดีกว่าคือ เราสามารถเขียน utility function ที่มีความหมายชัดเจนมากกว่า และ ช่วยให้เราสามารถต่อ context ได้อย่างถูกต้อง ยกตัวอย่าง เช่น แทนที่เราจะเข้าถึง context ตรงๆ ผ่าน this.context.get('title') เราสามารถขอ context ผ่าน higher-order component และให้ higher-order component ส่งค่ามาในรูปแบบของ props แทน ดังตัวอย่างด้านล่าง
+
 
 ```js
 // Title.jsx
@@ -172,9 +196,14 @@ export default wire(Title, ['title'], function resolve(title) {
 });
 ```
 
-The `wire` function accepts a React component, then an array with all the needed dependencies (which are `register`ed already) and then a function which I like to call `mapper`. It receives what is stored in the context as a raw data and returns an object which is later used as props for our component (`Title`). In this example we just pass what we get - a `title` string variable. However, in a real app this could be a collection of data stores, configuration or something else.
+<!-- The `wire` function accepts a React component, then an array with all the needed dependencies (which are `register`ed already) and then a function which I like to call `mapper`. It receives what is stored in the context as a raw data and returns an object which is later used as props for our component (`Title`). In this example we just pass what we get - a `title` string variable. However, in a real app this could be a collection of data stores, configuration or something else.
 
-Here is how the `wire` function looks like:
+Here is how the `wire` function looks like: -->
+
+ฟังชั่น wire รับ React component, อาเรย์ที่ประกอบด้วย dependencies (เชื่อมต่อเข้ากับ context แล้ว) ที่เราต้องการเรียกใช้ และ ฟั่งชั่นที่ ผู้เขียน ชอบเรียกว่า mapper ซึั่งฟันชั่นนี้จะรับค่า มาจาก context และ return ค่าในรูปแบบของออบเจ็กต์ โดยที่ออบเจ็กต์ ท้ายที่สุดแล้วจะถูกส่งให้ component ของเรา (Title) ในรูปแบบของ props ดังที่เห็นในตัวอย่างนี้ เรานำค่า title (string variable) ส่งเข้าไป
+ในการเขียนแอพจริงๆ ค่าที่ส่งเข้าไปอาจจะเป็น กลุ่มข้อมูลหลายๆอัน, configuration, หรือ อื่นๆ
+
+สามารถดู หน้าตาของฟั่งชั่น wire ได้จากโค้ดด้านล่าง
 
 ```js
 export default function wire(Component, dependencies, mapper) {
@@ -198,6 +227,8 @@ export default function wire(Component, dependencies, mapper) {
 ```
 
 `Inject` is a higher-order component that gets access to the context and retrieves all the items listed under `dependencies` array. The `mapper` is a function receiving the `context` data and transforms it to props for our component.
+
+Inject คือ higher-order component ที่เข้าถึง context และ นำค่าที่ประกาศไว้ใน อาเรย์ dependencies ออกมา ส่วน ฟังชั่น mapper ทำหน้าที่รับค่าเหล่านั้น และ ส่งเข้าไปหา component ของเรา ผ่าน props
 
 ## Using React's context (v. 16.3 and above)
 
