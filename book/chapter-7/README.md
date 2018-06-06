@@ -28,7 +28,7 @@ function App() {
 };
 ```
 
-ในตอนนี้เรามีข้อมูลภายในคอมโพเนนท์ของเราแล้ว หรือพูดอีกอย่างหนึ่งได้ว่า ในคอมโพเนนท์ `Switcher` เป็นที่ๆเดียวที่รู้เกี่ยวกับค่า `flag` ของเรา ดังนั้นมาลองส่งมันออกไปยังตัวเก็บข้อมูล (store) กันเถอะ 
+ในตอนนี้เรามีข้อมูลภายในคอมโพเนนท์ของเราแล้ว หรือพูดอีกอย่างหนึ่งได้ว่า ในคอมโพเนนท์ `Switcher` เป็นที่ๆเดียวที่รู้เกี่ยวกับค่า `flag` ของเรา ดังนั้นมาลองส่งมันออกไปยังตัวเก็บข้อมูล (`Store`) กันเถอะ 
 
 
 ```js
@@ -66,11 +66,11 @@ function App() {
 };
 ```
 
-Our `Store` object is a [singleton](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript) where we have helpers for setting and getting the value of the `_flag` property. By passing the setter to the `Switcher` we are able to update the data externally. More or less our application workflow looks like that:
+ออบเจ็ค `Store` ของเราคือ [Singleton](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript) ที่ๆเราสามารถมีตัวช่วยสำหรับการเขียนและอ่านข้อมูลของพร็อบเพอร์ตี้ `_flag` การส่งตัวเขียนข้อมูลไปยัง `Switcher` จะทำให้เราสามารถอัพเดทข้อมูลจากภายนอกได้ ดังนั้นภาพรวมของระบบการทำงานของแอพพลิเคชั่นจะมีลักษณะไม่ต่างไปจากนี้
 
-![one-direction data flow](./one-direction-1.jpg)
+![การไหลข้อมูลแบบทิศทางเดียว](./one-direction-1.jpg)
 
-Let's assume that we are saving the flag value to a back-end service via the `Store`. When the user comes back we have to set a proper initial state. If the user left the flag as `true` we have to show *"lights on"* and not the default *"lights off"*. Now it gets tricky because we have the data in two places. The UI and the `Store` have their own states. We have to communicate in both directions from the store to the switcher and from the switcher to the store.
+สมมติว่าเรากำลังบันทึกค่าของ flag ไปยังเซอร์วิสของระบบหลังบ้านผ่านทาง `Store` เมื่อผู้ใช้กลับมาใช้งานอีกครั้ง เราจะต้องบันทึกสถานะเริ่มต้น (Initial state) ให้ถูกต้อง ถ้าผู้ใช้ออกจากการใช้งานโดยมีค่า flag เป็น `true` เราต้องแสดง *"lights on"* แทนที่จะเป็นค่าเริ่มต้น *"lights off"* ตอนนี้การทำงานเริ่มจะยุ่งยากแล้วเพราะว่าเราต้องมีข้อมูลในสองที่ด้วยกันคือ ส่วนของการแสดงข้อมูล (UI) และส่วนของ `Store` ซึ่งแต่ละส่วนนั้นเก็บสถานะ (state) ของตัวเอง เราจึงต้องสื่อสารในสองทิศทางจาก store ไปยัง switcher และจาก switcher กลับไปยัง store
 
 ```js
 // ... in App component
