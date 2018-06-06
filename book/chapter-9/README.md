@@ -11,7 +11,7 @@
 
 ![Redux architecture](./redux-architecture.jpg)
 
-เช่นเดียวกับ Flux Redux มี view components (React) ที่คอย dispatch action โดยที่ action เดียวกันสามารถถูก dispatch มาจากส่วนไหนของระบบก็ได้ ยกตัวอย่างเช่น การเรียก bootstrap เป็นต้น action ที่ถูก dispatch จะถูกส่งตรงไปยัง store ซึ่งมีแค่ตัวเดียวเท่านั้นใน Redux ซึ่งสิ่งนี้เป็นสิ่งที่ Redux ไม่เหมือนกับ Flux ส่วนที่จะตัดสินใจว่า data ของเราจะเปลี่ยนไปอย่างไรนั้นขึ้นอยู่กับ reducers ที่เป็น pure functions เมื่อไรก็ตามที่ store ได้รับ action reducers จะทำการรับ state ณ ปัจจุบัน และ action ที่ถูกส่งเข้ามา เพื่อคำนวนและสร้าง state ถัดไป โดยอิงหลัก immutable store จะรับช่วงต่อและเปลี่ยนค่า state ภายใน store สุดท้าย React component ที่ดึง data มาจาก store ก็จะถูก re-render
+เช่นเดียวกับ Flux Redux มี view components (React) ที่คอย dispatch action โดยที่ action เดียวกันสามารถถูก dispatch มาจากส่วนไหนของระบบก็ได้ ยกตัวอย่างเช่น การเรียก bootstrap เป็นต้น action ที่ถูก dispatch จะถูกส่งตรงไปยัง store ซึ่งมีแค่ตัวเดียวเท่านั้นใน Redux ซึ่งสิ่งนี้เป็นสิ่งที่ Redux ไม่เหมือนกับ Flux ส่วนที่จะตัดสินใจว่า data ของเราจะเปลี่ยนไปอย่างไรนั้นขึ้นอยู่กับ reducers ที่เป็น pure functions เมื่อไรก็ตามที่ store ได้รับ action reducers จะทำการรับ current state และ action ที่ถูกส่งเข้ามา เพื่อคำนวนและสร้าง state ถัดไป โดยอิงหลัก immutable store จะรับช่วงต่อและเปลี่ยนค่า state ภายใน store สุดท้าย React component ที่ดึง data มาจาก store ก็จะถูก re-render
 
 Concept ของ Redux ค่อนข้างตรงไปตรงมาโดยยึดหลัก [one-direction data flow](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-7/README.md) เรามาเริ่มพูดถึงเรื่องนี้และแนะนำส่วนที่ช่วยสนับสนุน Redux pattern กันดีกว่า
 
@@ -40,7 +40,7 @@ It is a good practice that we create constants like `CHANGE_VISIBILITY` for our 
 
 The `visible` property is the meta data that we mentioned above. It has nothing to do with Redux. It means something in the context of the application.
 
-ทุกๆครั้งที่เราต้องการ dispatch method เราต้องใช้ object ซึ่งมันเป็นการยุ่งยากถ้าจะต้องมาเขียนมันซ้ำแล้วซ้ำเล่า ซึ่งเป็นที่มาของ *action creators* ที่เป็น function ที่ return ค่า object และจะรับหรือไม่รับ argument ที่เกี่ยวข้องกับ action นั้นเพิ่มก็ได้ ยกตัวอย่างเช่น action creator ของ action ข้างบน จะมีหน้าตาตามข้างล่าง
+ทุกๆครั้งที่เราต้องการ dispatch method เราต้องใช้ object ซึ่งมันเป็นการยุ่งยากถ้าจะต้องมาเขียนมันซ้ำแล้วซ้ำเล่า ซึ่งเป็นที่มาของ *action creators* ที่เป็น function ที่ return ค่า object และจะรับหรือไม่รับ argument ที่เกี่ยวข้องกับ action นั้นเพิ่มก็ได้ ยกตัวอย่างเช่น action creator ของ action ด้านบน จะมีหน้าตาตามด้านล่าง
 
 Every time when we want to dispatch a method we have to use such objects. However, it becomes too noisy to write them over and over again. That is why there is the concept of *action creators*. An action creator is a function that returns an object and may or may not accept an argument which directly relates to the action properties. For example the action creator for the above action looks like this:
 
@@ -70,9 +70,11 @@ import { createStore } from 'redux';
 createStore([reducer], [initial state], [enhancer]);
 ```
 
-เราได้กล่าวถึงไว้แล้วว่า reducer เป็น function ที่รับ state ณ ปัจจุบันและ action และ return ค่าเป็น state ใหม่ ต่อมา argrument ที่สองคือ state เริ่มต้น ซึ่งมีประโยชน์สำหรับในการใช้เป็นการกำหนดค่า state เมื่อ application เริ่มทำงาน 
+เราได้กล่าวถึงไว้แล้วว่า reducer เป็น function ที่รับ current state และ action และ return ค่าเป็น state ใหม่ ต่อมา argrument ที่สองคือ state เริ่มต้น ซึ่งมีประโยชน์สำหรับในการใช้เป็นการกำหนดค่า state เมื่อ application เริ่มทำงาน ซึ่ง feature นี้เป็นหนึ่งใน process ของการทำ server-side rendering หรือ persistent experience ส่วน argument ที่สามคือ enchancer เป็นส่วนไว้สำหรับต่อกับ third party API หรือ plug กับ function ที่ไม่ได้มีใน Redux ยกตัวอย่างเช่น วิธีการรับมือกับ async processes
 
 We already mentioned that the reducer is a function that accepts the current state and action and returns the new state. More about that in a bit. The second argument is the initial state of the store. This comes as a handy instrument to initialize our application with data that we already have. This feature is the essence of processes like server-side rendering or persistent experience. The third parameter, enhancer, provides an API for extending Redux with third party middlewares and basically plug some functionally which is not baked-in. Like for example an instrument for handling async processes.
+
+store ที่สร้างขึ้นมาประกอบไปด้วย 4 method คือ `getState`, `dispatch`, `subscribe` และ `replaceReducer` ซึ่งตัวที่สำคัญที่สุดคือ `dispatch`
 
 Once created the store has four methods - `getState`, `dispatch`, `subscribe` and `replaceReducer`. Probably the most important one is `dispatch`:
 
@@ -80,17 +82,30 @@ Once created the store has four methods - `getState`, `dispatch`, `subscribe` an
 store.dispatch(changeVisibility(false));
 ```
 
+จากด้านบนเป็นวิธีที่เราเรียกใช้ action creators โดยเราจะส่งผลรับที่ได้จาก action creators ซึ่งก็คือ action object ไปยัง `dispatch` method ซึ่งจะถูกกระจายต่อไปยัง reducer แต่ละตัวที่อยู่ใน application
+
 That is the place where we use our action creators. We pass the result of them or in other words action objects to this `dispatch` method. It then gets spread to the reducers in our application.
+
+โดยทั่วไปแล้วใน React application เราจะไม่ค่อยได้ใช้ `getState` และ `subscribe` ตรงๆ เพราะเรามีตัวช่วย (เราจะอธิบายในส่วนต่อไป) ในการที่จะเชื่อมต่อ component ของเราเข้ากับ store และ `subscribe` อย่างมีประสิทธิภาพเมื่อมีการเปลี่ยนแปลง ในส่วนของ subscription เรายังได้รับ current state ทำให้ไม่ต้อง call `getState` เองอีกด้วย ส่วน `replaceReducer` เป็น API ที่ค่อนข้างจะซับซ้อน ใช้สำหรับเปลี่ยน reducer ที่กำลังถูก store ใช้งานอยู่ โดยส่วนตัวแล้วยังไม่มีโอกาสได้ใช้เลย
 
 In the typical React application we usually don't use `getState` and `subscribe` directly because there is a helper (we will see it in the next sections) that wires our components with the store and effectively `subscribe`s for changes. As part of this subscription we also receive the current state so we don't have to call `getState` ourself. `replaceReducer` is kind of an advanced API and it swaps the reducer currently used by the store. I personally never used this method.
 
 ### Reducer
 
+reducer เป็น function ที่เรียกได้ว่า *สวยงามที่สุด* ภายใน Redux ถึงแม้ก่อนหน้านี้ ผมจะเริ่มสนใจในการเขียน pure fuction และ immutability แต่ Redux บังคับให้ผมต้องเขียน เพราะมีลักษณะสำคัญ 2 อย่างของ reducer ที่มีความสำคัญมาก หากขาดไปแล้ว pattern จะไม่มีทางเกิดขึ้น
+
 The reducer function is probably the most *beautiful* part of Redux. Even before that I was interested in writing pure functions with an immutability in mind but Redux forced me to do it. There are two characteristics of the reducer that are quite important and without them we basically have a broken pattern.
+
+(1) ต้องเป็น pure function เท่านั้น - หมายถึงว่า function ควรจะ return ค่าเดียวกันทุกครั้งหากมี input ที่เหมือนกัน
 
 (1) It must be a pure function - it means that the function should return the exact same output every time when the same input is given.
 
+(2) ควรจะไม่มี side effects - ของจำพวก global variable, การสร้าง async call หรือ การรอ promise เพื่อที่จะ resolve ไม่ควรมี
+
+
 (2) It should have no side effects - stuff like accessing a global variable, making an async call or waiting for a promise to resolve have no place in here.
+
+นี่คือตัวอย่างง่ายๆของ counter reducer
 
 Here is a simple counter reducer:
 
@@ -104,6 +119,8 @@ const counterReducer = function (state, action) {
   return { value: 0 };
 };
 ```
+
+จะเห็นว่าไม่มี side effects และเรา return oject ตัวใหม่ทุกครั้ง เราเพิ่มค่าให้กับ value โดยอิงจาก previous state และ action type ที่ถูกส่งเข้ามา
 
 There are no side effects and we return a brand new object every time. We accumulate the new value based on the previous state and the incoming action type. 
 
@@ -154,13 +171,19 @@ const mapDispatchToProps = dispatch => ({
 
 ## Simple counter app using Redux
 
+เรามาเริ่มสร้าง counter app แบบง่ายๆ ที่ใช้ APIs จากด้านบนกัน
+
 Let's create a simple counter app that uses all the APIs above.
 
 ![Redux counter app example](./redux-counter-app.png)
 
+ปุ่ม "Add" และ "Subtract" จะเป็นตัวเปลี่ยนแปลงค่าที่อยู่ใน store ของเรา "Visible" และ "Hidden" จะเป็นตัวควบคุมการแสดงค่า 
+
 The "Add" and "Subtract" buttons will simply change a value in our store. "Visible" and "Hidden" will control its visibility.
 
 ### Modeling the actions
+
+สำหรับผมแล้ว ทุก Redux feature จะเริ่มต้นด้วยการขึ้น model ของ action types และประกาศสิ่งที่จะเก็บใน state ในกรณีนี้เรามี 3 operation คือ adding, subtracting และ Visible/Hidden ดังนั้นเราจะมาเริ่มจาก: 
 
 For me, every Redux feature starts with modeling the action types and defining what state we want to keep. In our case we have three operations going on - adding, subtracting and managing visibility. So we will go with the following:
 
@@ -243,12 +266,16 @@ const rootReducer = combineReducers({
 
 ### Selectors
 
+ก่อนจะเริ่มในส่วนถัดไป React components ที่เราได้กล่าวไว้ในส่วน concept ของ *selector* จาก section ที่แล้ว เรารู้แล้วว่า state ของเราถูกแบ่งออกเป็นหลายๆส่วน เราได้ให้ reducer จัดการเกี่ยวกับ update data แต่เมื่อไหร่ที่มีการเรียก data เรายังคงมี state object ตัวเดียวอยู่ ซึ่งส่วนนี้ selector จะเป็นตัวช่วยจัดการ โดย selector จะเป็น function ที่รับ state oject และเลือก return เฉพาะ data ที่เราต้องการ ยกตัวอย่างเช่น app เล็กๆของเราต้องการแค่ selector สองตัวนี้
+
 Before moving to the React components we have to mention the concept of a *selector*. From the previous section we know that our state is usually divided into different parts. We have dedicated reducers to update the data but when it comes to fetching it we still have a single object. Here is the place where the selectors come in handy. The selector is a function that accepts the whole state object and extracts only the information that we need. For example in our small app we need two of those:
 
 ```js
 const getCounterValue = state => state.counter.value;
 const getVisibility = state => state.visible;
 ```
+
+counter app เล็กเกินกว่าที่จะเห็นประสิทธิภาพจริงๆของการเขียนตัวช่วยพวกนี้ แต่ใน project ใหญ่ๆจะต่างกันกันมาก ไม่ใช่แค่เพียงการที่เขียน code น้อยลงหรืออ่านง่าย เพราะ selector อาจมาพร้อมกับส่วนอื่นๆที่อาจจะมี logic อยู่เนื่องจาก selector สามารถเข้าถึง state ได้ทั้งหมดทำให้สามารถใส่ business logic เพื่อตอบคำถามอย่างเช่น "user มีสิทธิ์ที่จะทำ X ในขณะที่อยู่หน้า Y ได้หรือไม่" ซึ่งสามารถจัดการได้ใน selector เดียว
 
 A counter app is too small to see the real power of writing such helpers. However, in a big project is quite different. And it is not just about saving a few lines of code. Neither is about readability. Selectors come with these stuff but they are also contextual and may contain logic. Since they have access to the whole state they are able to answer business logic related questions. Like for example "Is the user authorize to do X while being on page Y". This may be done in a single selector.
 
