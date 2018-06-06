@@ -1,10 +1,10 @@
 # Composition
 
-หนึ่งในความสามารถที่มีประโยชน์ที่สุดของ React ก็คือ composability โดยส่วนตัวผมยังไม่รู้จัก framework ไหนที่มีวีธีในการสร้างและประกอบ component ได้อย่างที่ React ทำได้เลย ซึ่งในบทนี้เราก็จะมาลองดูเทคนิค composition บางตัวที่ได้รับการพิสูจน์ว่าใช้งานได้ดีกันนะครับ
+หนึ่งในความสามารถที่มีประโยชน์มากของ React ก็คือ composability โดยส่วนตัวผมยังไม่รู้จัก framework ไหนที่มีวีธีในการสร้างและรวม component ได้อย่างที่ React ทำได้เลย ซึ่งในบทนี้เราก็จะมาลองดูเทคนิค composition บางตัวที่ได้รับการพิสูจน์ว่าใช้งานได้ดีกันนะครับ
 
 One of the biggest benefits of React is composability. I personally don't know a framework that offers such an easy way to create and combine components. In this section we will explore few composition techniques which proved to work well.
 
-เริ่มจากตัวอย่างง่ายๆกันเลย สมมุติว่าเรามี application ที่มีส่วนของ header อยู่ และเราต้องการที่จะวาง navigation ไว้ข้างใน header นั้น ในกรณีนี้เรามี React component อยู่สามตัว ได้แก่ App, Header, และ Navigation โดยทั้งสามตัวต้องอยู่ในสภาพซ้อนทับกัน (nested) ซึ่งสามารถแสดง dependency ได้ดังนี้
+เริ่มจากตัวอย่างง่ายๆกันเลย สมมุติว่าเรามี application ที่มีส่วนของ header อยู่ และเราต้องการที่จะวาง navigation ไว้ข้างใน ในกรณีนี้เรามี React component อยู่สามตัว ได้แก่ `App`, `Header`, และ `Navigation` โดยทั้งสามตัวต้องอยู่ในสภาพซ้อนทับกัน (nested) ซึ่งสามารถแสดง dependency ได้ดังนี้:
 
 Let's get a simple example. Let's say that we have an application with a header and we want to place a navigation inside. We have three React components - `App`, `Header` and `Navigation`. They have to be nested into each other so we end up with the following dependencies:
 
@@ -12,7 +12,7 @@ Let's get a simple example. Let's say that we have an application with a header 
 <App> -> <Header> -> <Navigation>
 ```
 
-วิธีการง่ายๆในการรวม component เล่านี้ก็เข้าด้วยกันคือการอ้างถึง component ทั้งหมดในที่ๆเราจะต้องใช้
+วิธีการง่ายๆในการรวม component เหล่านี้ก็คือการอ้างถึง component ในที่ต่างๆที่เราจะต้องใช้
 
 The trivial approach for combining these components is to reference them in the places where we need them.
 
@@ -37,7 +37,12 @@ export default function Navigation() {
 }
 ```
 
+อย่างไรก็ตาม หากเราทำตามวิธีการข้างต้น เราจะเจอกับปัญหาสองสามอย่าง:
+
 However, by following this approach we introduced couple of problems:
+
+* เราสามารถมองว่า `App` เป็นที่ที่เราจะทำ composition สำหรับ component หลักๆของเรา แต่ทั้งนี้ `Header` อาจจะมี element อื่นๆอย่างโลโก้ ช่องค้นหา หรือสโลแกนอยู่ด้วย คงจะดีมากหาก element เหล่านั้นถูกส่งผ่านมาจาก component `App` เพื่อที่เราจะไม่ต้องสร้าง hard-coded dependency ขึ้น แล้วในกรณีที่เราต้องการ component `Header` ตัวเดิมแต่ไม่ต้องการ `Navigation` ล่ะ? เราไม่สามารถแก้ปัญหานี้ได้ง่ายๆเนื่องจาก component ทั้งสองนั้นผูกกันอยู่
+* การทดสอบจะเป็นเรื่องยากมาก โดยเราอาจจะมี business logic บางส่วนอยู่ใน `Header` และเพื่อที่จะทดสอบ logic เหล่านั้นเราจำเป็นต้องสร้าง instance ของ component ขึ้นมา อย่างไรก็ตาม เนื่องจาก `Header` ทำการ import component อื่นๆเข้ามาด้วย เราจึงอาจจะจำเป็นต้องสร้าง instance ของ component พวกนั้นด้วย ซึงจะกลายเป็นว่าการทดสอบเป็นงานที่หนักมากไปเลย นอกจากนี้การทดสอบ `Header` อาจจะล้มเหลวเพราะความผิดพลาดภายใน `Navigation` ก็ได้ ซึ่งจะทำให้เกิดความเข้าใจผิดขึ้นด้วย *(หมายเหตุ: ในบางกรณี [shallow rendering](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering) สามารถแก้ปัญหานี้ได้โดยการ render เฉพาะ `Header` โดยที่ไม่สนใจ component ลูกที่ซ้อนอยู่ข้างใน)*
 
 * We may consider the `App` as a place where we do our main composition. The `Header` though may have other elements like a logo, search field or a slogan. It will be nice if they are passed somehow from the `App` component so we don't create a hard-coded dependencies. What if we need the same `Header` component but without the `Navigation`. We can't easily achieve that because we have the two bound tightly together.
 * It's difficult to test. We may have some business logic in the `Header` and in order to test it we have to create an instance of the component. However, because it imports other components we will probably create instances of those components too and it becomes heavy to test. We may break our `Header` test by doing something wrong in the `Navigation` component which is totally misleading. *(Note: to some extent [shallow rendering](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering) solves this problem by rendering only the `Header` without its nested children.)*
