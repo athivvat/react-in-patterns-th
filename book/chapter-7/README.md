@@ -66,7 +66,7 @@ function App() {
 };
 ```
 
-object `Store` ของเราคือ [Singleton](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript) ที่ๆเราสามารถมีตัวช่วยสำหรับการเขียนและอ่านข้อมูลของ property `_flag` การส่งตัวเขียนข้อมูลไปยัง `Switcher` จะทำให้เราสามารถอัพเดทข้อมูลจากภายนอกได้ ดังนั้นภาพรวมของระบบการทำงานของแอพพลิเคชั่นจะมีลักษณะไม่ต่างไปจากนี้
+object `Store` ของเราเป็น [Singleton](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript) object ที่ๆเราสามารถมีตัวช่วยสำหรับการเขียนและอ่านข้อมูลของ property `_flag` การส่งตัวเขียนข้อมูลไปยัง `Switcher` จะทำให้เราสามารถอัพเดทข้อมูลจากภายนอกได้ ดังนั้นภาพรวมของระบบการทำงานของแอพพลิเคชั่นจะมีลักษณะไม่ต่างไปจากนี้
 
 ![การไหลข้อมูลแบบทิศทางเดียว](./one-direction-1.jpg)
 
