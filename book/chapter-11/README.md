@@ -50,7 +50,6 @@ const paragraphText = {
 ```js
 /* style.css */
 .title {
-  // ณ จุด ๆ นี้ คุณไม่ต้องครอบ green ด้วย Quote อีกต่อไป
   color: green;
 }
 
