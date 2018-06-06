@@ -1,18 +1,18 @@
 # การตกแต่ง React components
 
-React นั้นเป็นส่วนแสดงผล ซึ่งเป็นการควบคุมรูปแบบนึงของ Markup ซึ่งทำงานบนเบาเซอร์ And we know that the styling with CSS is tightly connected to the markup on the page. There are couple of approaches for styling React applications and in this section we will go through the most popular ones.
+React นั้นเป็นส่วนแสดงผล ซึ่งเป็นการควบคุมรูปแบบนึงของ Markup ซึ่งทำงานบนเบราว์เซอร์ และเราก็รู้แล้วว่าการใช้ CSS บนเว็บของเรานั้นถูกเชื่อมต่อกันโดยสมบูรณ์กับ มีหลายวิธีมากในการจัดการกับ Styling บนแอพพลิเคชั่น React และในบทนี้ เราจะมาพูดถึงวิธีการที่นิยมกัน
 
-## The good old CSS class
+## CSS Class ที่ดีในทุกยุคสมัย
 
-JSX syntax is pretty close to HTML syntax. As such we have almost the same tag attributes and we may still style using CSS classes. Classes which are defined in an external `.css` file. The only caveat is using `className` and not `class`. For example:
+JSX Syntax นั้นมีความใกล้เคียงกับภาษา HTML ซึ่งนั่นก็คือเรายังคงใช้ Attribute ที่เหมือนกัน และเราอาจจะใช้ CSS Class ในการตกแต่ง โดยที่ Class ต่างๆ ถูกประกาศจากไฟล์ `.css` โดยมีข้อแม้อย่างเดียวก็คือต้องใช้ `className` ไม่ใช่ `class` เช่น
 
 ```
-<h1 className='title'>Styling</h1>
+<h1 className='title'>4 ปีแล้วนะ</h1>
 ``` 
 
 ## Inline styling
 
-The inline styling works just fine. Similarly to HTML we are free to pass styles directly via a `style`  attribute. However, while in HTML the value is a string in JSX must be an object.
+การทำ Inline css ก็สามารถทำได้เช่นกัน เหมือนกับ HTML ที่เราสามารถส่งค่าต่างๆได้โดยตรงผ่าน Attribute `style` แต่อย่างไรก็ตาม ค่า value ที่เป็นค่า string นั้น ใน JSX จะต้องเป็น object
 
 ```js
 const inlineStyles = {
@@ -25,7 +25,7 @@ const inlineStyles = {
 <h2 style={ inlineStyles }>Inline styling</h2>
 ```
 
-Because we write the styles in JavaScript we have some limitations from a syntax point of view. If we want to keep the original CSS property names we have to put them in quotes. If not then we have to follow the camel case convention. However, writing styles in JavaScript is quite interesting and may be a lot more flexible then the plain CSS. Like for example inheriting of styles:
+เพราะว่าเราเขียน style ใน Javascript เราจึงมีข้อจำกัดจาก Syntax หากเราต้องการเขียน CSS Property ใบแบบของ CSS เราจะต้องเขียนภายใน Quote ถ้าไม่เช่นนั้นคุณก็จะต้องเขียนตามหลัก Camel case อย่างไรก็ตาม การเขียน Style ใน Javascript นั้นมีความน่าสนใจและยืดหยุ่นได้หลากหลายวิธีกว่า CSS ปกติ ดังในตัวอย่างนี้ เราส่งผ่าน Property จาก Style หนึ่งไปยังอีก Style หนึ่ง:
 
 ```js
 const theme = {
@@ -38,13 +38,14 @@ const paragraphText = {
 };
 ```
 
-We have some basic styles in `theme` and with mix them with what is in `paragraphText`. Shortly, we are able to use the whole power of JavaScript to organize our CSS. What it matters at the end is that we generate an object that goes to the `style` attribute.
+เรามี Basic Style ใน `theme` และเราก็รวมมันกับสิ่งที่อยู่ใน `paragraphText` อธิบายง่ายๆก็คือ เราสามารถใช้ความสามารถของ Javascript ในการจัดการ CSS ของเรา สิ่งที่สำคัญคือช่วงสุดท้ายเราได้สร้าง object ซึ่งมันจะไปแทรกตัวอยู่ใน Attribute `style`
 
 ## CSS modules
 
-[CSS modules](https://github.com/css-modules/css-modules/blob/master/docs/get-started.md) is building on top of what we said so far. If we don't like the JavaScript syntax then we may use CSS modules and we will be able to write plain CSS. Usually this library plays its role at bundling time. It is possible to hook it as part of the transpilation step but normally is distributed as a build system plugin.
+[CSS modules](https://github.com/css-modules/css-modules/blob/master/docs/get-started.md) นั้นสร้างขึ้นจากแนวคิดของสิ่งที่เราได้กล่าวไปก่อนหน้านี้ ถ้าเราไม่ชอบ syntax ของ Javascript เราสามารถเลือก CSS Module ที่ทำให้เราสามารถเขียน CSS แบบธรรมดาได้ ปกติแล้ว Library นี้จะจัดการงานของมันในช่วง Building Time
+เราอาจจะคิดว่ามันเป็นส่วนหนึ่งของการทำ Transpilation แต่ปกติแล้วมันคือส่วนหนึ่งของ plug-in ของการสร้างระบบ
 
-Here is a quick example to get an idea how it works:
+นี่คือตัวอย่างเล็กๆ ที่จะช่วยให้คุณเข้าใจว่ามันทำงานอย่างไร:
 
 <br /><br />
 
