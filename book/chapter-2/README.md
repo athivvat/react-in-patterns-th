@@ -71,11 +71,11 @@ function App() {
 
 (ก่อนเวอร์ชั่น 16.3) มีข้อมูลนำเข้าทางอ้อมที่ส่งไปให้ component เรียกว่า `context` ซึ่ง component ทั้งหมดที่อยู่ภายใต้ลำดับชั้นของ context นั้นๆ สามารถที่จะเข้าถึงข้อมูล content นั้นได้ (จะกล่างถึงอย่างละเอียดอีกครั้งในหัวข้อ [dependency injection](../chapter-10/README.md) ) 
 
-## Output
+## ข้อมูลส่งออก (Output)
 
-The first obvious output of a React component is the rendered HTML. Visually that is what we get. However, because the prop may be everything including a function we could also send out data or trigger a process.
+ข้อมูลส่งออกแรกที่ชัดเจนที่สุดของ React component ก็คือ HTML ที่ถูกประมวลผลออกมาแล้ว เป็นสิ่งที่สามารถเห็นได้ง่ายๆ อย่างไรก็ตาม เพราะว่าเราสามารถที่จะส่งอะไรเข้ามาเป็นข้อมูลนำเข้าก็ได้ เราจึงสามารถที่จะส่งฟังก์ชัน (function) เข้ามาเพื่อที่จะส่งข้อมูลกลับออกไปหรือกระตุ้นให้เกิดการเริ่มกระบวนการที่ต้องการได้ด้วย
 
-In the following example we have a component that accepts the user's input and sends it out (`<NameField />`).
+ในตัวอย่างด้านล่างเรามี component ชื่อ `<NameField />` ที่ด้านในของมันเป็น html input tag ทำหน้าที่รับข้อมูลนำเข้าจากผู้ใช้และมี prop (ข้อมูลนำเข้าของตัว NameField เอง) ที่ชื่อว่า `valueUpdated` เป็นเหมือน callback (ฟังก์ชันที่ส่งข้อมูลกลับเมื่อสิ้นสุดการทำงาน) ที่คอยส่งค่าที่ user ป้อนเข้ามา ออกไปยัง component ที่เรียกใช้ตัว `<NameField />` อีกทีนึง (`<App />`)
 
 <span class="new-page"></span>
 
@@ -104,7 +104,7 @@ class App extends React.Component {
 };
 ```
 
-Very often we need an entry point of our logic. React comes with some handy lifecycle methods that may be used to trigger a process. For example we have an external resource that needs to be fetched on a specific page.
+บ่อยครั้งที่เราต้องการจุดเริ่มต้นสำหรับ logic ของเรา และ React มาพร้อมกับฟังก์ชันวงจรชีวิต (lifecycle method) ต่างๆที่เราสามารถใช้ในการระบุการทำงานที่ต้องการในแต่ละช่วงสถานะของตัว component ได้ ดังเช่นตัวอย่างด้านล่างที่เราพยายามจะดึงข้อมูลจากทรัพยากรภายนอก
 
 ```js
 class ResultsPage extends React.Component {
@@ -121,8 +121,8 @@ class ResultsPage extends React.Component {
 }
 ```
 
-Let's say that we are building a search-results experience. We have a search page and we enter our criteria there. We click submit and the user goes to `/results` where we have to display the result of the search. Once we land on the results page we render some sort of a loading screen and trigger a request for fetching the results in `componentDidMount` lifecycle hook. When the data comes back we pass it to a `<List>` component.
+ลองคิดว่าเรากำลังจะสร้างส่วนของการค้นหา ซึ่งเรามีหน้าสำหรับค้นหาที่รับเงื่อนไขในการค้นหาอยู่แล้ว user อาจจะกรอกเงื่อนไขและกดค้นหา ซึ่งจะนำผู้ใช้ไปอยู่หน้า `/results` ที่ๆเราจะแสดงผลของการค้นหาของเรา และเมื่อผู้ใช้เข้าสู่หน้าแสดงผลสำเร็จแล้วเราก็จะให้ผู้ใช้พบกับส่วนที่แสดงว่ากำลังทำการดึงข้อมูลอยู่ให้ผู้ใช้รอ พลางทำการร้องขอข้อมูลไปที่ทรัพยากรด้านนอก ในขึ้นตอนนี้เราจะทำใน `componentDidMount` ที่เป็นฟังก์ชันวงจรชีวิตของ React component และเมื่อเราได้ผลลัพธ์กลับมาจากแหล่งข้อมูลที่เราร้องขอ เราก็จะนำข้อมูลมาแสดงให้กับผู้ใช้ใน `<List>` component ตามโค้ดตัวอย่างด้านบน
 
-## Final thoughts
+## สรุป
 
 It is nice that we may think about every React component as a black box. It has its own input, lifecycle and output. It is up to us to compose these boxes. And maybe that is one of the advantages that React offers. Easy to abstract and easy to compose.
