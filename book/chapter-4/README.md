@@ -48,6 +48,9 @@ However, by following this approach we introduced couple of problems:
 * It's difficult to test. We may have some business logic in the `Header` and in order to test it we have to create an instance of the component. However, because it imports other components we will probably create instances of those components too and it becomes heavy to test. We may break our `Header` test by doing something wrong in the `Navigation` component which is totally misleading. *(Note: to some extent [shallow rendering](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering) solves this problem by rendering only the `Header` without its nested children.)*
 
 ## Using React's children API
+## การใช้ React's children API
+
+ใน React นั้นมี prop ชื่อว่า [`children`](https://facebook.github.io/react/docs/multiple-components.html#children) ซึ่ง parent ใช้ในการอ่านหรือเข้าถึงลูกๆ โดย API นี้จะทำให้ Header ของเรานั้น dependency-free
 
 In React we have the handy [`children`](https://facebook.github.io/react/docs/multiple-components.html#children) prop. That's how the parent reads/accesses its children. This API will make our Header agnostic and dependency-free:
 
@@ -64,11 +67,18 @@ export default function Header({ children }) {
 };
 ```
 
+สังเกตุว่า ถ้าเราไม่ใช้ `{ children }` ใน `Header` จะทำให้ `Navigation` ไม่ถูก render
+
 Notice also that if we don't use `{ children }` in `Header`, the `Navigation` component will never be rendered.
+
+ตอนนี้การทดสอบก็ง่ายขึ้นมาแล้ว เพราะเราสามารถ render `Header` ด้วย `<div>` เปล่าๆได้ ซึ่งนี่จะทำให้ component อยู่แยกกันและทำให้เราสามารถโฟกัสไปแต่ละส่วนของ application ได้
 
 It now becomes easier to test because we may render the `Header` with an empty `<div>`. This will isolate the component and will let us focus on one piece of our application.
 
 ## Passing a child as a prop
+## การส่งผ่าน child ในรูปของ prop
+
+ทุกๆ component ใน React จะสามารถรับ prop ได้ อย่างที่เราได้กล่าวไปแล้วว่าไม่มีกฏไหนบอกว่า prop เหล่านี้จะต้องเป็นอะไร ดังนั้นเราจึงสามารถส่ง component อื่นๆเข้าไปเป็น prop ก็ได้
 
 Every React component receives props. As we mentioned already there is no any strict rule about what these props are. We may even pass other components.
 
@@ -93,11 +103,17 @@ function App() {
 };
 ```
 
+เทคนิคนี้มีประโยชน์เมื่อ component อย่าง `Header` จำเป็นต้องตัดสินใจเกี่ยวกับ children แต่ไม่จำเป็นต้องรู้ว่าจริงๆแล้ว children คืออะไร ตัวอย่างง่ายๆก็เช่น visibility component ที่ซ่อน children ไว้ตามเงื่อนไขบางอย่าง
+
 This technique is useful when a component like `Header` needs to take decisions about its children but don't bother about what they actually are. A simple example is a visibility component that hides its children based on a specific condition.
 
 ## Higher-order component
 
+เป็นเวลานานมากแล้วที่ higher-order component เป็นวิธีที่นิยมใช้ในการ enhance element ใน React ซึ่ง component ชนิดนี้มีความคล้ายคลึงอย่างมากกับ [decorator design pattern](http://robdodson.me/javascript-design-patterns-decorator/) เพราะ component เหล่านี้ wrap และ enhance เช่นกัน
+
 For a long period of time higher-order components were the most popular way to enhance and compose React elements. They look really similar to the [decorator design pattern](http://robdodson.me/javascript-design-patterns-decorator/) because we have component wrapping and enhancing.
+
+ในทางเทคนิค higher-order component ปกติจะเป็น function ที่รับ original component และ return ตัวมันในรูปแบบที่ถูก enhance หรือ populate ตัวอย่างเล็กๆก็เช่น:
 
 On the technical side the higher-order component is usually a function that accepts our original component and returns an enhanced/populated version of it. The most trivial example is as follows:
 
@@ -121,6 +137,8 @@ class App extends React.Component {
 };
 ```
 
+สิ่งแรกที่ higher-order component ทำก็คือ render original component โดย good practice คือการทำ proxy pass `props` เข้าไป วิธีนี้จะทำให้เรายังสามารถเก็บ input ของ original component ไว้ได้ และเนื่องจากเราสามารถควบคุม input ของ component อยู่ เราจึงอาจจะส่งอะไรเข้าไปก็ได้ อะไรที่ปกติแล้ว component ไม่สามารถเข้าถึงได้ ตรงส่วนนี้เองที่ถือเป็นประโยชน์ใหญ่ๆข้อแรก ลองสมมุติว่าเรามี configuration setting ที่ `OriginalTitle` ต้องใช้:
+
 The very first thing that the higher-order component does is to render the original component. It's a good practice to proxy pass the `props` to it. This way we will keep the input of our original component. And here it comes the first big benefit of this pattern - because we control the input of the component we may send something that the component usually has no access to. Let's say that we have a configuration setting that `OriginalTitle` needs:
 
 ```js
@@ -142,7 +160,11 @@ var OriginalTitle  = ({ title }) => <h1>{ title }</h1>;
 var EnhancedTitle = enhanceComponent(OriginalTitle);
 ```
 
+Knowledge ของ `appTitle` นั้นถูกซ่อนอยู่ใน higher-order component และ `OriginalTitle` รู้แค่เพียงว่ามันรับ `prop` ที่เรียกว่า `title` เข้ามา โดย `OriginalTitle` ไม่รู้เลยว่า prop ดังกล่าวมาจากไฟล์ configuration ซึ่งนั่นก็คือข้อได้เปรียบอย่างใหญ่หลวงเพราะตอนนี้เราสามารถแยก block การทำงานออกจากกันได้ นอกจากนี้ยังช่วยเรื่องการทดสอบ component ด้วย เพราะเราสามารถสร้าง mock ได้อย่างง่ายดาย
+
 The knowledge for the `appTitle` is hidden into the higher-order component. `OriginalTitle` knows only that it receives a `prop` called `title`. It has no idea that this is coming from a configuration file. That's a huge advantage because it allows us to isolate blocks. It also helps with the testing of the component because we can create mocks easily.
+
+อีกหนึ่งคุณลักษณะของ pattern นี้ก็คือ เรามี buffer สำหรับเพิ่ม logic เข้าไปได้อีกด้วย ตัวอย่างเช่น ถ้า `OriginalTitle` ต้องใช้ข้อมูลซึ่งมาจาก remote server เราอาจจะทำการ query ข้อมูลนี้ใน higher-order component และส่งมันกลับไปในรูปของ prop ก็ได้
 
 Another characteristic of this pattern is that we have a nice buffer for additional logic. For example, if our `OriginalTitle` needs data also from a remote server. We may query this data in the higher-order component and again send it as a prop.
 
@@ -177,13 +199,20 @@ var OriginalTitle  = ({ title, remoteTitle }) =>
 var EnhancedTitle = enhanceComponent(OriginalTitle);
 ```
 
+เช่นเคย `OriginalTitle` รู้แค่ว่ามันรับ prop เข้ามาสองตัวและต้อง render ต่อกัน สิ่งเดียวที่ `OriginalTitle` ต้องกังวลคือข้อมูลนั้นมีหน้าตาอย่าไร ไม่ใช่ว่ามาจากไหนและมาได้ยังไง
+
 Again, the `OriginalTitle` knows that it receives two props and has to render them next to each other. Its only concern is how the data looks like not where it comes from and how.
+
+*[Dan Abramov](https://github.com/gaearon) ได้พูดไว้[อย่างน่าสนใจ](https://github.com/krasimir/react-in-patterns/issues/12)ว่า การขั้นตอนการสร้าง higher-order component (ซึ่งก็คือการเรียก function อย่าง `enhanceComponent`) นั้นควรจะเกิดขึ้นที่ระดับ component definition หรือพูดอีกอย่างก็คือ เป็น bad practice หากจะสร้าง higher-order component ข้างใน component ของ React อีกตัว เพราะจะทำให้ช้าและอาจเกิด performance issue ได้
 
 *[Dan Abramov](https://github.com/gaearon) made a really [good point](https://github.com/krasimir/react-in-patterns/issues/12) that the actual creation of the higher-order component (i.e. calling a function like `enhanceComponent`) should happen at a component definition level. Or in other words, it's a bad practice to do it inside another React component because it may be slow and lead to performance issues.*
 
 <br /><br />
 
 ## Function as a children, render prop
+## การใช้ function เป็น children และ render prop
+
+ไม่กี่เดือนก่อน React community เริ่มที่จะเปลี่ยนทิศทางความสนใจแล้ว จนถึงตอนนี้ ในตัวอย่างของเรา `children` prop คือ React component ตัวหนึ่ง อย่างไรก็ตามยังมีอีก pattern หนึ่งที่ตอนนี้กำลังได้รับความนิยม นั่นก็คือ `children` prop ในรูปแบบของ JSX expression เรามาเริ่มด้วยกันส่งผ่าน object ธรรมดาๆดูก่อน
 
 Last couple of months the React community started shifting in an interesting direction. So far in our examples the `children` prop was a React component. There is however a new pattern gaining popularity in which the same `children` prop is a JSX expression. Let's start by passing a simple object.
 
@@ -207,6 +236,8 @@ function App() {
   );
 }
 ```
+
+นี่อาจจะดูแปลก แต่ในความเป็นจริงนั้นเป็นวิธีที่ทรงพลังมาก ตัวอย่างเช่น เมื่อเรามี knowledge บางอย่างใน component แม่ และไม่จำเป็นต้องส่ง knowledge นั้นให้ลูก ตัวอย่างข้างล่างนี้พิมพ์ลิสต์ของ TODO ออกมา โดย `App` component เก็บข้อมูลทั้งหมดไว้และรู้วิธีดูว่า TODO นี้เสร็จหรือยัง ซึ่ง `TodoList` component นั้นแค่หุ้ม HTML markup ไว้
 
 This may look weird but in fact is really powerful. Like for example when we have some knowledge in the parent component and don't necessary want to send it down to children. The example below prints a list of TODOs. The `App` component has all the data and knows how to determine whether a TODO is completed or not. The `TodoList` component simply encapsulate the needed HTML markup.
 
@@ -244,7 +275,11 @@ function App() {
 }
 ```
 
+สังเกตุวิธีที่ `App` component ไม่ได้เปิดเผย structure ของข้อมูลเลย และ `TodoList` ก็ไม่รู้ว่ามี `lebel` หรือ `status` property อยู่ด้วย
+
 Notice how the `App` component doesn't expose the structure of the data. `TodoList` has no idea that there is `label` or `status` properties.
+
+ซึ่ง pattern *render prop* นั้นก็เป็นเหมือนกัน ยกเว้นแต่ว่าเราใช้ prop ไม่ใช่ `children` ในการ render todo
 
 The so called *render prop* pattern is almost the same except that we use a prop and not `children` for rendering the todo.
 
