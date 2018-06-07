@@ -1,8 +1,8 @@
-# การส่งต่อ Dependency (Dependency injection)
+# การส่งต่อ dependency (Dependency injection)
 
 <!-- Big part of the modules/components that we write have dependencies. A proper management of these dependencies is critical for the success of the project. There is a technique (most people consider it a *pattern*) called [*dependency injection*](http://krasimirtsonev.com/blog/article/Dependency-injection-in-JavaScript) that helps solving the problem. -->
 
-Components/modules ที่ถูกเขียนขึ้นมาส่วนใหญ่มักจะมี dependencies ติดมาด้วยเสมอ การที่เราสามารถจัดการ dependencies เหล่านั้น จึงเป็นส่วนสำคัญที่ทำให้โปรเจคของเราสำเร็จลุล่วงไปด้วยดี ปัจจุบัน มีเทคนิคชนิดหนึ่ง (หรือที่หลายๆคนเรียกว่า pattern) ที่สามารถช่วยจัดการ dependencies ของเราได้ นั้นก็คือ dependencies injection
+Components/modules ที่ถูกเขียนขึ้นมาส่วนใหญ่มักจะมี dependencies ติดมาด้วยเสมอ การที่เราสามารถจัดการ dependencies เหล่านั้น จึงเป็นส่วนสำคัญที่ทำให้โปรเจคของเราสำเร็จลุล่วงไปด้วยดี ปัจจุบัน มีเทคนิคชนิดหนึ่ง (หรือที่หลายๆคนเรียกว่า pattern) ที่สามารถช่วยจัดการ dependencies ของเราได้ นั้นก็คือ dependency injection
 
 <!-- In React the need of dependency injector is easily visible. Let's consider the following application tree: -->
 
@@ -83,7 +83,8 @@ export default function Header() {
 
 ตอนนี้ตัวแปร title ได้ถูกซ้อนอยู่ในเลเยอร์ตรงกลาง หรือ higher-order component (inject.jsx) โดยที่มันจะถูกส่งไปหา Title component ผ่าน props โดยตรง ท่านี้ีแก้ปัญหาได้ครึ่งทาง เราไม่ต้องกังวลเลยการส่งค่าหลายๆชั้นอีกแล้ว แต่ยังมีปัญหาเรื่องที่ว่า เราจะทำยังไงให้ค่าวิ่งไปหา inject.jsx
 
-## Using React's context (prior v. 16.3)
+<!-- ## Using React's context (prior v. 16.3) -->
+## การใช้ React's context (ก่อนเวอร์ชั่น 16.3)
 
 <!-- *In v16.3 React's team introduced a new version of the context API and if you are going to use that version or above you'd probably skip this section.* -->
 
@@ -230,13 +231,20 @@ export default function wire(Component, dependencies, mapper) {
 
 Inject คือ higher-order component ที่เข้าถึง context และ นำค่าที่ประกาศไว้ใน อาเรย์ dependencies ออกมา ส่วน ฟังชั่น mapper ทำหน้าที่รับค่าเหล่านั้น และ ส่งเข้าไปหา component ของเรา ผ่าน props
 
-## Using React's context (v. 16.3 and above)
+<!-- ## Using React's context (v. 16.3 and above) -->
+## การใช้ React's context (เวอร์ชั่น 16.3 หรือ มากกว่า)
 
-For years the context API was not really recommended by Facebook. They mentioned in the official docs that the API is not stable and may change. And that is exactly what happened. In the version 16.3 we got a new one which I think is more natural and easy to work with.
+<!-- For years the context API was not really recommended by Facebook. They mentioned in the official docs that the API is not stable and may change. And that is exactly what happened. In the version 16.3 we got a new one which I think is more natural and easy to work with. -->
 
-Let's use the same example with the string that needs to reach a `<Title>` component.
+เป็นเวลาหลายปีที่ Facebook ไม่แนะนำให้ใช้ context API โดยให้เหตุผลไว้ใน official docs ว่า API นั้น ไม่เสถียร และ เสี่ยงต่อการเปลี่ยนแปลงในอนาคต และนั้นคือสิ่งที่เกิดขึ้น ในปัจจุบัน ในเวอร์ชั่น 16.3 เราได้ API อันใหม่ ซึ่งผู้เขียนคิดว่า API นี้เป็นธรรมชาติมากขึ้น และ ใช้งานได้ง่ายกว่า
 
-We will start by defining a file that will contain our context initialization:
+<!-- Let's use the same example with the string that needs to reach a `<Title>` component. -->
+
+ลองยกตัวอย่างเดิมมาใช้ ตัวอย่างที่เราต้องการส่งสตริงไปหา Title component
+
+<!-- We will start by defining a file that will contain our context initialization: -->
+
+เราเริ่มโดยการสร้างไฟล์สำหรับการสร้าง context
 
 ```js
 // context.js
@@ -248,9 +256,13 @@ export const Provider = Context.Provider;
 export const Consumer = Context.Consumer;
 ```
 
-`createContext` returns an object that has `.Provider` and `.Consumer` properties. Those are actually valid React classes. The `Provider` accepts our context in the form of a `value` prop. The consumer is used to access the context and basically read data from it. And because they usually live in different files it is a good idea to create a single place for their initialization. 
+<!-- `createContext` returns an object that has `.Provider` and `.Consumer` properties. Those are actually valid React classes. The `Provider` accepts our context in the form of a `value` prop. The consumer is used to access the context and basically read data from it. And because they usually live in different files it is a good idea to create a single place for their initialization. -->
 
-Let's say that our `App` component is the root of our tree. At that place we have to pass the context.
+ฟังชั่น createContext returns ออบเจ็กต์ตัวหนึ่ง ที่มี properties ประกอบด้วย .Provider และ .Consumer โดยที่สองตัวนี้จริงๆแล้วคือ React class สำหรับตัว Provider นั้น มันจะรับ context ผ่าน value props ส่วนตัว consumer นั้น จะใช้สำหรับการเข้าถึงและอ่านค่า context ปกติแล้วสองตัวนี้จะอยู่คนละไฟล์ มันจึงเป็นความคิดที่ดี ที่จะสร้างที่ๆหนึ่งสำหรับการสร้างสองตัวนั้น
+
+<!-- Let's say that our `App` component is the root of our tree. At that place we have to pass the context. -->
+
+สมมุติว่า App component ของเรานั้น คือ จุดสูงสุดของแอปพลิเคชัน tree ข้างในนั้น เราจะทำการส่ง context เข้าไป
 
 ```js
 import { Provider } from './context';
@@ -268,7 +280,9 @@ class App extends React.Component {
 };
 ```
 
-The wrapped components and their children now share the same context. The `<Title>` component is the one that needs the `title` string so that is the place where we use the `<Consumer>`.
+<!-- The wrapped components and their children now share the same context. The `<Title>` component is the one that needs the `title` string so that is the place where we use the `<Consumer>`. -->
+
+ตอนนี้ components ที่โดยครอบ และ ลูกๆของมันได้ถูกแชร์ context อันเดียวกัน ในตัวอย่าง <Title> component คือตัวที่ต้องการสตริง title ตรงนี้จึงเป็นที่ๆเราจะนำ <Consumer> มาใช้
 
 ```js
 import { Consumer } from './context';
@@ -282,17 +296,27 @@ function Title() {
 }
 ```
 
-*Notice that the `Consumer` class uses the function as children (render prop) pattern to deliver the context.*
+<!-- *Notice that the `Consumer` class uses the function as children (render prop) pattern to deliver the context.* -->
 
-The new API feels easier to understand and eliminates the boilerplate. It is still pretty new but looks promising. It opens a whole new range of possibilities.
+*สังเกตุได้ว่า Consumer class ใช้ function as children (render prop) pattern สำหรับการส่ง context*
+
+<!-- The new API feels easier to understand and eliminates the boilerplate. It is still pretty new but looks promising. It opens a whole new range of possibilities. -->
+
+API อันใหม่นั้น ง่ายต้องการเข้าใจ ทั้งยังทำให้เราไม่ต้องใช้ boilerplate ตัว API นั้นค่อนข้างใหม่แต่ดูมีแนวโน้มที่ดี มันเปิดโอกาศให้เราเข้าถึงความเป็นไปได้ที่หลากหลายมากขึ้น
 
 ## Using the module system
 
-If we don't want to use the context there are a couple of other ways to achieve the injection. They are not exactly React specific but worth mentioning. One of them is using the module system.
+<!-- If we don't want to use the context there are a couple of other ways to achieve the injection. They are not exactly React specific but worth mentioning. One of them is using the module system. -->
 
-As we know the typical module system in JavaScript has a caching mechanism. It's nicely noted in the [Node's documentation](https://nodejs.org/api/modules.html#modules_caching):
+ถ้าเราไม่ต้องการที่จะใช้ context ก็มีทางเลือกอื่นที่สามารถทำให้เราทำ injection ได้ ทางเลือกอื่นๆนั้น อาจจะไม่เจาะจงไปหา React แต่ก็ควรค่าแก่การกล่างถึง หนึ่งในนั้นคือการใช้ module system
 
-> Modules are cached after the first time they are loaded. This means (among other things) that every call to require('foo') will get exactly the same object returned, if it would resolve to the same file.
+<!-- As we know the typical module system in JavaScript has a caching mechanism. It's nicely noted in the [Node's documentation](https://nodejs.org/api/modules.html#modules_caching): -->
+
+อย่างที่รู้ๆกันว่า ปกติแล้ว module system ใน Javascript นั้นมีกลไกการทำ caching โดยได้มีการโน้ตไว้ใน Node's documentation
+
+<!-- > Modules are cached after the first time they are loaded. This means (among other things) that every call to require('foo') will get exactly the same object returned, if it would resolve to the same file. -->
+
+Modules นั้นจะถูก cached หลังจากครั้งแรกที่มันถูกโหลดขึ้นมา นั้นหมายความว่า ทุกครั้งที่เราเรียก required('foo') ออบเจ็ตก์อันเดิมจะถูกนำมาใช้เสมอ ถ้ามัน resolve ไปหาไฟล์อันเดิม
 
 > Multiple calls to require('foo') may not cause the module code to be executed multiple times. This is an important feature. With it, "partially done" objects can be returned, thus allowing transitive dependencies to be loaded even when they would cause cycles.
 
