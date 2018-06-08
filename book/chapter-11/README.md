@@ -46,7 +46,7 @@ const paragraphText = {
 
 [CSS modules](https://github.com/css-modules/css-modules/blob/master/docs/get-started.md) นั้นสร้างขึ้นจากแนวคิดของสิ่งที่เราได้กล่าวไปก่อนหน้านี้ ถ้าเราไม่ชอบ Syntax ของ Javascript เราสามารถเลือก CSS Module ที่ทำให้เราสามารถเขียน CSS แบบธรรมดาได้
 ปกติแล้ว Library นี้จะจัดการงานของมันในช่วง Building Time
-เราอาจจะคิดว่ามันเป็นส่วนหนึ่งของการทำ Transpilation แต่อาจจะกล่าวได้ว่ามันคือส่วนหนึ่งของ Plug-in ของการสร้างระบบ
+เราอาจจะคิดว่ามันเป็นส่วนหนึ่งของการทำ [Transpilation](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) แต่อาจจะกล่าวได้ว่ามันคือส่วนหนึ่งของ Plug-in ของการสร้างระบบ
 
 นี่คือตัวอย่างเล็ก ๆ ที่จะช่วยให้คุณเข้าใจว่ามันทำงานอย่างไร:
 
