@@ -185,6 +185,7 @@ const mapDispatchToProps = dispatch => ({
 
 <br />
 
+## สร้าง counter app ง่ายๆด้วย Redux
 ## Simple counter app using Redux
 
 เรามาเริ่มสร้าง counter app แบบง่ายๆ ที่ใช้ APIs จากด้านบนกัน
@@ -197,9 +198,10 @@ Let's create a simple counter app that uses all the APIs above.
 
 The "Add" and "Subtract" buttons will simply change a value in our store. "Visible" and "Hidden" will control its visibility.
 
+### การออกแบบ Actions
 ### Modeling the actions
 
-สำหรับผมแล้ว ทุก Redux feature จะเริ่มต้นด้วยการขึ้น model ของ action types และประกาศสิ่งที่จะเก็บใน state ในกรณีนี้เรามี 3 operation คือ adding, subtracting และ Visible/Hidden ดังนั้นเราจะมาเริ่มจาก: 
+สำหรับผมแล้ว ทุก Redux feature จะเริ่มต้นด้วยการออกแบบ action types และประกาศสิ่งที่จะเก็บใน state ในกรณีนี้เรามี 3 operation คือ adding, subtracting และ Visible/Hidden ดังนั้นเราจะมาเริ่มจาก: 
 
 For me, every Redux feature starts with modeling the action types and defining what state we want to keep. In our case we have three operations going on - adding, subtracting and managing visibility. So we will go with the following:
 
@@ -215,7 +217,7 @@ const changeVisibility = visible => ({
   visible
 });
 ```
-### Store กับ reducers
+### Store และ Reducers
 ### Store and its reducers
 
 ยังมีบางอย่างที่เรายังไม่ได้พูดถึงตอนที่เราอธิบายเรื่อง store กับ reducer, โดยปกติแล้วเราจะมี reducer มากกว่าหนึ่งตัว เพราะเราต้องการที่จะแยกจัดการหลายๆอย่าง เรามี store อยู่ตัวเดียวอยู่แล้วและตามทฤษฏีแล้ว state ก็จะมีแค่ตัวเดียวเหมือนกัน โดยส่วนใหญ่ application ที่รันบน production จะมี state ที่ถูกแบ่งเป็นส่วนๆ โดยแต่ละส่วนจะแสดงให้เห็นถึงแต่ละส่วนของระบบ ในตัวอย่างเรามีส่วนของ counting และ visibility ซึ่งเราสามารถสร้าง state ได้ตามนั้นเลย
@@ -253,7 +255,7 @@ function `A` จะรับเฉพาะส่วน `counter` จาก stat
 
 Function `A` receives only the `counter` slice as a state and needs to return only that part. Same for `B`. Accepts a boolean (the value of `visible`) and must return a boolean.
 
-reducer สำหรับส่วน counter ควรจะต้องรับ action `ADD` และ `SUBTRACT` มาเพื่อคำนวนหาค่า `counter` state ใหม่
+reducer สำหรับส่วน counter ควรจะทำงานเมื่อรับ action `ADD` และ `SUBTRACT` มาเพื่อคำนวนหาค่า `counter` state ใหม่
 
 The reducer for our counter slice should take into account both actions `ADD` and `SUBTRACT` and based on them calculates the new `counter` state.
 
@@ -272,7 +274,7 @@ reducer ทุกตัวจะถูกเรียกอย่างน้อ
 
 Every reducer is fired at least once when the store is initialized. In that very first run the `state` is `undefined` and the `action` is `{ type: "@@redux/INIT"}`. In this case our reducer should return the initial value of our data - `{ value: 0 }`.
 
-reducer สำหรับ
+reducer สำหรับ visibility จะมีลักษณะคล้ายๆกัน ยกเว้นว่าจะรับ action `CHANGE_VISIBILITY` แทน
 
 The reducer for the visibility is pretty similar except that it waits for `CHANGE_VISIBILITY` action:
 
@@ -284,6 +286,8 @@ const visibilityReducer = function (state, action) {
   return true;
 };
 ```
+
+และสุดท้ายแล้วเราจะส่ง reducer ทั้งสองตัวไปยัง `combineReducer` เพื่อที่จะสร้างเป็น `rootReducer`
 
 And at the end we have to pass both reducers to `combineReducers` so we create our `rootReducer`.
 
@@ -311,6 +315,8 @@ A counter app is too small to see the real power of writing such helpers. Howeve
 
 ### React components
 
+เรามาเริ่มจัดการกับ UI และส่วนทำ visibility ของ counter กันก่อน
+
 Let's first deal with the UI that manages the visibility of the counter.
 
 ```js
@@ -335,7 +341,11 @@ const VisibilityConnected = connect(
 )(Visibility);
 ```
 
+เราต้องมีปุ่มสองปุ่ม `Visible` กับ `Hidden` ซึ่งทั้งสองปุ่มจะส่ง action `CHANGE_VISIBILITY` แต่ปุ่ม Visible จะส่งค่า `true` ส่วนปุ่ม Hidden จะส่งค่า `false` โดยที่ component class `VisibilityConnected` จะถูกสร้างมาจากการเชื่อมต่อ Redux ด้วย `connect` สังเกตว่าเราส่งค่า `null` เป็นแทน `mapStateToProps` เพราะว่าเราไม่ได้ต้องการ data อะไรจาก store เราแค่ต้องการ dispatch action เท่านั้น
+
 We have two buttons `Visible` and `Hidden`. They both fire `CHANGE_VISIBILITY` action but the first one passes `true` as a value while the second one `false`. The `VisibilityConnected` component class gets created as a result of the wiring done via Redux's `connect`. Notice that we pass `null` as `mapStateToProps` because we don't need any of the data in the store. We just need to `dispatch` an action.
+
+component ที่สองจะซับซ้อนขั้นมากเล็กน้อย โดยที่มันมีชื่อว่า `Counter` และ render ปุ่มสองปุ่มและตัวแสดงตัวนับค่า
 
 The second component is slightly more complicated. It is named `Counter` and renders two buttons and the counter value.
 
@@ -361,7 +371,11 @@ const CounterConnected = connect(
 )(Counter);
 ```
 
+ตอนนี้เราต้องส่งทั้ง `mapStateToProps` และ `mapDispatchToProps` เพราะว่าเราต้องมีการอ่าน data จาก store และ dispatch action โดย component ของเราจะรับค่า props สามตัวคือ - `value`, `add` และ `subtract`
+
 We now need both `mapStateToProps` and `mapDispatchToProps` because we want to read data from the store and dispatch actions. Our component receives three props - `value`, `add` and `subtract`. 
+
+และสุดท้าย `App` component ที่ๆเราจะสร้าง application
 
 The very last bit is an `App` component where we compose the application.
 
@@ -380,14 +394,23 @@ const AppConnected = connect(
 )(App);
 ```
 
+เราต้องเรียกใช้ `connect` กับ component อีกครั้ง เพราะเราต้องจัดการ visibility ของ counter โดยที่ `getVisibility` selector จะ return ค่า boolean ที่จะเป็นตัวกำหนด `CounterConnected` ว่าจะ render หรือไม่
+
 We again need to `connect` our component because we want to control the visibility of the counter. The `getVisibility` selector returns a boolean that indicates whether `CounterConnected` will be rendered or not.
 
+## สรุป
 ## Final thoughts
+
+Redux เป็น pattern ดี หลายปีแล้วที่ JavaScript community พัฒนาแนวคิดและเพิ่มประสิทธิภาพในหลายๆด้าน ผมคิดว่ารูปแบบ redux application จะมีหน้าตาใกล้เคียงดังนี้
 
 Redux is a wonderful pattern. Over the years the JavaScript community developed the idea and enhanced it with couple of new terms. I think a typical redux application looks more like this:
 
 ![Redux architecture](redux-reallife.jpg)
 
+*อย่างไรก็ตาม เราไม่ได้กล่าวถึงเรื่องการจัดการผลข้างเคียง ซึ่งถือว่าเป็นเรื่องใหม่ที่มีแนวคิดและวิธีแก้ปัญหาของมันเอง*
+
 *By the way we didn't mention the side effects management. It is a whole new story with its own ideas and solutions.*
+
+เรามาถึงข้อสรุปแล้วว่า Redux นั้นเป็น pattern ที่ง่ายมาก แถมยังสอนเทคนิคที่มีีประโยชน์มาก แต่ในบางครั้งก็ยังไม่พอ ไม่ช้าก็เร็วเราจะมีแนวคิดหรือ pattern ใหม่ๆ ซึ่งนั่นไม่ใช้เรื่องแย่ เราแค่ต้องเตรียมพร้อมสำหรับมัน
 
 We can conclude that Redux itself is a pretty simple pattern. It teaches very useful techniques but unfortunately it is very often not enough. Sooner or later we have to introduce more concepts/patterns. Which of course is not that bad. We just have to plan for it.
