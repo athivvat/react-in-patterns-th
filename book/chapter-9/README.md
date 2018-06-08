@@ -215,8 +215,10 @@ const changeVisibility = visible => ({
   visible
 });
 ```
-
+### Store กับ reducers
 ### Store and its reducers
+
+ยังมีบางอย่างที่เรายังไม่ได้พูดถึงตอนที่เราอธิบายเรื่อง store กับ reducer, โดยปกติแล้วเราจะมี reducer มากกว่าหนึ่งตัว เพราะเราต้องการที่จะแยกจัดการหลายๆอย่าง เรามี store อยู่ตัวเดียวอยู่แล้วและตามทฤษฏีแล้ว state ก็จะมีแค่ตัวเดียวเหมือนกัน โดยส่วนใหญ่ application ที่รันบน production จะมี state ที่ถูกแบ่งเป็นส่วนๆ โดยแต่ละส่วนจะแสดงให้เห็นถึงแต่ละส่วนของระบบ ในตัวอย่างเรามีส่วนของ counting และ visibility ซึ่งเราสามารถสร้าง state ได้ตามนั้นเลย
 
 There is something that we didn't talk about while explaining the store and reducers. We usually have more then one reducer because we want to manage multiple things. The store is one though and we in theory have only one state object. What happens in most of the apps running in production is that the application state is a composition of slices. Every slice represents a part of our system. In this very small example we have counting and visibility slices. So our initial state looks like that:
 
@@ -229,7 +231,11 @@ const initialState = {
 };
 ```
 
+เราต้องสร้าง reducer แยกกันสำหรับแต่ละส่วนซึ่งทำให้ code ของเรามีความยืดหยุ่นและอ่านง่ายมากขึ้น ลองคิดดูว่าถ้าเรามี app ที่มีขนาดใหญ่ที่มีการแบ่ง state มากกว่า 10 ส่วน มันคงเป็นการยากที่เราจะต้องจัดการมันอยู่บน function เดียว
+
 We must define separate reducers for both parts. This is to introduce some flexibility and to improve the readability of our code. Imagine if we have a giant app with ten or more state slices and we keep working within a single function. It will be too difficult to manage.
+
+Redux มาพร้อมกับ function `combineReducers` ที่ช่วยให้เราสามารถ assign reducer ในลงใน state แบบเจาะจง
 
 Redux comes with a helper that allows us to target a specific part of the state and assign a reducer to it. It is called `combineReducers`:
 
@@ -243,7 +249,11 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 ```
 
+function `A` จะรับเฉพาะส่วน `counter` จาก state และต้อง return ค่าเฉพาะส่วนนั้น เช่นเดียวกับ `B` ที่จะรับ boolean (ค่าของ `visible`) และต้อง return boolean เท่านั้น
+
 Function `A` receives only the `counter` slice as a state and needs to return only that part. Same for `B`. Accepts a boolean (the value of `visible`) and must return a boolean.
+
+reducer สำหรับส่วน counter ควรจะต้องรับ action `ADD` และ `SUBTRACT` มาเพื่อคำนวนหาค่า `counter` state ใหม่
 
 The reducer for our counter slice should take into account both actions `ADD` and `SUBTRACT` and based on them calculates the new `counter` state.
 
@@ -258,7 +268,11 @@ const counterReducer = function (state, action) {
 };
 ```
 
+reducer ทุกตัวจะถูกเรียกอย่างน้อยหนึ่งครั้งตอนเริ่มสร้าง store โดยค่าเริ่มต้นของ `state` จะเป็น `undefined` และ `action` จะมีค่าเป็น `{ type: "@@redux/INIT"}` ซึ่งในกรณีนี้ reducer ของเราควรจะ return ค่าเริ่มต้นเป็น `{ value: 0 }`
+
 Every reducer is fired at least once when the store is initialized. In that very first run the `state` is `undefined` and the `action` is `{ type: "@@redux/INIT"}`. In this case our reducer should return the initial value of our data - `{ value: 0 }`.
+
+reducer สำหรับ
 
 The reducer for the visibility is pretty similar except that it waits for `CHANGE_VISIBILITY` action:
 
