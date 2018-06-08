@@ -124,9 +124,15 @@ const counterReducer = function (state, action) {
 
 There are no side effects and we return a brand new object every time. We accumulate the new value based on the previous state and the incoming action type. 
 
+
+### การเชื่อมต่อกับ React components
 ### Wiring to React components
 
+ถ้าเราพูดถึง Redux ที่ใช้ใน React แล้วมักจะหมายถึง ซึ่งประกอบด้วยสองอย่างที่ช่วยเชื่อมต่อ Redux กับ components ของเรา
+
 If we talk about Redux in the context of React we almost always mean [react-redux](https://github.com/reactjs/react-redux) module. It provides two things that help connecting Redux to our components.
+
+(1) `<Provider>` component - เป็น component ที่รับ store เข้ามาเพื่อทำให้ children node ใน React tree สามารถ access ได้โดยผ่าน React's content API ตัวอย่างเช่น
 
 (1) `<Provider>` component - it's a component that accepts our store and makes it available for the children down the React tree via the React's context API. For example:
 
@@ -136,7 +142,11 @@ If we talk about Redux in the context of React we almost always mean [react-redu
 </Provider>
 ```
 
+โดยปกติแล้วเราจะประกาศใช้แค่ที่เดียวใน app
+
 We usually have a single place in our app where we use it.
+
+(2) `connect` function - เป็น function ที่ใช้ทำ subcribe เพื่ออัพเดท store และ re-render component โดย function จะสร้างเป็น [higher-order component](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-4/README.md#higher-order-component) ออกมา โดย function มี signature ดังนี้
 
 (2) `connect` function - it is a function that does the subscribing for updates in the store and re-renders our component. It implements a [higher-order component](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-4/README.md#higher-order-component). Here is its signature:
 
@@ -149,6 +159,8 @@ connect(
 )
 ```
 
+`mapStateToProps` เป็น function ที่รับ currenct state และ return เป็น set ของ key-value (object) ที่จะถูกส่งไปยัง React componnet ในรูปของ props, ยกตัวอย่างเช่น
+
 `mapStateToProps` parameter is a function that accepts the current state and must return a set of key-value pairs (an object) that are getting send as props to our React component. For example:
 
 ```js
@@ -157,6 +169,8 @@ const mapStateToProps = state => ({
 });
 ```
 
+`mapDispatchToProps` คล้ายกับ mapStateToProps แต่จะรับ `dispatch` function แทน `state` ซึ่งจุดนี้จะเป็นที่ๆเราจะประกาศ prop สำหรับ dispatch action
+
 `mapDispatchToProps` is a similar one but instead of the `state` receives a `dispatch` function. Here is the place where we can define a prop for dispatching actions.
 
 ```js
@@ -164,6 +178,8 @@ const mapDispatchToProps = dispatch => ({
   changeVisibility: value => dispatch(changeVisibility(value))
 });
 ```
+
+`mergeProps` เป็นที่รวม และ เข้าด้วยกัน เพื่อให้โอกาสเปลี่ยนแปลงค่า props ก่อนจะส่งไปยัง component จากตัวอย่างด้านบน ถ้าเราต้องการที่จะทำ action สองอย่าง เราสามารถรวมมันเข้าด้วยกันเป็น props เดียวแล้วส่งไปยัง React ได้ `option` รับ setting ไว้สำหรับควบคุมการทำงานของ connect function
 
 `mergeProps` combines both `mapStateToProps` and `mapDispatchToProps` and the props send to the component and gives us the opportunity to accumulate better props. Like for example if we need to fire two actions we may combine them to a single prop and send that to React. `options` accepts couple of settings that control how the connection works.
 
