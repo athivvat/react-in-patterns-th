@@ -304,7 +304,8 @@ function Title() {
 
 API อันใหม่นั้น ง่ายต้องการเข้าใจ ทั้งยังทำให้เราไม่ต้องใช้ boilerplate ตัว API นั้นค่อนข้างใหม่แต่ดูมีแนวโน้มที่ดี มันเปิดโอกาศให้เราเข้าถึงความเป็นไปได้ที่หลากหลายมากขึ้น
 
-## Using the module system
+<!-- ## Using the module system -->
+## การใช้ module system
 
 <!-- If we don't want to use the context there are a couple of other ways to achieve the injection. They are not exactly React specific but worth mentioning. One of them is using the module system. -->
 
@@ -318,11 +319,17 @@ API อันใหม่นั้น ง่ายต้องการเข้
 
 Modules นั้นจะถูก cached หลังจากครั้งแรกที่มันถูกโหลดขึ้นมา นั้นหมายความว่า ทุกครั้งที่เราเรียก required('foo') ออบเจ็ตก์อันเดิมจะถูกนำมาใช้เสมอ ถ้ามัน resolve ไปหาไฟล์อันเดิม
 
-> Multiple calls to require('foo') may not cause the module code to be executed multiple times. This is an important feature. With it, "partially done" objects can be returned, thus allowing transitive dependencies to be loaded even when they would cause cycles.
+<!-- > Multiple calls to require('foo') may not cause the module code to be executed multiple times. This is an important feature. With it, "partially done" objects can be returned, thus allowing transitive dependencies to be loaded even when they would cause cycles. -->
 
-How is that helping for our injection? Well, if we export an object we are actually exporting a [singleton](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript) and every other module that imports the file will get the same object. This allows us to `register` our dependencies and later `fetch` them in another file.
+การเรียกไปหา require('foo') หลายๆครั้ง จะไม่ทำให้โค้ดข้างใน foo module ถูกเรียกใหม่ซ้ำๆ นี้เป็นฟีเจอร์ที่สำคัญมาก เพราะว่า 'partially done' ออบเจ็กต์ (ออบเจ็กต์ที่ยังรันไม่เสร็จ แต่ถูก require) จะถูก return ออกมาได้ และ ทำให้ transitive dependencies (dependency ตอนที่ modules require กันเอง) ถูกโหลด โดยไม่ทำให้เกิดลูป (cyclic dependency)
 
-Let's create a new file called `di.jsx` with the following content:
+<!-- How is that helping for our injection? Well, if we export an object we are actually exporting a [singleton](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript) and every other module that imports the file will get the same object. This allows us to `register` our dependencies and later `fetch` them in another file. -->
+
+แล้วสิ่งเหล่านี้จะช่วยเราในการทำ injection อย่างไร ? มันช่วยเราได้เพราะออบเจ็กต์ที่ถูก export ออกมานั้น จริงๆแล้วคือ singleton และทุก module ที่ import ไฟล์นั้นเข้าไป ก็จะเข้าถึงอ็อบเจกต์ตัวเดียวกัน นั้นทำให้เราสามารถ ใส่ dependencies ของเราลงไป (register) และ นำออกมาจากไฟล์อื่นๆได้ (fetch)
+
+<!-- Let's create a new file called `di.jsx` with the following content: -->
+
+เราลองมาสร้างไฟล์ใหม่ชื่อ di.jsx ที่มีโค้ดตามด้านล่าง
 
 ```js
 var dependencies = {};
@@ -355,9 +362,11 @@ export function wire(Component, deps, mapper) {
 }
 ```
 
-We'll store the dependencies in `dependencies` global variable (it's global for our module, not for the whole application). We then export two functions `register` and `fetch` that write and read entries. It looks a little bit like implementing setter and getter against a simple JavaScript object. Then we have the `wire` function that accepts our React component and returns a [higher-order component](https://github.com/krasimir/react-in-patterns/tree/master/patterns/higher-order-components). In the constructor of that component we are resolving the dependencies and later while rendering the original component we pass them as props. We follow the same pattern where we describe what we need (`deps` argument) and extract the needed props with a `mapper` function.
+<!-- We'll store the dependencies in `dependencies` global variable (it's global for our module, not for the whole application). We then export two functions `register` and `fetch` that write and read entries. It looks a little bit like implementing setter and getter against a simple JavaScript object. Then we have the `wire` function that accepts our React component and returns a [higher-order component](https://github.com/krasimir/react-in-patterns/tree/master/patterns/higher-order-components). In the constructor of that component we are resolving the dependencies and later while rendering the original component we pass them as props. We follow the same pattern where we describe what we need (`deps` argument) and extract the needed props with a `mapper` function.
 
-Having the `di.jsx` helper we are again able to register our dependencies at the entry point of our application (`app.jsx`) and inject them wherever (`Title.jsx`) we need.
+Having the `di.jsx` helper we are again able to register our dependencies at the entry point of our application (`app.jsx`) and inject them wherever (`Title.jsx`) we need. -->
+
+เราะจะเก็บ dependecies ไว้ในตัวแปร global ชื่อ dependencies (ตัวแปร global ในระดับ module ไม่ใช้ระดับแอปพลิเคชัน) หลังจากนั้นเราจะ export สองฟั่งชั่นได้แก่ register และ fetch ที่จะทำหน้าที่เขียนและอ่านค่าต่างๆ โดยที่มันจะคล้ายๆกับการสร้าง setter และ getter ในออบเจ็กต์ของ Javascript ต่อจากนั้นเราจะใช้ฟังชั่น wire ในการรับ React component และ return higher-order component ออกไป ใน constructor ของ component ในฟังชั่น wire เราจะทำการดึง dependencies ออกมา แล้วก็ ส่งมันลงไปหา component ข้างใต้ที่กำลัง render ในรูปแบบของ props
 
 <span class="new-page"></span>
 
@@ -401,8 +410,13 @@ export default wire(
 );
 ```
 
-*If we look at the `Title.jsx` file we'll see that the actual component and the wiring may live in different files. That way the component and the mapper function become easily unit testable.*
+<!-- *If we look at the `Title.jsx` file we'll see that the actual component and the wiring may live in different files. That way the component and the mapper function become easily unit testable.* -->
 
-## Final thoughts
+ถ้าเรามองที่ไฟล์ Title.jsx เราจะเห็นว่า ตัว component และ ส่วนที่ทำการเชื่อมต่อนั้น สามารถอยู่คนละไฟล์ได้ ซึ่งท่านี้จะทำให้ ตัว component และฟังชั่น mapper นั้นง่ายต่อการเขียน unit test
 
-Dependency injection is a tough problem. Especially in JavaScript. Lots of people didn't realize that but putting a proper dependency management is a key process of every development cycle. JavaScript ecosystem offers different tools and we as developers should pick the one that fits in our needs.
+<!-- ## Final thoughts -->
+## ความคิดทิ้งท้าย
+
+<!-- Dependency injection is a tough problem. Especially in JavaScript. Lots of people didn't realize that but putting a proper dependency management is a key process of every development cycle. JavaScript ecosystem offers different tools and we as developers should pick the one that fits in our needs. -->
+
+Dependency injection นั้นเป็นปัญหาที่ยาก โดยเฉพาะใน Javascript คนหลายๆคนไม่คำนึงถึงว่า การทำ dependency management ที่เหมาะสมนั้น เป็นกระบวนการที่สำคัญในทุกๆ development cycle โดยที่ JavaScript ecosystem นั้นมี tools ที่หลากหลายมานำเสนอให้เราอยู่เสมอ และ เรา developers ควรที่จะเลือกหยิบสิ่งที่ตอบโจทย์กับความต้องการของเรามากที่สุด
