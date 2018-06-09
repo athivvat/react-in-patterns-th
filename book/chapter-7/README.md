@@ -22,7 +22,7 @@ class Switcher extends React.Component {
   }
 };
 
-// ... render คอมโพเนนท์ที่นี่
+// ... render component ที่นี่
 function App() {
   return <Switcher />;
 };
