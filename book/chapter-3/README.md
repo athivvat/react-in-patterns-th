@@ -98,8 +98,7 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     this._onNameChanged = this._onFieldChange.bind(this, 'name');
-    this._onPasswordChanged =
-      this._onFieldChange.bind(this, 'password');
+    this._onPasswordChanged = this._onFieldChange.bind(this, 'password');
   }
   render() {
     return (
@@ -115,6 +114,6 @@ class Form extends React.Component {
 };
 ```
 
-## Final thoughts
+## สรุป
 
-There is not much to learn about event handling in React. The authors of the library did a good job in keeping what's already there. Since we are using HTML-like syntax it makes total sense that we have also a DOM-like event handling.
+การจัดการอีเวนท์ใน React นั้นอาจดูเหมือนไม่มีอะไรใหม่ให้ศึกษาสักเท่าไหร่ เพราะคนสร้าง React นั้นถือว่าทำไว้ดีแล้วในเรื่องของการนำสิ่งที่มีอยู่แล้วมาใช้ ในเมื่อตัวไลบรารี่เองมีการใช้ syntax ที่เหมือนกับ HTML เดิมอยู่แล้ว จึงไม่ใช่เรื่องแปลกอะไรที่จะมีการจัดการอีเวนท์เหมือนใน DOM
