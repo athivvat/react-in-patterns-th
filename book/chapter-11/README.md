@@ -12,7 +12,7 @@ JSX Syntax นั้นมีความใกล้เคียงกับภ
 
 ## Inline styling
 
-การทำ Inline CSS ก็สามารถทำได้เช่นกัน เหมือนกับ HTML ที่เราสามารถส่งค่า Parameter ต่างๆได้โดยตรงผ่าน Attribute `style` แต่อย่างไรก็ตาม ใน JSX นั้นเราจะต้องกำหนด Styling ด้วย Object แตกต่างจาก HTML ที่กำหนดเป็น String
+การทำ Inline CSS ก็สามารถทำได้ดีเช่นเดียวกับ HTML ที่เราสามารถส่งค่า Parameter ต่างๆได้โดยตรงผ่าน Attribute `style` แต่อย่างไรก็ตาม ใน JSX นั้นเราจะต้องกำหนด Styling ด้วย Object แตกต่างจาก HTML ที่กำหนดเป็น String
 
 ```js
 const inlineStyles = {
