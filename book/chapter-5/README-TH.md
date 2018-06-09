@@ -81,7 +81,7 @@ class App extends React.Component {
 การจะใช้ Refs นั้นต้องกำหนด prop ที่ชื่อว่า `ref` และค่าที่กำหนดให้นั้นจะต้องเป็นตัวอักษรสตริง(Legacy String Refs) หรือ callback function* จากตัวอย่างซอสโค้ดด้านบนใช้ callback เพื่อที่จะเก็บ DOM element ไว้ที่ตัวแปร *local* ที่มีชื่อว่า `input` และเมื่อ handler `onChange` จับได้ถึงการเปลี่ยนแปลงค่าของอินพุต function ก็จะใช้ Refs เพื่ออ้างถึงข้อมูลที่ DOM อินพุตนั้นถืออยู่ และนำไปใช้อัพเดทค่า state ของ component `App`
 
 *ปัจจุบัน React สนับสนุนให้ใช้ callback function มากกว่า [Legacy String Refs](https://reactjs.org/docs/refs-and-the-dom.html#legacy-api-string-refs) เพราะแบบเก่ามีปัญหา และอาจจะถูกนำออกไปในเวอร์ชั่นข้างหน้า
-*การใช้  `Refs` บ่อยๆนั้นไม่ใช่ตัวเลือกที่ดีนัก ถ้าเป็นไปได้ควรใช้ `อินพุตควบคุม` แทน*
+*การใช้  `Refs` บ่อยๆนั้นไม่ใช่ตัวเลือกที่ดีนัก ถ้าเป็นไปได้ควรใช้  `อินพุตควบคุม` แทน*
 
 ## ฝากไว้ให้คริส
 
