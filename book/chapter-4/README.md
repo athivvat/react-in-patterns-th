@@ -308,6 +308,8 @@ return (
 );
 ```
 
+โดย pattern *function as children* และ *render prop* เมื่อไม่นานมานี้ได้กลายมาเป็นหนึ่งใน pattern ที่ผมชอบมาก ทั้งสองมอบ flexibility และช่วยในกรณีที่เราต้องการ reuse code ซึ่งทั้งสองยังเป็นวิธีการที่ทรงพลังในการ abstract code ส่วนที่สำคัญมากๆด้วย
+
 These two patterns, *function as children* and *render prop* are probably one of my favorite ones recently. They provide flexibility and help when we want to reuse code. They are also a powerful way to abstract imperative code.
 
 ```js
@@ -327,11 +329,15 @@ class DataProvider extends React.Component {
 }
 ```
 
+`DataProvider` ไม่ reder อะไรเลยเมื่อครั้งแรกที่ถูก mount แต่ห้าวินาทีหลังจากที่เราอัพเดท state ของ component เราได้ทำการ render `<section>` ตามด้วยสิ่งที่ prop `render` return กลับมา ลองนึกภาพว่า component ตัวเดียวกันนี้ fetch ข้อมูลมาจาก remote server และเราต้องการจะแสดงผลก็ต่อเมื่อข้อมูลดังกล่าวมาถึงแล้วเท่านั้น
+
 `DataProvider` renders nothing when first gets mounted. Five seconds later we update the state of the component and we render a `<section>` followed by what is `render` prop returning. Imagine that this same component fetches data from a remote server and we want to display it only when it is available.
 
 ```js
 <DataProvider render={ data => <p>The data is here!</p> } />
 ```
+
+ซึ่งเราได้ระบุว่าเราต้องการอะไร แต่ไม่ได้บอกว่าจะได้มาอย่างไร วิธีการดังกล่าวถูกซ่อนอยู่ภายใน `DataProvider` โดยในช่วงหลังๆ เราใช้ pattern นี้ในการทำงานที่เราต้องจำกัด UI บางส่วนไว้ที่ ผู้ใช้บางกลุ่มที่มี permission `read:products` แล้วเราจึงใช้ *render prop* pattern
 
 We do say what we want to happen but not how. That is hidden inside the `DataProvider`. These days we used this pattern at work where we had to restrict some UI to certain users having `read:products` permissions. And we used the *render prop* pattern.
 
@@ -341,8 +347,13 @@ We do say what we want to happen but not how. That is hidden inside the `DataPro
   render={ () => <ProductsList /> } />
 ```
 
+ผลลัพธ์ที่ออกมานั้นดูสวยและยังอธิบายตัวเองไปในตัวได้อีกด้วย โดย `Authorize` ถูกส่งไปที่ identity provider และตรวจสอบว่า permission ของ user ปัจจุบันคืออะไร ถ้า user ได้รับอนุญาติให้อ่าน products ได้ เราก็จะ render `ProductList`
+
 Pretty nice and self-explanatory in a declarative fashion. `Authorize` goes to our identity provider and checks what are the permissions of the current user. If he/she is allowed to read our products we render the `ProductList`.
 
 ## Final thoughts
+## ทิ้งท้าย
+
+เคยสงสัยมั้ยว่าทำไม HTML ถึงยังคงมีอยู่ ณ จุดนี้ HTML ถูกสร้างในยุกแรกของ Internet และเรายังใช้คงใช้กันอยู่จนถึงทุกวันนี้ นั่นเป็นเพราะ HTML มี composability สูงยังไงล่ะ React และ JSX เองก็ดูคล้ายกับ HTML ที่ได้รับ steroid เข้าไปในรูปแบบที่ว่าทั้งสองมี composibility ที่สูงเช่นกัน เพราะฉะนั้นจงทำให้แน่ใจว่าคุณได้เรียนรู้เทคนิค composition อย่างลึกซึ้ง เพราะนั่นคือหนึ่งในความสามรถที่มีประโยชน์ที่สุดของ React
 
 Did you wonder why HTML is still here. It was created in the dawn of the internet and we still use it. That is because is highly composable. React and its JSX looks like HTML on steroids and as such it comes with the same capabilities. So, make sure that you master the composition because that is one of the biggest benefits of React.
