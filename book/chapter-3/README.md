@@ -87,7 +87,7 @@ class Switcher extends React.Component {
 };
 ```
 
-Facebook by the way [recommend](https://reactjs.org/docs/handling-events.html) the same technique while dealing with functions that need the context of the same component.
+Facebook (ผู้สร้าง React) เองก็ยัง [แนะนำ](https://reactjs.org/docs/handling-events.html) เทคนิคเดียวกันนี้เวลาที่ต้องจัดการกับฟังค์ชันที่ใช้ context เดียวกันภายในคอมโพเนนท์
 
 Constructor ยังถือเป็นที่ที่ดีสำหรับการสร้าง handler ที่มีค่าบางอย่างพร้อมแล้วอีกด้วย ยกตัวอย่างเช่น เมื่อเรามี `<form>` ที่มีหลาย `<input>` อยู่ข้างใน แต่เราต้องการจัดการการทำงานเมื่อ `<input>` ถูกเปลี่ยนในฟังค์ชัน `_onFieldChange(field, event)` เพียงที่เดียว
 
