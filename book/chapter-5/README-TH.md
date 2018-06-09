@@ -16,17 +16,72 @@ class App extends React.Component {
 };
 ```
 ผลลัพธ์ของโค้ดด้านบนจะได้อินพุตที่เราสามารถกำหนดค่าที่อินพุตนั้นแสดงอยู่ได้ แต่จะไม่สามารถเปลี่ยนแปลงค่าของมันได้เลย เพราะว่าเราได้กำหนดค่าให้อินพุตนั้นโดยนำมาจากค่า state ของ component `App`แต่ถ้าจะให้อินพุตนั้นใช้งานได้อย่างปกติอย่างที่ควรจะเป็น (คือสามารถกำหนดค่า และ เปลี่ยนแปลงค่าของมันได้) จำเป็นจะต้องเพิ่ม attribute handler (prop) ที่เรียกว่า `onChange` เพื่อทำการจัดการและเปลี่ยนค่า state ของ component `App`(ที่ถูกนำไปกำหนดเป็นค่าของอินพุต) ซึ่งจะทำให้เกิดวัฐจักรของการ render เกิดขึ้นใหม่แล้วจึงจะแสดงผลของค่าที่ได้อัพเดทไปแล้วที่อินพุต
+<span class="new-page"></span>
+
+```js
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: 'hello' };
+    this._change = this._handleInputChange.bind(this);
+  }
+  render() {
+    return (
+      <input
+        type='text'
+        value={ this.state.value }
+        onChange={ this._change } />
+    );
+  }
+  _handleInputChange(e) {
+    this.setState({ value: e.target.value });
+  }
+};
+```
 
 ในขณะที่ *อินพุตอิสระ (Uncontrolled Input)* เป็นอินพุตที่ปล่อยให้เบราเซอร์เป็นตัวจัดการค่าต่างๆที่เกิดขึ้นมาจากการกระทำของยูสเซอร์ แต่ถึงอย่างนั้นเราก็ยังสามารถกำหนดค่าเริ่มต้นให้แก่อินพุตได้โดนการเพิ่ม attribute (prop) ที่เรียกว่า `defaultValue`แล้วหลังจากนั้นเบราเซอร์จะรับหน้าที่เก็บค่าของอินพุตและแสดงผลเอง
 
+```js
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: 'hello' };
+  }
+  render() {
+    return <input type='text' defaultValue={ this.state.value } />
+  }
+};
+```
+
 จากตัวอย่างข้างบนนั้น element `<input>` ค่อนข้างจะไม่มีประโยชน์ เนื่องจากเมื่อมีการอัพเดทข้อมูลของยูสเซอร์ ตัว component `App` นั้นจะไม่รับรู้อะไรเลย จะต้องใช้ตัวอ้างอิง [`Refs`](https://reactjs.org/docs/glossary.html#refs) เพื่อที่จะดึงข้อมูลจากอินพุตโดยตรง
 
-prop `ref` นั้นจะรับตัวอักษรสตริง หรือ callback function จากตัวอย่างซอสโค้ดด้านบนใช้ callback เพื่อที่จะเก็บ DOM element ไว้ที่ตัวแปร *local* ที่มีชื่อว่า `input`ภายหลังเมื่อใช้ handler `onChange` `App`'s state.
+```js
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: 'hello' };
+    this._change = this._handleInputChange.bind(this);
+  }
+  render() {
+    return (
+      <input
+        type='text'
+        defaultValue={ this.state.value }
+        onChange={ this._change }
+        ref={ input => this.input = input }/>
+    );
+  }
+  _handleInputChange() {
+    this.setState({ value: this.input.value });
+  }
+};
+```
 
-*Using a lot of `refs` is not a good idea. If it happens in your app consider using `controlled` inputs and re-think your components.*
+การจะใช้ Refs นั้นต้องกำหนด prop ที่ชื่อว่า `ref` และค่าที่กำหนดให้นั้นจะต้องเป็นตัวอักษรสตริง หรือ callback function จากตัวอย่างซอสโค้ดด้านบนใช้ callback เพื่อที่จะเก็บ DOM element ไว้ที่ตัวแปร *local* ที่มีชื่อว่า `input` และเมื่อ handler `onChange` จับได้ถึงการเปลี่ยนแปลงค่าของอินพุต function ก็จะใช้ Refs เพื่ออ้างถึงข้อมูลที่ DOM อินพุตนั้นถืออยู่ และนำไปใช้อัพเดทค่า state ของ component `App`
+
+*การใช้ `Refs` บ่อยๆนั้นไม่ใช่ตัวเลือกที่ดีนัก ถ้าเป็นไปได้ควรใช้ `อินพุตควบคุม` แทน*
 
 ## Final thoughts
 
-*controlled* versus *uncontrolled* inputs is very often underrated. However I believe that it is a fundamental decision because it dictates the data flow in the React component. I personally think that *uncontrolled* inputs are kind of an anti-pattern and I'm trying to avoid them when possible.
-
-
+คนส่วนใหญ่มักจะมองข้าม ข้อแตกต่างระหว่าง *อินพุตควบคุม* และ *อินพุตอิสระ* แต่โดยพื้นฐานและแนวคิดของ React นั้นจะเป็นการควบคุม data flow เพราะฉะนั้นแนวคิดนี้ค่อนข้างจะสนับสนุนและสอดคล้องกับ วิธีและกลไกของ *อินพุตควบคุม*
+ส่วนตัวผมนั้นคิดว่าการใช้ *อินพุตอิสระ* ค่อนข้างจะเป็น anti-pattern ถ้าเป็นไปได้ผมมักจะพยายามหลีกเลี่ยงที่จะใช้มัน
