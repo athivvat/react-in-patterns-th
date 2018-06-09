@@ -199,10 +199,10 @@ export default wire(Title, ['title'], function resolve(title) {
 
 Here is how the `wire` function looks like: -->
 
-ฟังชั่น `wire` รับ React component, อาเรย์ที่ประกอบด้วย dependencies (ที่`เชื่อมต่อ`เข้ากับ context แล้ว) ที่เราต้องการจะเรียกใช้ และ ฟั่งชั่นที่ผู้เขียนชอบเรียกว่า `mapper` ซึั่งฟันชั่นนี้จะรับค่ามาจาก context และ return ค่าในรูปแบบของออบเจ็กต์ โดยที่ออบเจ็กต์นั้นท้ายที่สุดแล้วจะถูกส่งให้ component ของเรา (`Title`) ในรูปแบบของ props ดังที่เห็นในตัวอย่างนี้ เรานำค่า `title` (string variable) ส่งเข้าไป
+ฟังก์ชัน `wire` รับ React component, อาเรย์ที่ประกอบด้วย dependencies (ที่`เชื่อมต่อ`เข้ากับ context แล้ว) ที่เราต้องการจะเรียกใช้ และ ฟังก์ชันที่ผู้เขียนชอบเรียกว่า `mapper` ซึ่งฟังก์ชันนี้จะรับค่ามาจาก context และ return ค่าในรูปแบบของออบเจ็กต์ โดยที่ออบเจ็กต์นั้นท้ายที่สุดแล้วจะถูกส่งให้ component ของเรา (`Title`) ในรูปแบบของ props ดังที่เห็นในตัวอย่างนี้ เรานำตัวแปร `title` ส่งเข้าไป
 ในการเขียนแอปจริงๆ ค่าที่ส่งเข้าไปอาจจะเป็น กลุ่มข้อมูลหลายๆอัน, configuration, หรือ อื่นๆ
 
-และนี้คือหน้าตาของฟั่งชั่น `wire`:
+และนี้คือหน้าตาของฟังก์ชัน `wire`:
 
 ```js
 export default function wire(Component, dependencies, mapper) {
@@ -225,9 +225,9 @@ export default function wire(Component, dependencies, mapper) {
 };
 ```
 
-`Inject` is a higher-order component that gets access to the context and retrieves all the items listed under `dependencies` array. The `mapper` is a function receiving the `context` data and transforms it to props for our component.
+<!-- `Inject` is a higher-order component that gets access to the context and retrieves all the items listed under `dependencies` array. The `mapper` is a function receiving the `context` data and transforms it to props for our component. -->
 
-`Inject` คือ higher-order component ที่สามารถเข้าถึง context และ นำค่าที่ประกาศไว้ในอาเรย์ `dependencies` ออกมา ส่วนฟังชั่น `mapper` ทำหน้าที่รับ `context` เหล่านั้น และ ส่งเข้าไปหา component ของเราผ่าน props
+`Inject` คือ higher-order component ที่สามารถเข้าถึง context และ นำค่าที่ประกาศไว้ในอาเรย์ `dependencies` ออกมา ส่วนฟังก์ชัน `mapper` ทำหน้าที่รับ `context` เหล่านั้น และ ส่งเข้าไปหา component ของเราผ่าน props
 
 <!-- ## Using React's context (v. 16.3 and above) -->
 ## การใช้ React's context (เวอร์ชั่น 16.3 หรือ มากกว่า)
@@ -256,7 +256,7 @@ export const Consumer = Context.Consumer;
 
 <!-- `createContext` returns an object that has `.Provider` and `.Consumer` properties. Those are actually valid React classes. The `Provider` accepts our context in the form of a `value` prop. The consumer is used to access the context and basically read data from it. And because they usually live in different files it is a good idea to create a single place for their initialization. -->
 
-ฟังชั่น `createContext` returns ออบเจ็กต์ตัวหนึ่ง ที่มี properties ประกอบด้วย `.Provider` และ `.Consumer` โดยที่สองตัวนี้จริงๆแล้วคือ React class และสำหรับตัว Provider นั้น จะรับ context ผ่าน props ชื่อ `value` ในขณะที่ตัว consumer นั้น จะใช้สำหรับการเข้าถึงและอ่านค่า context ปกติแล้วสองตัวนี้จะอยู่คนละไฟล์ มันจึงเป็นความคิดที่ดี ที่จะสร้างที่ๆหนึ่งสำหรับการสร้างสองตัวนั้น
+ฟังก์ชัน `createContext` returns ออบเจ็กต์ตัวหนึ่ง ที่มี properties ประกอบด้วย `.Provider` และ `.Consumer` โดยที่สองตัวนี้จริงๆแล้วคือ React class และสำหรับตัว Provider นั้น จะรับ context ผ่าน props ชื่อ `value` ในขณะที่ตัว consumer นั้น จะใช้สำหรับการเข้าถึงและอ่านค่า context ปกติแล้วสองตัวนี้จะอยู่คนละไฟล์ มันจึงเป็นความคิดที่ดี ที่จะสร้างที่ๆหนึ่งสำหรับการสร้างสองตัวนั้น
 
 <!-- Let's say that our `App` component is the root of our tree. At that place we have to pass the context. -->
 
@@ -364,7 +364,7 @@ export function wire(Component, deps, mapper) {
 
 Having the `di.jsx` helper we are again able to register our dependencies at the entry point of our application (`app.jsx`) and inject them wherever (`Title.jsx`) we need. -->
 
-เราะจะเก็บ dependecies ไว้ในตัวแปร global ชื่อ `dependencies` (ตัวแปร global ในระดับ module ไม่ใช้ระดับแอปพลิเคชัน) หลังจากนั้นเราจะ export สองฟั่งชั่นได้แก่ `register` และ `fetch` ที่จะทำหน้าที่เขียนและอ่านค่าต่างๆ โดยที่มันจะคล้ายๆกับการสร้าง setter และ getter ในออบเจ็กต์ของ Javascript ต่อจากนั้นเราจะใช้ฟังชั่น `wire` ในการรับ React component และ return [higher-order component](https://github.com/krasimir/react-in-patterns/tree/master/patterns/higher-order-components) ออกไป และใน constructor ของ component ที่อยู่ข้างในฟังชั่น wire เราจะทำการดึง dependencies ออกมา แล้วก็ส่งมันลงไปหา component ข้างใต้ที่กำลัง render ในรูปแบบของ props โดยที่เราจะทำตาม pattern เดิม ที่เราอธิบายสิ่งที่เราต้องการ (`deps` argument) และ ดึง props ที่ต้องการออกมาผ่านฟั่งชั่น `mapper`
+เราะจะเก็บ dependecies ไว้ในตัวแปร global ชื่อ `dependencies` (ตัวแปร global ในระดับ module ไม่ใช้ระดับแอปพลิเคชัน) หลังจากนั้นเราจะ export สองฟังก์ชันได้แก่ `register` และ `fetch` ที่จะทำหน้าที่เขียนและอ่านค่าต่างๆ โดยที่มันจะคล้ายๆกับการสร้าง setter และ getter ในออบเจ็กต์ของ Javascript ต่อจากนั้นเราจะใช้ฟังก์ชัน `wire` ในการรับ React component และ return [higher-order component](https://github.com/krasimir/react-in-patterns/tree/master/patterns/higher-order-components) ออกไป และใน constructor ของ component ที่อยู่ข้างในฟังก์ชัน wire เราจะทำการดึง dependencies ออกมา แล้วก็ส่งมันลงไปหา component ข้างใต้ที่กำลัง render ในรูปแบบของ props โดยที่เราจะทำตาม pattern เดิม ที่เราอธิบายสิ่งที่เราต้องการ (`deps` argument) และ ดึง props ที่ต้องการออกมาผ่านฟังก์ชัน `mapper`
 
 การที่เรามี `di.jsx` helper นั้นทำให้เราสามารถสร้าง dependencies ได้ที่จุดเริ่มต้นของแอปพลิเคชัน (`app.jsx`) และ ส่งมันลงไปในที่ๆเราต้องการได้ (`Title.jsx`)
 
@@ -412,11 +412,11 @@ export default wire(
 
 <!-- *If we look at the `Title.jsx` file we'll see that the actual component and the wiring may live in different files. That way the component and the mapper function become easily unit testable.* -->
 
-*ถ้าเรามองที่ไฟล์ `Title.jsx` เราจะเห็นว่าตัว component และ ส่วนที่ทำการเชื่อมต่อนั้นสามารถอยู่คนละไฟล์ได้ ซึ่งท่านี้จะทำให้ตัว component และฟังชั่น mapper นั้นง่ายต่อการเทสในระดับ unit*
+*ถ้าเรามองที่ไฟล์ `Title.jsx` เราจะเห็นว่าตัว component และ ส่วนที่ทำการเชื่อมต่อนั้นสามารถอยู่คนละไฟล์ได้ ซึ่งท่านี้จะทำให้ตัว component และฟังก์ชัน mapper นั้นง่ายต่อการเทสในระดับ unit*
 
 <!-- ## Final thoughts -->
 ## ความคิดทิ้งท้าย
 
 <!-- Dependency injection is a tough problem. Especially in JavaScript. Lots of people didn't realize that but putting a proper dependency management is a key process of every development cycle. JavaScript ecosystem offers different tools and we as developers should pick the one that fits in our needs. -->
 
-Dependency injection นั้นเป็นปัญหาที่ยาก โดยเฉพาะใน Javascript หลายๆคนไม่คำนึงถึงว่าการทำ dependency management ที่เหมาะสมนั้น เป็นกระบวนการสำคัญในทุกๆ development cycle และในส่วนของ JavaScript ecosystem นั้น มี tools ที่หลากหลายมานำเสนอให้เราอยู่เสมอ และ เรา developers ควรที่จะเลือกหยิบสิ่งที่ตอบโจทย์ต่อความต้องการของเรามากที่สุด
+Dependency injection นั้นเป็นปัญหาที่ยากโดยเฉพาะใน Javascript หลายๆคนไม่คำนึงถึงว่าการทำ dependency management ที่เหมาะสมนั้น เป็นกระบวนการสำคัญในทุก development cycle และในส่วนของ JavaScript ecosystem นั้น มี tools ที่หลากหลายมานำเสนอให้เราอยู่เสมอ และ เรา developers ควรที่จะเลือกหยิบสิ่งที่ตอบโจทย์ต่อความต้องการของเรามากที่สุด
