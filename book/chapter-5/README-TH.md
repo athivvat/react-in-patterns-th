@@ -20,3 +20,13 @@ class App extends React.Component {
 ในขณะที่ *อินพุตอิสระ (Uncontrolled Input)* เป็นอินพุตที่ปล่อยให้เบราเซอร์เป็นตัวจัดการค่าต่างๆที่เกิดขึ้นมาจากการกระทำของยูสเซอร์ แต่ถึงอย่างนั้นเราก็ยังสามารถกำหนดค่าเริ่มต้นให้แก่อินพุตได้โดนการเพิ่ม attribute (prop) ที่เรียกว่า `defaultValue`แล้วหลังจากนั้นเบราเซอร์จะรับหน้าที่เก็บค่าของอินพุตและแสดงผลเอง
 
 จากตัวอย่างข้างบนนั้น element `<input>` ค่อนข้างจะไม่มีประโยชน์ เนื่องจากเมื่อมีการอัพเดทข้อมูลของยูสเซอร์ ตัว component `App` นั้นจะไม่รับรู้อะไรเลย จะต้องใช้ตัวอ้างอิง [`Refs`](https://reactjs.org/docs/glossary.html#refs) เพื่อที่จะดึงข้อมูลจากอินพุตโดยตรง
+
+prop `ref` นั้นจะรับตัวอักษรสตริง หรือ callback function จากตัวอย่างซอสโค้ดด้านบนใช้ callback เพื่อที่จะเก็บ DOM element ไว้ที่ตัวแปร *local* ที่มีชื่อว่า `input`ภายหลังเมื่อใช้ handler `onChange` `App`'s state.
+
+*Using a lot of `refs` is not a good idea. If it happens in your app consider using `controlled` inputs and re-think your components.*
+
+## Final thoughts
+
+*controlled* versus *uncontrolled* inputs is very often underrated. However I believe that it is a fundamental decision because it dictates the data flow in the React component. I personally think that *uncontrolled* inputs are kind of an anti-pattern and I'm trying to avoid them when possible.
+
+
