@@ -133,7 +133,7 @@ var EnhancedTitle = enhanceComponent(OriginalTitle);
 
 Knowledge ของ `appTitle` นั้นถูกซ่อนอยู่ใน higher-order component โดย `OriginalTitle` จะรู้เพียงแค่ว่ามันรับ `prop` ที่เรียกว่า `title` เข้ามาและไม่รู้เลยว่า prop ดังกล่าวมาจากไฟล์ configuration ซึ่งนั่นก็คือข้อได้เปรียบที่ใหญ่มากข้อหนึ่ง เพราะตอนนี้เราสามารถแยก block การทำงานออกจากกันได้และยังช่วยเรื่องการทำการทดสอบ component ด้วย เนื่องจากเราสามารถสร้าง mock ได้อย่างง่ายดายแล้ว
 
-อีกหนึ่งคุณลักษณะของ pattern นี้ก็คือ เรามี buffer สำหรับใส่ logic เพิ่มเติมเข้าไปได้อีกด้วย ตัวอย่างเช่น ถ้า `OriginalTitle` ต้องใช้ข้อมูลซึ่งมาจาก remote server เราอาจจะทำการ query ข้อมูลนี้ใน higher-order component และส่งมันกลับไปในรูปของ prop ก็ได้
+อีกหนึ่งคุณลักษณะของ pattern นี้ก็คือ เรามี buffer สำหรับใส่ logic เพิ่มเติมเข้าไปได้อีกด้วย ตัวอย่างเช่น ถ้า `OriginalTitle` ต้องใช้ข้อมูลซึ่งมาจาก remote server เราอาจจะทำการ query ข้อมูลนี้ใน higher-order component และส่งกลับไปในรูปของ prop ก็ได้
 
 <span class="new-page"></span>
 
@@ -174,7 +174,7 @@ var EnhancedTitle = enhanceComponent(OriginalTitle);
 
 ## การใช้ function เป็น children และ render prop
 
-ในช่วงสองสามเดือนมานี้ React community เริ่มที่จะเปลี่ยนทิศทางความสนใจบ้างแล้ว จนถึงตอนนี้ ในตัวอย่างของเรา `children` prop คือ React component ตัวหนึ่ง อย่างไรก็ตามยังมีอีก pattern หนึ่งที่กำลังได้รับความนิยมเพิ่มขึ้น นั่นก็คือ `children` prop ตัวเดิมนี่แหละแต่กลายมาอยู่ในรูปแบบของ JSX expression งั้นเรามาเริ่มด้วยการส่ง object ธรรมดาๆกันดูก่อนนะครับ
+ในช่วงสองสามเดือนหลังนี้ React community เริ่มที่จะเปลี่ยนทิศทางความสนใจบ้างแล้ว จนถึงตอนนี้ ในตัวอย่างของเรา `children` prop คือ React component ตัวหนึ่ง อย่างไรก็ตามยังมีอีก pattern หนึ่งที่กำลังได้รับความนิยมเพิ่มขึ้น นั่นก็คือ `children` prop ตัวเดิมที่กลายมาอยู่ในรูปของ JSX expression เรามาเริ่มด้วยการลองส่ง object ธรรมดาๆกันดูก่อนนะครับ
 
 ```js
 function UserName({ children }) {
@@ -197,7 +197,7 @@ function App() {
 }
 ```
 
-นี่อาจจะดูแปลก แต่ในความเป็นจริงนั้นเป็นวิธีที่ทรงพลังมาก ตัวอย่างเช่น เมื่อเรามี knowledge บางอย่างใน component แม่ และไม่จำเป็นต้องส่ง knowledge นั้นให้ลูก ตัวอย่างข้างล่างนี้พิมพ์ลิสต์ของ TODO ออกมา โดย `App` component เก็บข้อมูลทั้งหมดไว้และรู้วิธีดูว่า TODO นี้เสร็จหรือยัง ซึ่ง `TodoList` component นั้นแค่หุ้ม HTML markup ไว้
+ตัวอย่างนี้อาจจะดูแปลกอยู่ซักหน่อย แต่จริงๆแล้วเป็นวิธีที่ใช้งานได้ดีมาก เช่นในกรณีที่เรามี knowledge บางอย่างใน component แม่ และไม่อยากที่จะต้องส่ง knowledge นั้นให้ลูก ตัวอย่างข้างล่างนี้พิมพ์ลิสต์ของ TODO ออกมา โดย `App` component จะเก็บข้อมูลทั้งหมดไว้และรู้วิธีตรวจสอบว่า TODO นี้เสร็จหรือยัง ซึ่ง `TodoList` component นั้นทำหน้าที่แค่ห่อหุ้ม HTML markup ที่จำเป็นไว้เท่านั้น
 
 <br /><br /><br /><br />
 
@@ -233,9 +233,9 @@ function App() {
 }
 ```
 
-สังเกตุวิธีที่ `App` component ไม่ได้เปิดเผย structure ของข้อมูลเลย และ `TodoList` ก็ไม่รู้ว่ามี `lebel` หรือ `status` property อยู่ด้วย
+สังเกตุวิธีที่ `App` component ไม่ได้เปิดเผยโครงสร้างของข้อมูลเลย และ `TodoList` ก็ไม่รู้ว่ามี `lebel` หรือ `status` property อยู่ด้วย
 
-ซึ่ง pattern *render prop* นั้นก็เป็นเหมือนกัน ยกเว้นแต่ว่าเราใช้ prop ไม่ใช่ `children` ในการ render todo
+โดย *render prop* pattern นั้นก็เป็นเช่นเดียวกัน ยกเว้นแต่ว่าเราใช้ prop ไม่ใช่ `children` ในการ render todo
 
 <br /><br /><br />
 
@@ -262,7 +262,7 @@ return (
 );
 ```
 
-โดย pattern *function as children* และ *render prop* เมื่อไม่นานมานี้ได้กลายมาเป็นหนึ่งใน pattern ที่ผมชอบมาก ทั้งสองมอบ flexibility และช่วยในกรณีที่เราต้องการ reuse code ซึ่งทั้งสองยังเป็นวิธีการที่ทรงพลังในการ abstract code ส่วนที่สำคัญมากๆด้วย
+ซึ่ง pattern ทั้งสองตัว ได้แก่ *function as children* และ *render prop* นั้นเมื่อไม่นานมานี้ได้กลายมาเป็นหนึ่งใน pattern โปรดของผมแล้ว โดยทั้งสองมอบ flexibility และช่วยในกรณีที่เราต้องการ reuse code และทั้งสองยังเป็นวิธีการที่ใช้ได้ดีมากในการ abstract code ส่วนที่สำคัญๆอีกด้วย
 
 ```js
 class DataProvider extends React.Component {
@@ -281,13 +281,13 @@ class DataProvider extends React.Component {
 }
 ```
 
-`DataProvider` ไม่ reder อะไรเลยเมื่อครั้งแรกที่ถูก mount แต่ห้าวินาทีหลังจากที่เราอัพเดท state ของ component เราได้ทำการ render `<section>` ตามด้วยสิ่งที่ prop `render` return กลับมา ลองนึกภาพว่า component ตัวเดียวกันนี้ fetch ข้อมูลมาจาก remote server และเราต้องการจะแสดงผลก็ต่อเมื่อข้อมูลดังกล่าวมาถึงแล้วเท่านั้น
+`DataProvider` ไม่ได้ reder อะไรเลยเมื่อครั้งแรกที่ถูก mount แต่ห้าวินาทีหลังจากที่เราอัพเดท state ของ component เราได้ทำการ render `<section>` ตามด้วยสิ่งที่ prop `render` return กลับมา ลองนึกภาพว่า component ตัวเดียวกันนี้ดึงข้อมูลมาจาก remote server และเราต้องการจะแสดงผลก็ต่อเมื่อข้อมูลดังกล่าวมาถึงแล้วเท่านั้น
 
 ```js
 <DataProvider render={ data => <p>The data is here!</p> } />
 ```
 
-ซึ่งเราได้ระบุว่าเราต้องการอะไร แต่ไม่ได้บอกว่าจะได้มาอย่างไร วิธีการดังกล่าวถูกซ่อนอยู่ภายใน `DataProvider` โดยในช่วงหลังๆ เราใช้ pattern นี้ในการทำงานที่เราต้องจำกัด UI บางส่วนไว้ที่ ผู้ใช้บางกลุ่มที่มี permission `read:products` แล้วเราจึงใช้ *render prop* pattern
+เราระบุว่าเราต้องการให้อะไรเกิดขึ้นแต่ไม่ใช่เกิดขึ้นได้อย่างไร วิธีการดังกล่าวถูกซ่อนอยู่ภายใน `DataProvider` โดยในช่วงหลังๆ เราใช้ pattern นี้ในงานที่เราต้องจำกัด UI บางส่วนไว้ที่ผู้ใช้บางกลุ่มที่มี permission `read:products` จากนั้นเราจึงใช้ *render prop* pattern
 
 ```js
 <Authorize
@@ -295,8 +295,8 @@ class DataProvider extends React.Component {
   render={ () => <ProductsList /> } />
 ```
 
-ผลลัพธ์ที่ออกมานั้นดูสวยและยังอธิบายตัวเองไปในตัวได้อีกด้วย โดย `Authorize` ถูกส่งไปที่ identity provider และตรวจสอบว่า permission ของ user ปัจจุบันคืออะไร ถ้า user ได้รับอนุญาติให้อ่าน products ได้ เราก็จะ render `ProductList`
+ผลลัพธ์ที่ออกมานั้นดูสวยและยังอธิบายตัวเองไปในตัวได้อีกด้วย โดย `Authorize` ถูกส่งไปที่ identity provider และตรวจสอบว่า permission ของผู้ใช้ปัจจุบันคืออะไร ถ้าผู้ใช้ได้รับอนุญาติให้อ่าน products ได้ เราก็จะ render `ProductList`
 
 ## ทิ้งท้าย
 
-เคยสงสัยมั้ยว่าทำไม HTML ถึงยังคงมีอยู่ ณ จุดนี้ HTML ถูกสร้างในยุกแรกของ Internet และเรายังใช้คงใช้กันอยู่จนถึงทุกวันนี้ นั่นเป็นเพราะ HTML มี composability สูงยังไงล่ะ React และ JSX เองก็ดูคล้ายกับ HTML ที่ได้รับ steroid เข้าไปในรูปแบบที่ว่าทั้งสองมี composibility ที่สูงเช่นกัน เพราะฉะนั้นจงทำให้แน่ใจว่าคุณได้เรียนรู้เทคนิค composition อย่างลึกซึ้ง เพราะนั่นคือหนึ่งในความสามรถที่มีประโยชน์ที่สุดของ React
+เคยสงสัยมั้ยว่าทำไม HTML ถึงยังคงมีอยู่จนถึงปัจจุบันนี้ทั้งที่ถูกสร้างในยุกแรกของ Internet แต่เราก็ยังคงใช้กันอยู่ นั่นเป็นเพราะ HTML มี composability ที่สูงมาก ซึ่ง React และ JSX เองก็ดูคล้ายกับ HTML ที่ได้รับ steroid เข้าไป ในรูปแบบที่ว่าทั้งสองมี composibility ที่สูงเช่นเดียวกัน ฉะนั้นจงทำให้แน่ใจว่าคุณได้เรียนรู้เทคนิค composition อย่างลึกซึ้งแล้ว เพราะนั่นคือหนึ่งในความสามรถที่มีประโยชน์ที่สุดของ React
