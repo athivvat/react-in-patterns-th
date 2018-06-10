@@ -44,9 +44,8 @@ const paragraphText = {
 
 ## CSS modules
 
-[CSS modules](https://github.com/css-modules/css-modules/blob/master/docs/get-started.md) นั้นสร้างขึ้นจากแนวคิดของสิ่งที่เราได้กล่าวไปก่อนหน้านี้ ถ้าเราไม่ชอบ Syntax ของ JavaScript เราสามารถเลือก CSS Module ที่ทำให้เราสามารถเขียน CSS แบบธรรมดาได้
-ปกติแล้ว Library นี้จะจัดการงานของมันในช่วง Building Time
-เราอาจจะคิดว่ามันเป็นส่วนหนึ่งของการทำ [Transpilation](https://scotch.io/tutorials/javaScript-transpilers-what-they-are-why-we-need-them) แต่อาจจะกล่าวได้ว่ามันคือส่วนหนึ่งของ Plug-in ของการสร้างระบบ
+[CSS modules](https://github.com/css-modules/css-modules/blob/master/docs/get-started.md) นั้นสร้างขึ้นจากแนวคิดของสิ่งที่เราได้กล่าวไปก่อนหน้านี้ ถ้าเราไม่ชอบการเขียน CSS ภายใต้ Syntax ของ JavaScript เราสามารถใช้ CSS Module ที่ทำให้เราสามารถเขียน CSS ในรูปแบบ External CSS ได้
+ปกติแล้ว Library นี้จะจัดการงานของมันในช่วง Building Time มันเป็นไปได้ที่เราจะเข้าใจว่ามันคือส่วนหนึ่งของกระบวนการ [Transpilation](https://scotch.io/tutorials/javaScript-transpilers-what-they-are-why-we-need-them) แต่โดยปกติแล้วมันก็คือ Build system ชนิดหนึ่ง
 
 นี่คือตัวอย่างเล็ก ๆ ที่จะช่วยให้คุณเข้าใจว่ามันทำงานอย่างไร:
 
@@ -64,7 +63,7 @@ function App() {
 }
 ```
 
-ตามปกติแล้ววิธีนี้จะไม่สามารถทำได้ แต่ด้วยพลังแห่ง CSS Module เราสามารถ import ไฟล์ CSS และเรียกใช้ Class ได้
+ตามปกติแล้ววิธีนี้จะไม่สามารถทำได้ แต่ด้วยพลังแห่ง CSS Module เราสามารถ import ไฟล์ CSS และเรียกใช้ Class ที่ประกาศไว้ในไฟล์ CSS Module ได้
 
 และดังที่เราได้กล่าวไปว่า Plain CSS ใน React นั้น ไม่ได้เหมือนกับ CSS ธรรมดาบน HTML มันสามารถใช้งานเทคนิคบางอย่างที่เป็นประโยชน์กับคุณได้ ดังตัวอย่าง:
 
