@@ -26,7 +26,7 @@ const inlineStyles = {
 ```
 
 เพราะว่าเราเขียน Style ใน Syntax ของ Javascript เราจึงมีข้อจำกัดของ Syntax
-หากเราต้องการเขียน CSS Property ใบแบบของ CSS ดั้งเดิมนั้น  เราจะต้องเขียนภายใน Quote ( เครื่องหมาย ", ' ) ถ้าไม่เช่นนั้นคุณก็จะต้องเขียนตามหลัก Camel Case อย่างไรก็ตาม Styling ใน Javascript นั้นมีความน่าสนใจและยืดหยุ่นได้หลากหลายวิธีกว่า CSS ปกติทั่วไป (เช่น Plain CSS ใน HTML) ดังในตัวอย่างด้านล่างนี้ เราส่งผ่าน Property จาก Style หนึ่งไปยังอีก Style หนึ่ง:
+หากเราต้องการเขียน CSS Property ในแบบของ CSS ดั้งเดิมนั้น  เราจะต้องเขียนภายใน Quote ( เครื่องหมาย ", ' ) ถ้าไม่เช่นนั้นคุณก็จะต้องเขียนตามหลัก Camel Case อย่างไรก็ตาม Styling ใน Javascript นั้นมีความน่าสนใจและยืดหยุ่นได้หลากหลายวิธีกว่า CSS ปกติทั่วไป (เช่น Plain CSS ใน HTML) ดังในตัวอย่างด้านล่างนี้ เราส่งผ่าน Property จาก Style หนึ่งไปยังอีก Style หนึ่ง:
 
 ```js
 const theme = {
@@ -34,7 +34,7 @@ const theme = {
   color: 'blue'
 };
 const paragraphText = {
-  // ES6 Destructuring
+  // ES2018 object spread
   ...theme,
   fontSize: '20px'
 };
