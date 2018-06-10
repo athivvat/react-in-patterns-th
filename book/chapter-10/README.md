@@ -84,7 +84,7 @@ export default function Header() {
 ตอนนี้ตัวแปร `title` ได้ถูกซ่อนอยู่ในเลเยอร์ตรงกลาง (higher-order component) จากตรงนั้นมันจะถูกส่งไปหา `Title` component ผ่าน props โดยตรง ท่านี้แก้ปัญหาได้ครึ่งทาง เราไม่ต้องกังวลเรื่องการส่ง `title` ลงไปหลายๆชั้นอีกแล้ว แต่ยังมีปัญหาเรื่องที่ว่า เราจะทำยังไงให้ค่าวิ่งไปหา `inject.jsx`
 
 <!-- ## Using React's context (prior v. 16.3) -->
-## การใช้ React's context (ก่อนเวอร์ชั่น 16.3)
+## การใช้ React's context (เวอร์ชั่นก่อนหน้า 16.3)
 
 <!-- *In v16.3 React's team introduced a new version of the context API and if you are going to use that version or above you'd probably skip this section.* -->
 
@@ -307,7 +307,7 @@ API อันใหม่นั้น ง่ายต้องการเข้
 
 <!-- If we don't want to use the context there are a couple of other ways to achieve the injection. They are not exactly React specific but worth mentioning. One of them is using the module system. -->
 
-ถ้าเราไม่ต้องการที่จะใช้ context ก็มีทางเลือกอื่นที่สามารถทำให้เราทำ injection ได้ โดยที่ทางเลือกนั้นอาจจะไม่เจาะจงไปที่ React แต่ก็ควรค่าแก่การกล่างถึง หนึ่งในนั้นคือการใช้ module system
+ถ้าเราไม่ต้องการที่จะใช้ context ก็มีทางเลือกอื่นที่สามารถทำให้เราทำ injection ได้ โดยที่ทางเลือกนั้นอาจจะไม่เจาะจงไปที่ React แต่ก็ควรค่าแก่การกล่าวถึง หนึ่งในนั้นคือการใช้ module system
 
 <!-- As we know the typical module system in JavaScript has a caching mechanism. It's nicely noted in the [Node's documentation](https://nodejs.org/api/modules.html#modules_caching): -->
 
@@ -412,7 +412,7 @@ export default wire(
 
 <!-- *If we look at the `Title.jsx` file we'll see that the actual component and the wiring may live in different files. That way the component and the mapper function become easily unit testable.* -->
 
-*ถ้าเรามองที่ไฟล์ `Title.jsx` เราจะเห็นว่าตัว component และ ส่วนที่ทำการเชื่อมต่อนั้นสามารถอยู่คนละไฟล์ได้ ซึ่งท่านี้จะทำให้ตัว component และฟังก์ชัน mapper นั้นง่ายต่อการเทสในระดับ unit*
+*ถ้าเรามองที่ไฟล์ `Title.jsx` เราจะเห็นว่าตัว component และ ส่วนที่ทำการเชื่อมต่อนั้นสามารถอยู่คนละไฟล์ได้ ซึ่งท่านี้จะทำให้ตัว component และฟังก์ชัน mapper นั้นง่ายต่อการทำ unit test*
 
 <!-- ## Final thoughts -->
 ## ความคิดทิ้งท้าย
