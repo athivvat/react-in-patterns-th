@@ -25,8 +25,8 @@ const inlineStyles = {
 <h2 style={ inlineStyles }>Inline styling</h2>
 ```
 
-เพราะว่าเราเขียน Style ใน Syntax ของ Javascript เราจึงมีข้อจำกัดของ Syntax
-หากเราต้องการเขียน CSS Property ในแบบของ CSS ดั้งเดิมนั้น  เราจะต้องเขียนภายใน Quote ( เครื่องหมาย ", ' ) ถ้าไม่เช่นนั้นคุณก็จะต้องเขียนตามหลัก Camel Case อย่างไรก็ตาม Styling ใน Javascript นั้นมีความน่าสนใจและยืดหยุ่นได้หลากหลายวิธีกว่า CSS ปกติทั่วไป (เช่น Plain CSS ใน HTML) ดังในตัวอย่างด้านล่างนี้ เราส่งผ่าน Property จาก Style หนึ่งไปยังอีก Style หนึ่ง:
+เพราะว่าเราเขียน Style ใน Syntax ของ JavaScript เราจึงมีข้อจำกัดของ Syntax
+หากเราต้องการเขียน CSS Property ในแบบของ CSS ดั้งเดิมนั้น  เราจะต้องเขียนภายใน Quote ( เครื่องหมาย ", ' ) ถ้าไม่เช่นนั้นคุณก็จะต้องเขียนตามหลัก Camel Case อย่างไรก็ตาม Styling ใน JavaScript นั้นมีความน่าสนใจและยืดหยุ่นได้หลากหลายวิธีกว่า CSS ปกติทั่วไป (เช่น Plain CSS ใน HTML) ดังในตัวอย่างด้านล่างนี้ เราส่งผ่าน Property จาก Style หนึ่งไปยังอีก Style หนึ่ง:
 
 ```js
 const theme = {
@@ -40,13 +40,13 @@ const paragraphText = {
 };
 ```
 
-เรามี Style ชุดนึงใน `theme` และเราก็เรียกใช้มันภายใน Style ของ `paragraphText` อธิบายง่ายๆก็คือ เราสามารถใช้ความสามารถของ Javascript ในการจัดการ CSS ของเรา สิ่งที่เราต้องการให้คุณเห็นคือสุดท้ายเราได้สร้าง Object หนึ่ง ซึ่งมันจะไปแทรกตัวอยู่ใน Attribute `style`
+เรามี Style ชุดนึงใน `theme` และเราก็เรียกใช้มันภายใน Style ของ `paragraphText` อธิบายง่ายๆก็คือ เราสามารถใช้ความสามารถของ JavaScript ในการจัดการ CSS ของเรา สิ่งที่เราต้องการให้คุณเห็นคือสุดท้ายเราได้สร้าง Object หนึ่ง ซึ่งมันจะไปแทรกตัวอยู่ใน Attribute `style`
 
 ## CSS modules
 
-[CSS modules](https://github.com/css-modules/css-modules/blob/master/docs/get-started.md) นั้นสร้างขึ้นจากแนวคิดของสิ่งที่เราได้กล่าวไปก่อนหน้านี้ ถ้าเราไม่ชอบ Syntax ของ Javascript เราสามารถเลือก CSS Module ที่ทำให้เราสามารถเขียน CSS แบบธรรมดาได้
+[CSS modules](https://github.com/css-modules/css-modules/blob/master/docs/get-started.md) นั้นสร้างขึ้นจากแนวคิดของสิ่งที่เราได้กล่าวไปก่อนหน้านี้ ถ้าเราไม่ชอบ Syntax ของ JavaScript เราสามารถเลือก CSS Module ที่ทำให้เราสามารถเขียน CSS แบบธรรมดาได้
 ปกติแล้ว Library นี้จะจัดการงานของมันในช่วง Building Time
-เราอาจจะคิดว่ามันเป็นส่วนหนึ่งของการทำ [Transpilation](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) แต่อาจจะกล่าวได้ว่ามันคือส่วนหนึ่งของ Plug-in ของการสร้างระบบ
+เราอาจจะคิดว่ามันเป็นส่วนหนึ่งของการทำ [Transpilation](https://scotch.io/tutorials/javaScript-transpilers-what-they-are-why-we-need-them) แต่อาจจะกล่าวได้ว่ามันคือส่วนหนึ่งของ Plug-in ของการสร้างระบบ
 
 นี่คือตัวอย่างเล็ก ๆ ที่จะช่วยให้คุณเข้าใจว่ามันทำงานอย่างไร:
 
