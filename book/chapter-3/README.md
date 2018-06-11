@@ -1,6 +1,6 @@
-# การจัดการอีเวนท์
+# การจัดการ Event
 
-React นั้นได้มีการเตรียม attributes ต่างๆที่ใช้สำหรับการจัดการกับ `event` ไว้เรียบร้อยแล้ว ซึ่งวิธีใช้ทั่วไปนั้นแทบจะเหมือนกับวิธีการจัดการ `event` ใน DOM ที่เราคุ้นเคยเลย โดยจะมีความแตกต่างกันเพียงเล็กน้อย เช่น การใช้ `camelCase` เป็นชื่อ attribute หรือการส่ง *Function* แทนที่จะเป็น *String* เป็นต้น
+React นั้นได้มีการเตรียม attributes ต่าง ๆ ที่ใช้สำหรับการจัดการกับ `event` ไว้เรียบร้อยแล้ว ซึ่งวิธีใช้ทั่วไปนั้นแทบจะเหมือนกับวิธีการจัดการ `event` ใน DOM ที่เราคุ้นเคยเลย โดยจะมีความแตกต่างกันเพียงเล็กน้อย เช่น การใช้ `camelCase` เป็นชื่อ attribute หรือการส่ง function แทนที่จะเป็น string เป็นต้น
 
 ```js
 const theLogoIsClicked = () => alert('Clicked');
@@ -9,7 +9,9 @@ const theLogoIsClicked = () => alert('Clicked');
 <Logo onClick={ theLogoIsClicked } />
 
 // อีเวนท์ onChange
-<input type='text' onChange={event => theInputIsChanged(event.target.value) } />
+<input
+  type='text'
+  onChange={event => theInputIsChanged(event.target.value) } />
 ```
 
 ส่วนใหญ่แล้วเรามักจะจัดการอีเวนท์กันภายใน Component ที่สร้างอีเวนท์นั้นขึ้นมา เช่นในตัวอย่างข้างล่าง เรามี `button` อยู่ในคอมโพเนนท์ `Switcher` แล้วเราต้องการให้การคลิกที่ `button` ไปรันคำสั่งชื่อ `_handleButtonClick` ที่อยู่ในคอมโพเนนท์ `Switcher`
@@ -48,7 +50,7 @@ class Switcher extends React.Component {
   }
   _handleButtonClick() {
     console.log(`Button is clicked inside ${ this.state.name }`);
-    // ไม่สามารถเรียก this.state.name ได้ เพราะหา this ไม่เจอ
+    // ไม่สามารถเรียก this.state.name ได้ เพราะหา this ไม่เจอ เนื่องจาก context ของ this ไม่ตรงกัน
     // Uncaught TypeError: Cannot read property 'state' of null
   }
 };
