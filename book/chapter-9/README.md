@@ -303,7 +303,7 @@ const AppConnected = connect(
 
 เราต้องเรียกใช้ `connect` กับ component อีกครั้ง เพราะเราต้องการที่จะควบคุม visibility ของ counter โดยที่ `getVisibility` selector จะ return ค่า boolean ที่จะเป็นตัวกำหนด `CounterConnected` ว่าจะ render หรือไม่
 
-## สรุป
+## ข้อคิด
 
 Redux เป็น pattern ที่ดี หลายปีแล้วที่ JavaScript community พัฒนาแนวคิดและเพิ่มประสิทธิภาพในหลาย ๆ ด้าน ผมคิดว่ารูปแบบ redux application จะมีหน้าตาใกล้เคียงภาพต่อไปนี้
 
