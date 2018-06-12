@@ -194,6 +194,6 @@ class Tags extends React.Component {
 
 <br />
 
-## สรุปสุดท้าย
+## ข้อคิด
 
 ถึงแม้ว่า React จะเป็นคนจัดการ DOM tree เราสามารถก็ที่ยังสามารถใช้งานกับ third-party libraries และ services โดยให้ lifecycle method ต่าง ๆ เป็นตัวเชื่อมระหว่าง React กับ non-React code
