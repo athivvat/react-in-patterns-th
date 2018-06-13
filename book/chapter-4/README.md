@@ -86,7 +86,7 @@ function App() {
 
 ## Higher-order component
 
-เป็นเวลานานมากแล้วที่ higher-order component เป็นวิธีที่นิยมใช้ในการ enhance และประกอบ (compose) React element ซึ่ง component ชนิดนี้มีความคล้ายคลึงอย่างมากกับ [decorator design pattern](http://robdodson.me/javascript-design-patterns-decorator/) เพราะมีทั้ง wrap และ enhance เช่นกัน
+เป็นเวลานานมากแล้วที่ higher-order component เป็นวิธีที่นิยมใช้ในการ enhance และประกอบ (compose) React element ซึ่ง pattern ชนิดนี้มีความคล้ายคลึงอย่างมากกับ [decorator design pattern](http://robdodson.me/javascript-design-patterns-decorator/) เพราะมีทั้ง wrap และ enhance เช่นกัน
 
 ในทางเทคนิค higher-order component ปกติจะเป็น function ที่รับ component ดั้งเดิมและ return ตัวมันในรูปแบบที่ถูก enhance หรือ populate ตัวอย่างเล็ก ๆ ก็เช่น:
 
