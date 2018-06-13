@@ -1,10 +1,10 @@
-# Styling React components
+# การตกแต่ง React components
 
-React is a view layer. As such it kind of controls the markup rendered in the browser. And we know that the styling with CSS is tightly connected to the markup on the page. There are couple of approaches for styling React applications and in this section we will go through the most popular ones.
+React นั้นเป็นส่วนแสดงผล ซึ่งเป็นการควมคุม Markup ที่จะแสดงผลในเบราว์เซอร์ เรามักจะใช้ CSS ในการตกแต่งหน้า Markup ของเรา มีหลายวิธีมากในการจัดการกับ Styling บนแอพพลิเคชั่น React และในบทนี้ เราจะมาพูดถึงวิธีการที่นิยมกัน
 
-## The good old CSS class
+## CSS Class ที่ดีในทุกยุคสมัย
 
-JSX syntax is pretty close to HTML syntax. As such we have almost the same tag attributes and we may still style using CSS classes. Classes which are defined in an external `.css` file. The only caveat is using `className` and not `class`. For example:
+JSX Syntax นั้นมีความใกล้เคียงกับภาษา HTML ซึ่งนั่นก็คือเรายังคงใช้ Attribute ต่าง ๆ เหมือนกัน และเราอาจจะยังคงใช้ CSS Class ในการ Styling โดยที่ Class ต่างๆ ถูกประกาศจากไฟล์ `.css` โดยมีข้อแตกต่างอย่างนึงก็คือต้องใช้ `className` ไม่ใช่ `class` เช่น
 
 ```
 <h1 className='title'>Styling</h1>
@@ -12,7 +12,7 @@ JSX syntax is pretty close to HTML syntax. As such we have almost the same tag a
 
 ## Inline styling
 
-The inline styling works just fine. Similarly to HTML we are free to pass styles directly via a `style`  attribute. However, while in HTML the value is a string in JSX must be an object.
+การทำ Inline CSS ก็สามารถทำได้ดีเช่นเดียวกับ HTML ที่เราสามารถส่งค่า Parameter ต่าง ๆ ได้โดยตรงผ่าน Attribute `style` แต่อย่างไรก็ตาม ใน JSX นั้นเราจะต้องกำหนด Styling ด้วย Object แตกต่างจาก HTML ที่กำหนดเป็น String
 
 ```js
 const inlineStyles = {
@@ -25,7 +25,8 @@ const inlineStyles = {
 <h2 style={ inlineStyles }>Inline styling</h2>
 ```
 
-Because we write the styles in JavaScript we have some limitations from a syntax point of view. If we want to keep the original CSS property names we have to put them in quotes. If not then we have to follow the camel case convention. However, writing styles in JavaScript is quite interesting and may be a lot more flexible then the plain CSS. Like for example inheriting of styles:
+เพราะว่าเราเขียน Style ใน Syntax ของ JavaScript เราจึงมีข้อจำกัดของ Syntax
+หากเราต้องการเขียน CSS Property ในแบบของ CSS ดั้งเดิมนั้น  เราจะต้องเขียนภายใน Quote ( เครื่องหมาย ", ' ) ถ้าไม่เช่นนั้นคุณก็จะต้องเขียนตามหลัก Camel Case อย่างไรก็ตาม Styling ใน JavaScript นั้นมีความน่าสนใจและยืดหยุ่นได้หลากหลายวิธีกว่า CSS ปกติทั่วไป (เช่น Plain CSS ใน HTML) ดังในตัวอย่างด้านล่างนี้ เราส่งผ่าน Property จาก Style หนึ่งไปยังอีก Style หนึ่ง:
 
 ```js
 const theme = {
@@ -33,20 +34,20 @@ const theme = {
   color: 'blue'
 };
 const paragraphText = {
+  // ES2018 object spread
   ...theme,
   fontSize: '20px'
 };
 ```
 
-We have some basic styles in `theme` and with mix them with what is in `paragraphText`. Shortly, we are able to use the whole power of JavaScript to organize our CSS. What it matters at the end is that we generate an object that goes to the `style` attribute.
+เรามี Style ชุดนึงใน `theme` และเราก็เรียกใช้มันภายใน Style ของ `paragraphText` อธิบายง่าย ๆ ก็คือ เราสามารถใช้ความสามารถของ JavaScript ในการจัดการ CSS ของเรา สิ่งที่เราต้องการให้คุณเห็นคือสุดท้ายเราได้สร้าง Object หนึ่ง ซึ่งมันจะไปแทรกตัวอยู่ใน Attribute `style`
 
 ## CSS modules
 
-[CSS modules](https://github.com/css-modules/css-modules/blob/master/docs/get-started.md) is building on top of what we said so far. If we don't like the JavaScript syntax then we may use CSS modules and we will be able to write plain CSS. Usually this library plays its role at bundling time. It is possible to hook it as part of the transpilation step but normally is distributed as a build system plugin.
+[CSS modules](https://github.com/css-modules/css-modules/blob/master/docs/get-started.md) นั้นสร้างขึ้นจากแนวคิดของสิ่งที่เราได้กล่าวไปก่อนหน้านี้ ถ้าเราไม่ชอบการเขียน CSS ภายใต้ Syntax ของ JavaScript เราสามารถใช้ CSS Module ที่ทำให้เราสามารถเขียน CSS ในรูปแบบและ Syntax ของ CSS ได้ ( ดังที่กล่าวไปว่าการเขียน CSS โดยที่ไม่มี CSS module นั้นจะต้องเขียนใน Syntax ของ JavaScript )
+ปกติแล้ว Library นี้จะจัดการงานของมันในช่วง Building Time มันเป็นไปได้ที่เราจะเข้าใจว่ามันคือส่วนหนึ่งของกระบวนการ [Transpilation](https://scotch.io/tutorials/javaScript-transpilers-what-they-are-why-we-need-them) แต่โดยปกติแล้วมันก็คือ build system plug-in ชนิดหนึ่ง
 
-Here is a quick example to get an idea how it works:
-
-<br /><br />
+นี่คือตัวอย่างเล็ก ๆ ที่จะช่วยให้คุณเข้าใจว่ามันทำงานอย่างไร:
 
 ```js
 /* style.css */
@@ -62,9 +63,9 @@ function App() {
 }
 ```
 
-That is not possible by default but with CSS modules we may import directly a plain CSS file and use the classes inside.
+ตามปกติแล้ววิธีนี้จะไม่สามารถทำได้ แต่ด้วยพลังแห่ง CSS Module เราสามารถ import ไฟล์ CSS และเรียกใช้ Class ที่ประกาศไว้ในไฟล์ CSS Module ได้
 
-And when we say *plain CSS* we don't mean that it is exactly like the normal CSS. It supports some really helpful composition techniques. For example:
+และดังที่เราได้กล่าวไปว่า Plain CSS ใน React นั้น ไม่ได้เหมือนกับ CSS ธรรมดาบน HTML มันทำให้คุณสามารถใช้งานเทคนิคบางอย่างที่เป็นประโยชน์กับคุณได้ ดังตัวอย่าง:
 
 ```
 .title {
@@ -74,7 +75,7 @@ And when we say *plain CSS* we don't mean that it is exactly like the normal CSS
 
 ## Styled-components
 
-[Styled-components](https://www.styled-components.com/) took another direction. Instead of inlining styles the library provides a React component. We then use this component to represent a specific look and feel. For example, we may create a `Link` component that has certain styling and use that instead of the `<a>` tag.
+[styled-components](https://www.styled-components.com/) นั้นต่างออกไป แทนที่จะเป็น Inline Style ที่เกิดจาก Library เราใช้มันเพื่อทำให้โค้ดของเราดูดีมากขึ้น เช่น เราอาจจะสร้าง Component `Link` ซึ่งมี Style และมีการใช้การใช้งานเหมือนกับ `<a>`
 
 ```js
 const Link = styled.a`
@@ -87,7 +88,7 @@ const Link = styled.a`
 <Link href='http://google.com'>Google</Link>
 ```
 
-There is again a mechanism for extending classes. We may still use the `Link` component but change the text color like so:
+เช่นเดิมที่เรามีวิธีในการขยายเพิ่ม Class อีกด้วย เราอาจจะยังคงใช้ Component `Link` แต่เปลี่ยนสีตัวอักษรได้ดังนี้:
 
 ```js
 const AnotherLink = styled(Link)`
@@ -97,8 +98,8 @@ const AnotherLink = styled(Link)`
 <AnotherLink href='http://facebook.com'>Facebook</AnotherLink>
 ```
 
-By far for me styled-components are probably the most interesting approach for styling in React. It is quite easy to create components for everything and forget about the styling. If your company has the capacity to create a design system and building a product with it then this option is probably the most suitable one.
+ตามความคิดเห็นผมแล้ว styled-components เป็นวิธีการที่น่าสนใจที่สุดแล้วในการ Styling ใน React มันง่ายมากในการสร้าง Components สำหรับทุก ๆ อย่างและลดความยุ่งยากในการ Styling ลง ถ้าบริษัทของคุณมีความพร้อมในการทำระบบดีไซน์ ( Design System ) และการพัฒนาระบบด้วย styled-components นี่คงจะเป็นทางเลือกที่ดีที่สุดแล้ว
 
-## Final thoughts
+## ข้อคิด
 
-There are multiple ways to style your React application. I did experienced all of them in production and I would say that there is no right or wrong. As most of the stuff in JavaScript today you have to pick the one that fits better in your context.
+มีหลายทางเลือกมาก ๆ ในการตกแต่งโปรเจคของคุณ ผมได้ทดลองมามากมายและผมคงจะบอกได้ว่าไม่มีวิธีไหนถูกหรือผิด มีทางเลือกให้คุณได้ใช้มากมาย คุณควรจะเลือกสักวิธีหนึ่งที่ดีที่สุดในโปรเจคของคุณ
