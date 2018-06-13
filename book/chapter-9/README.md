@@ -133,7 +133,7 @@ const mapDispatchToProps = dispatch => ({
 
 ## สร้าง counter app ง่าย ๆ ด้วย Redux
 
-เรามาเริ่มสร้าง counter app แบบง่ายๆ ที่ใช้ APIs จากด้านบนกัน
+เรามาเริ่มสร้าง counter app แบบง่าย ๆ ที่ใช้ APIs จากด้านบนกัน
 
 ![Redux counter app example](./redux-counter-app.png)
 
