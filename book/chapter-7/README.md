@@ -1,8 +1,8 @@
-# One-way direction data flow
+# การไหลข้อมูลแบบทิศทางเดียว
 
-One-way direction data flow is a pattern that works nicely with React. It is around the idea that the components do not modify the data that they receive. They only listen for changes of this data and maybe provide the new value but they do not update the actual data. This update happens following another mechanism in another place and the component just gets re-rendered with the new value.
+การไหลข้อมูลแบบทิศทางเดียว (One-way direction data flow) เป็นรูปแบบการจัดการข้อมูลที่ทำงานได้ดีกับ React ไอเดียหลักๆ คือ Component จะไม่แก้ไขข้อมูลใดๆที่ได้รับมา ซึ่ง Component จะคอยดูการเปลี่ยนแปลงของข้อมูลเท่านั้น โดยอาจสร้างข้อมูลใหม่ แต่จะไม่อัพเดทข้อมูลที่ได้รับมา การเปลี่ยนแปลงของข้อมูล จะเกิดขึ้นตามกลไกจากอีกที่หนึ่ง และ Component จะเป็นเพียงตัว render ด้วยข้อมูลชุดใหม่เท่านั้น
 
-Let's for example get a simple `Switcher` component that contains a button. If we click it we have to enable a flag in the system.
+มาดูตัวอย่างง่ายๆของ Component `Switcher` กันเถอะ ซึ่งมันประกอบไปด้วยปุ่ม 1 ปุ่ม โดยถ้าคลิกปุ่มเราจะสามารถเปิดค่า flag บางอย่างในระบบได้
 
 ```js
 class Switcher extends React.Component {
@@ -22,13 +22,14 @@ class Switcher extends React.Component {
   }
 };
 
-// ... and we render it
+// ... render component ที่นี่
 function App() {
   return <Switcher />;
 };
 ```
 
-At this moment we have the data inside our component. Or in other words, `Switcher` is the only one place that knows about our `flag`. Let's send it out to some kind of a store:
+ในตอนนี้เรามีข้อมูลภายใน Component ของเราแล้ว หรือพูดอีกอย่างหนึ่งได้ว่า ใน Component `Switcher` เป็นที่ๆเดียวที่รู้เกี่ยวกับค่า `flag` ของเรา ดังนั้นมาลองส่งมันออกไปยังตัวเก็บข้อมูล (`Store`) กันเถอะ 
+
 
 ```js
 var Store = {
@@ -65,11 +66,11 @@ function App() {
 };
 ```
 
-Our `Store` object is a [singleton](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript) where we have helpers for setting and getting the value of the `_flag` property. By passing the setter to the `Switcher` we are able to update the data externally. More or less our application workflow looks like that:
+object `Store` ของเราเป็น [Singleton](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript) object ที่ๆเราสามารถมีตัวช่วยสำหรับการเขียนและอ่านข้อมูลของ property `_flag` การส่งตัวเขียนข้อมูลไปยัง `Switcher` จะทำให้เราสามารถอัพเดทข้อมูลจากภายนอกได้ ดังนั้นภาพรวมของระบบการทำงานของแอพพลิเคชั่นจะมีลักษณะไม่ต่างไปจากนี้
 
-![one-direction data flow](./one-direction-1.jpg)
+![การไหลข้อมูลแบบทิศทางเดียว](./one-direction-1.jpg)
 
-Let's assume that we are saving the flag value to a back-end service via the `Store`. When the user comes back we have to set a proper initial state. If the user left the flag as `true` we have to show *"lights on"* and not the default *"lights off"*. Now it gets tricky because we have the data in two places. The UI and the `Store` have their own states. We have to communicate in both directions from the store to the switcher and from the switcher to the store.
+สมมติว่าเรากำลังบันทึกค่าของ flag ไปยังเซอร์วิสของระบบหลังบ้านผ่านทาง `Store` เมื่อผู้ใช้กลับมาใช้งานอีกครั้ง เราจะต้องบันทึกสถานะเริ่มต้น (Initial state) ให้ถูกต้อง ถ้าผู้ใช้ตั้งค่า flag เป็น `true` เราต้องแสดง *"lights on"* แทนที่จะเป็นค่าเริ่มต้น *"lights off"* ตอนนี้จะเริ่มยุ่งยากขึ้นแล้ว เพราะว่าเราต้องมีข้อมูลในสองที่ด้วยกันคือ ส่วนของการแสดงข้อมูล (UI) และส่วนของ `Store` ซึ่งแต่ละส่วนนั้นเก็บสถานะ (state) ของตัวเอง เราจึงต้องสื่อสารในสองทิศทางจาก store ไปยัง switcher และจาก switcher กลับไปยัง store
 
 ```js
 // ... in App component
@@ -84,13 +85,13 @@ constructor(props) {
   ...
 ```
 
-Our workflow changes to the following:
+รูปแบบการทำงานของเราจะเปลี่ยนไปเป็นลักษณะตามภาพดังนี้
 
-![one-direction data flow](./one-direction-2.jpg)
+![การไหลข้อมูลแบบทิศทางเดียว](./one-direction-2.jpg)
 
-All this leads to managing two states instead of one. What if the `Store` changes its value based on other actions in the system. We have to propagate that change to the `Switcher` and we increase the complexity of our app.
+จากรูปแบบของการทำงานทั้งหมดนี้ทำให้เราต้องจัดการสถานะสองที่แทนที่จะจัดการภายในที่เดียว ดังนั้นจะเกิดอะไรขึ้นถ้าค่าใน `Store` มีการเปลี่ยนแปลงโดยขึ้นอยู่กับการกระทำอื่นๆในระบบ เราต้องส่งการเปลี่ยนแปลงนั้นกลับมาที่ `Switcher` และเราก็เพิ่มความซับซ้อนของแอพพลิเคชั่น
 
-One-way direction data flow solves this problem. It eliminates the multiple places where we manage states and deals with only one which is usually the store. To achieve that we have to tweak our `Store` object a little bit. We need logic that allows us to subscribe for changes:
+การไหลข้อมูลแบบทิศทางเดียวสามารถแก้ปัญหานี้ได้ โดยหลักการคือจะกำจัดส่วนที่จัดการ state หลายๆ จุด ให้เหลือเพียงแค่ที่เดียว ซึ่งปกติแล้วที่ๆนั้นก็คือ store เพื่อที่จะทำแบบนั้นได้เราต้องปรับปรุง object `Store` เล็กน้อย และเราจำเป็นต้องมีลอจิกที่สามารถให้เราติดตามการเปลี่ยนแปลงได้ด้วย
 
 <span class="new-page"></span>
 
@@ -111,7 +112,7 @@ var Store = {
 };
 ```
 
-Then we will hook our main `App` component and we'll re-render it every time when the `Store` changes its value:
+จากนั้นเราจะให้ Component `App` render ใหม่ทุกๆครั้งที่ `Store` มีการเปลี่ยนแปลงค่าของมัน
 
 ```js
 class App extends React.Component {
@@ -133,7 +134,7 @@ class App extends React.Component {
 };
 ```
 
-Because of this change the `Switcher` becomes really simple. We don't need the internal state and the component may be written as a stateless function.
+เนื่องจากการเปลี่ยนแปลงนี้ การทำงานใน `Switcher` จะง่ายมาก เราไม่จำเป็นต้องมีสถานะภายใน และ Component นี้อาจเขียนได้ในรูปแบบของ function ที่เรียกกันว่า stateless function ได้อีกด้วย
 
 ```js
 function Switcher({ value, onChange }) {
@@ -149,6 +150,6 @@ function Switcher({ value, onChange }) {
   onChange={ Store.set.bind(Store) } />
 ```
 
-## Final thoughts
+## ข้อคิด
 
-The benefit that comes with this pattern is that our components become dummy representation of the store's data. There is only one source of truth and this makes the development easier. If you are going to take one thing from this book I would prefer to be this chapter. The one-direction data flow drastically changed the way of how I think when designing a feature so I believe it will have the same effect on you.
+ประโยชน์จากรูปแบบนี้คือ Component ของเราจะเป็นเพียง Component ง่ายๆที่ทำหน้าที่แสดงข้อมูลใน store เนื่องจากแหล่งเก็บข้อมูลมีเพียงแค่ที่เดียวเท่านั้น (single source of truth) และนี่จะทำให้การพัฒนาง่ายมากยิ่งขึ้น ถ้าคุณกำลังจะได้สิ่งๆหนึ่งจากหนังสือเล่มนี้ สำหรับฉันแล้วก็จะเป็นเนื้อหาของบทนี้ การไหลข้อมูลแบบทิศทางเดียวจะเปลี่ยนวิธีการคิดของการออกแบบฟีเจอร์อย่างมาก ดังนั้นฉันเชื่อว่ามันจะมีผลเดียวกันนี้กับคุณเช่นกัน
