@@ -1,20 +1,20 @@
 # Redux
 
-[Redux](https://redux.js.org/) is a library that acts as a state container and helps managing your application data flow. It was introduced back in 2015 at ReactEurope conference ([video](https://www.youtube.com/watch?v=xsSnOQynTHs)) by [Dan Abramov](https://twitter.com/dan_abramov). It is similar to [Flux architecture](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-8/README.md#flux-architecture-and-its-main-characteristics) and has a lot in common with it. In this section we will create a small counter app using Redux alongside React.
+[Redux](https://redux.js.org/) เป็น Library ที่ทำตัวเป็นตัวเก็บ state และช่วยจัดการ data ภายใน application เปิดตัวครั้งแรกในงาน ReactEurope conference ([วิดีโอ](https://www.youtube.com/watch?v=xsSnOQynTHs)) ในปี 2015 โดย [Dan Abramov](https://twitter.com/dan_abramov) มีลักษณะการทำงานและการออกแบบคล้าย [สถาปัตยกรรม Flux](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-8/README.md#flux-architecture-and-its-main-characteristics)
 
 <span class="new-page"></span>
 
-## Redux architecture and its main characteristics
+## สถาปัตยกรรม Redux และลักษณะสำคัญ
 
 ![Redux architecture](./redux-architecture.jpg)
 
-Similarly to [Flux](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-8/README.md) architecture we have the view components (React) dispatching an action. Same action may be dispatched by another part of our system. Like a bootstrap logic for example. This action is dispatched not to a central hub but directly to the store. We are saying "store" not "stores" because there is only one in Redux. That is one of the big differences between Flux and Redux. The logic that decided how our data changes lives in pure functions called reducers. Once the store receives an action it asks the reducers about the new version of the state by sending the current state and the given action. Then in immutable fashion the reducer needs to return the new state. The store continues from there and updates its internal state. As a final step, the wired to the store React component gets re-rendered.
+เช่นเดียวกับ [Flux](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-8/README.md) Redux มี view components (React) ที่คอย dispatch action โดยที่ action เดียวกันสามารถถูก dispatch มาจากส่วนไหนของระบบก็ได้ ยกตัวอย่างเช่น การเรียก bootstrap เป็นต้น action ที่ถูก dispatch จะถูกส่งตรงไปยัง store ซึ่งมีแค่ตัวเดียวเท่านั้นใน Redux ซึ่งสิ่งที่ Redux ไม่เหมือนกับ Flux คือส่วนที่จะตัดสินใจว่า data ของเราจะเปลี่ยนไปอย่างไรนั้นขึ้นอยู่กับ reducers ที่เป็น pure functions เมื่อ store ได้รับ action reducers จะทำการรับ current state และ action ที่ถูกส่งเข้ามา เพื่อคำนวณและสร้าง state ถัดไป โดยอิงหลัก immutable store จะรับช่วงต่อและเปลี่ยนค่า state ภายใน store สุดท้าย React component ที่ดึง data มาจาก store ก็จะถูก re-render
 
-The concept is pretty linear and again follows the [one-direction data flow](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-7/README.md). Let's talk about all these pieces and introduce a couple of new terms that support the work of the Redux pattern.
+Concept ของ Redux ค่อนข้างตรงไปตรงมาโดยยึดหลัก [one-direction data flow](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-7/README.md) เรามาเริ่มจาก แนะนำส่วนประกอบต่าง ๆ และตัวช่วยใน Redux pattern กันดีกว่า
 
 ### Actions
 
-The typical action in Redux (same as Flux) is just an object with a `type` property. Everything else in that object is considered a context specific data and it is not related to the pattern but to your application logic. For example:
+โดยทั่วไปแล้ว action ใน Redux เป็นเพียง object ที่ประกอบไปด้วย property ที่ชื่อว่า `type` ส่วน property อื่น ๆ ใน object คือ data ที่เกี่ยวข้องกับบริบทของ action นั้น ๆ และไม่เกี่ยวข้องกับ pattern ของ Redux แต่อย่างใด ยกตัวอย่างเช่น
 
 ```js
 const CHANGE_VISIBILITY = 'CHANGE_VISIBILITY';
@@ -23,12 +23,11 @@ const action = {
   visible: false
 }
 ```
+ถือว่าเป็นแบบอย่างที่ดีที่เราสร้าง constant อย่าง `CHANGE_VISIBILITY` เป็น action type ซึ่งยังมี tools หรือ libraries หลาย ๆ อย่างที่รองรับ Redux ที่มีวีธีเรียกใช้ที่สะดวกโดยการส่ง action type อย่างเดียว
 
-It is a good practice that we create constants like `CHANGE_VISIBILITY` for our action types. It happens that there are lots of tools/libraries that support Redux and solve different problems which do require the type of the action only. So it is just a convenient way to transfer this information.
+ส่วนของ property `visible` เป็น metadata ที่เราได้กล่าวถึง ซึ่งไม่ได้ถูกใช้ใน Redux เป็นเพียงแค่ข้อมูลที่ใช้ใน application เท่านั้น
 
-The `visible` property is the meta data that we mentioned above. It has nothing to do with Redux. It means something in the context of the application.
-
-Every time when we want to dispatch a method we have to use such objects. However, it becomes too noisy to write them over and over again. That is why there is the concept of *action creators*. An action creator is a function that returns an object and may or may not accept an argument which directly relates to the action properties. For example the action creator for the above action looks like this:
+ทุก ๆ ครั้งที่เราต้องการ dispatch method เราต้องใช้ object ซึ่งมันเป็นการยุ่งยากถ้าจะต้องมาเขียนมันซ้ำแล้วซ้ำเล่า จึงเป็นที่มาของ *action creators* ที่เป็น function ที่ return ค่า object และอาจจะรับหรือไม่รับ argument ที่เกี่ยวข้องกับ action นั้นเพิ่มก็ได้ ยกตัวอย่างเช่น action creator ของ action ด้านบน จะมีหน้าตาตามด้านล่าง
 
 ```js
 const changeVisibility = visible => ({
@@ -40,11 +39,11 @@ changeVisibility(false);
 // { type: CHANGE_VISIBILITY, visible: false }
 ```
 
-Notice that we pass the value of the `visible` as an argument and we don't have to remember (or import) the exact type of the action. Using such helpers makes the code compact and easy to read.
+จะสังเกตได้ว่าเราทำการส่งค่าของ `visible` ผ่าน argument ทำให้เราไม่ต้องจดจำค่าจริงของ action type นั้น ซึ่งการใช้ตัวช่วยพวกนี้จะทำให้โค้ดของเราสั้นและง่ายต่อการอ่าน
 
 ### Store
 
-Redux provides a helper `createStore` for creating a store. Its signature is as follows:
+Redux ได้เตรียมตัวช่วยอย่าง `createStore` ไว้สำหรับการสร้าง store โดย function มีลักษณะดังนี้
 
 ```js
 import { createStore } from 'redux';
@@ -52,27 +51,27 @@ import { createStore } from 'redux';
 createStore([reducer], [initial state], [enhancer]);
 ```
 
-We already mentioned that the reducer is a function that accepts the current state and action and returns the new state. More about that in a bit. The second argument is the initial state of the store. This comes as a handy instrument to initialize our application with data that we already have. This feature is the essence of processes like server-side rendering or persistent experience. The third parameter, enhancer, provides an API for extending Redux with third party middlewares and basically plug some functionally which is not baked-in. Like for example an instrument for handling async processes.
+เราได้กล่าวถึงไว้แล้วว่า reducer เป็น function ที่รับ current state และ action และ return ค่าเป็น state ใหม่ ต่อมา argument ที่สองคือ state เริ่มต้น ซึ่งมีประโยชน์ในการกำหนดค่า state เมื่อ application เริ่มทำงาน ซึ่ง feature นี้เป็นส่วนสำคัญของกระบวนการทำ server-side rendering หรือ persistent experience ส่วน argument ที่สามคือ enhancer ไว้ใช้สำหรับเชื่อมต่อกับ third party API หรือ function ที่ไม่ได้มีใน Redux ยกตัวอย่างเช่น function ที่ไว้จัดการ async processes
 
-Once created the store has four methods - `getState`, `dispatch`, `subscribe` and `replaceReducer`. Probably the most important one is `dispatch`:
+store ที่สร้างขึ้นมาประกอบไปด้วย 4 method คือ `getState`, `dispatch`, `subscribe` และ `replaceReducer` ซึ่งตัวที่สำคัญที่สุดคือ `dispatch`
 
 ```js
 store.dispatch(changeVisibility(false));
 ```
 
-That is the place where we use our action creators. We pass the result of them or in other words action objects to this `dispatch` method. It then gets spread to the reducers in our application.
+ด้านบนเป็นวิธีที่เราเรียกใช้ action creators โดยเราจะส่งผลลัพธ์ที่ได้จาก action creators ซึ่งก็คือ action object ไปยัง `dispatch` method ซึ่งจะถูกกระจายต่อไปยัง reducer แต่ละตัวที่อยู่ใน application
 
-In the typical React application we usually don't use `getState` and `subscribe` directly because there is a helper (we will see it in the next sections) that wires our components with the store and effectively `subscribe`s for changes. As part of this subscription we also receive the current state so we don't have to call `getState` ourself. `replaceReducer` is kind of an advanced API and it swaps the reducer currently used by the store. I personally never used this method.
+โดยทั่วไปแล้วใน React application เราจะไม่ค่อยได้ใช้ `getState` และ `subscribe` ตรง ๆ เพราะเรามีตัวช่วย (เราจะอธิบายในส่วนต่อไป) ในการที่จะเชื่อมต่อ component ของเราเข้ากับ store และ `subscribe` อย่างมีประสิทธิภาพเมื่อมีการเปลี่ยนแปลง ในส่วนของ subscription เรายังได้รับ current state ทำให้ไม่ต้องเรียก `getState` เองอีกด้วย ส่วน `replaceReducer` เป็น API ที่ค่อนข้างซับซ้อน ใช้สำหรับเปลี่ยน reducer ที่กำลังถูก store ใช้งานอยู่ โดยส่วนตัวผมแล้ว ผมยังไม่มีโอกาสได้ใช้เลย
 
 ### Reducer
 
-The reducer function is probably the most *beautiful* part of Redux. Even before that I was interested in writing pure functions with an immutability in mind but Redux forced me to do it. There are two characteristics of the reducer that are quite important and without them we basically have a broken pattern.
+reducer เป็น function ที่เรียกได้ว่า *สวยงามที่สุด* ภายใน Redux แม้ก่อนหน้านี้ ผมจะเริ่มสนใจในการเขียน pure fuction ที่มีคุณสมบัติ immutability อยู่แล้ว แต่ Redux บังคับให้ผมต้องเขียน reducer มีคุณสมบัติที่สำคัญอยู่ 2 ข้อด้วยกัน หากขาดหายไปแล้ว pattern นี้ก็จะไม่สมบูรณ์
 
-(1) It must be a pure function - it means that the function should return the exact same output evert time when the same input is given.
+(1) ต้องเป็น pure function เท่านั้น หมายความว่า function ควรจะ return ค่าเดียวกันทุกครั้งหากมี input ที่เหมือนกัน
 
-(2) It should have no side effects - stuff like accessing a global variable, making an async call or waiting for a promise to resolve have no place in here.
+(2) ควรจะไม่มี side effects กล่าวคือไม่ควรมีการแก้ไขค่า global variable, การเรียก async function หรือ การใช้งาน promise
 
-Here is a simple counter reducer:
+นี่คือตัวอย่างง่าย ๆ ของ counter reducer
 
 ```js
 const counterReducer = function (state, action) {
@@ -85,13 +84,13 @@ const counterReducer = function (state, action) {
 };
 ```
 
-There are no side effects and we return a brand new object every time. We accumulate the new value based on the previous state and the incoming action type. 
+จะเห็นว่าไม่มี side effects และเรา return object ตัวใหม่ทุกครั้ง เราสร้าง value ขึ้นมาใหม่ โดยอิงจาก state ก่อนหน้าและ action type ที่ถูกส่งเข้ามา
 
-### Wiring to React components
+### การเชื่อมต่อกับ React components
 
-If we talk about Redux in the context of React we almost always mean [react-redux](https://github.com/reactjs/react-redux) module. It provides two things that help connecting Redux to our components.
+ถ้าเราพูดถึง Redux ที่ใช้ใน React แล้วมักจะหมายถึง [react-redux](https://github.com/reactjs/react-redux) ซึ่งมีสองอย่างที่ช่วยเชื่อมต่อ Redux กับ components ของเรา
 
-(1) `<Provider>` component - it's a component that accepts our store and makes it available for the children down the React tree via the React's context API. For example:
+(1) `<Provider>` component - เป็น component ที่รับ store เข้ามาเพื่อทำให้ children node ใน React tree สามารถ access store ได้โดยผ่าน React's context API ตัวอย่างเช่น
 
 ```js
 <Provider store={ myStore }>
@@ -99,9 +98,9 @@ If we talk about Redux in the context of React we almost always mean [react-redu
 </Provider>
 ```
 
-We usually have a single place in our app where we use it.
+โดยปกติแล้วเราจะประกาศใช้แค่ที่เดียวใน app
 
-(2) `connect` function - it is a function that does the subscribing for updates in the store and re-renders our component. It implements a [higher-order component](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-4/README.md#higher-order-component). Here is its signature:
+(2) `connect` function - เป็น function ที่ใช้ subcribe เพื่ออัพเดท store และ re-render component โดย function จะสร้าง [higher-order component](https://github.com/krasimir/react-in-patterns/blob/master/book/chapter-4/README.md#higher-order-component) ออกมา โดย function มีลักษณะดังนี้
 
 ```
 connect(
@@ -112,7 +111,7 @@ connect(
 )
 ```
 
-`mapStateToProps` parameter is a function that accepts the current state and must return a set of key-value pairs (an object) that are getting send as props to our React component. For example:
+`mapStateToProps` เป็น function ที่รับ current state และ return เป็น set ของ key-value (object) ที่จะถูกส่งไปยัง React component ในรูปของ props ยกตัวอย่างเช่น
 
 ```js
 const mapStateToProps = state => ({
@@ -120,7 +119,7 @@ const mapStateToProps = state => ({
 });
 ```
 
-`mapDispatchToProps` is a similar one but instead of the `state` receives a `dispatch` function. Here is the place where we can define a prop for dispatching actions.
+`mapDispatchToProps` ทำหน้าที่คล้ายกับ mapStateToProps แต่จะรับ function `dispatch` แทน `state` ซึ่งตรงนี้เป็นที่ ๆ เราจะประกาศ prop สำหรับ dispatch action
 
 ```js
 const mapDispatchToProps = dispatch => ({
@@ -128,21 +127,21 @@ const mapDispatchToProps = dispatch => ({
 });
 ```
 
-`mergeProps` combines both `mapStateToProps` and `mapDispatchToProps` and the props send to the component and gives us the opportunity to accumulate better props. Like for example if we need to fire two actions we may combine them to a single prop and send that to React. `options` accepts couple of settings that control how how the connection works.
+`mergeProps` เป็นตัวที่รวม `mapStateToProps` และ `mapDispatchToProps` เข้าด้วยกัน เป็นจุดสุดท้ายที่เปลี่ยนแปลงค่า props ก่อนจะส่งไปยัง component จากตัวอย่างด้านบน ถ้าเราต้องการที่จะทำ action สองอย่าง เราสามารถรวมมันเข้าด้วยกันเป็น props เดียวแล้วส่งไปยัง React ได้ `options` รับ setting ไว้สำหรับควบคุมการทำงานของ connect function
 
 <br />
 
-## Simple counter app using Redux
+## สร้าง counter app ง่าย ๆ ด้วย Redux
 
-Let's create a simple counter app that uses all the APIs above.
+เรามาเริ่มสร้าง counter app แบบง่าย ๆ ที่ใช้ APIs จากด้านบนกัน
 
 ![Redux counter app example](./redux-counter-app.png)
 
-The "Add" and "Subtract" buttons will simply change a value in our store. "Visible" and "Hidden" will control its visibility.
+ปุ่ม "Add" และ "Subtract" จะเป็นตัวเปลี่ยนแปลงค่าที่อยู่ใน store ของเรา ส่วนปุ่ม "Visible" และ "Hidden" จะเป็นตัวควบคุมการแสดงค่า 
 
-### Modeling the actions
+### การออกแบบ Actions
 
-For me, every Redux feature starts with modeling the action types and defining what state we want to keep. In our case we have three operations going on - adding, subtracting and managing visibility. So we will go with the following:
+สำหรับผมแล้ว ทุก feature ใน Redux จะเริ่มต้นด้วยการออกแบบ action types และประกาศสิ่งที่จะเก็บใน state ในกรณีนี้เรามี 3 operation คือ adding, subtracting และ จัดการ visibility ดังนั้นเราจะมาเริ่มจาก: 
 
 ```js
 const ADD = 'ADD';
@@ -156,10 +155,9 @@ const changeVisibility = visible => ({
   visible
 });
 ```
+### Store และ Reducers
 
-### Store and its reducers
-
-There is something that we didn't talk about while explaining the store and reducers. We usually have more then one reducer because we want to manage multiple things. The store is one though and we in theory have only one state object. What happens in most of the apps running in production is that the application state is a composition of slices. Every slice represents a part of our system. In this very small example we have counting and visibility slices. So our initial state looks like that:
+ยังมีบางอย่างที่เรายังไม่ได้พูดถึงตอนที่เราอธิบายเรื่อง store กับ reducer โดยปกติแล้วเราจะมี reducer มากกว่าหนึ่งตัว เพราะเราต้องการที่จะแยกจัดการหลาย ๆ อย่าง เรามี store อยู่ตัวเดียวอยู่แล้วและตามทฤษฏีแล้ว state ก็จะมีแค่ตัวเดียวเหมือนกัน โดยส่วนใหญ่ application ที่รันบน production จะมี state ที่ถูกแบ่งเป็นส่วน ๆ แสดงให้เห็นถึงแต่ละส่วนของระบบ ในตัวอย่างเรามีส่วนของ counting และ visibility ซึ่งเราสามารถสร้าง state ได้ตามนั้นเลย
 
 ```js
 const initialState = {
@@ -170,9 +168,9 @@ const initialState = {
 };
 ```
 
-We must define separate reducers for both parts. This is to introduce some flexibility and to improve the readability of our code. Imagine if we have a giant app with ten or more state slices and we keep working within a single function. It will be too difficult to manage.
+เราต้องสร้าง reducer แต่ละส่วนแยกกัน ซึ่งทำให้โค้ดของเรามีความยืดหยุ่นและอ่านง่ายมากขึ้น ลองคิดดูว่าถ้าเรามี app ที่มีขนาดใหญ่ที่มีการแบ่ง state มากกว่าสิบส่วน มันคงเป็นการยากที่เราจะต้องจัดการมันอยู่บน function เดียว
 
-Redux comes with a helper that allows us to target a specific part of the state and assign a reducer to it. It is called `combineReducers`:
+Redux มาพร้อมกับ function `combineReducers` ที่ทำให้เราสนใจเฉพาะ state ย่อยในแต่ละส่วน และระบุ reducer ให้ state นั้น
 
 ```js
 import { createStore, combineReducers } from 'redux';
@@ -184,9 +182,9 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 ```
 
-Function `A` receives only the `counter` slice as a state and needs to return only that part. Same for `B`. Accepts a boolean (the value of `visible`) and must return a boolean.
+โดย function `A` จะรับเฉพาะส่วน `counter` จาก state และต้อง return ค่าเฉพาะส่วนนั้น เช่นเดียวกับ `B` ที่จะรับ boolean (ค่าของ `visible`) และต้อง return boolean เท่านั้น
 
-The reducer for our counter slice should take into account both actions `ADD` and `SUBTRACT` and based on them calculates the new `counter` state.
+สำหรับ reducer ในส่วนของ counter ควรจะทำงานเมื่อรับ action `ADD` และ `SUBTRACT` มาเพื่อคำนวณหาค่า `counter` state ใหม่
 
 ```js
 const counterReducer = function (state, action) {
@@ -199,9 +197,9 @@ const counterReducer = function (state, action) {
 };
 ```
 
-Every reducer is fired at least once when the store is initialized. In that very first run the `state` is `undefined` and the `action` is `{ type: "@@redux/INIT"}`. In this case our reducer should return the initial value of our data - `{ value: 0 }`.
+reducer ทุกตัวจะถูกเรียกอย่างน้อยหนึ่งครั้งตอนเริ่มสร้าง store โดยค่าเริ่มต้นของ `state` จะเป็น `undefined` และ `action` จะมีค่าเป็น `{ type: "@@redux/INIT"}` ซึ่งในกรณีนี้ reducer ของเราควรจะ return ค่าเริ่มต้นเป็น `{ value: 0 }`
 
-The reducer for the visibility is pretty similar except that it waits for `CHANGE_VISIBILITY` action:
+สำหรับ reducer ในส่วนของ visibility นั้นจะมีลักษณะคล้าย ๆ กัน เว้นแต่จะรับ action `CHANGE_VISIBILITY` แทน
 
 ```js
 const visibilityReducer = function (state, action) {
@@ -212,7 +210,7 @@ const visibilityReducer = function (state, action) {
 };
 ```
 
-And at the end we have to pass both reducers to `combineReducers` so we create our `rootReducer`.
+และสุดท้ายแล้วเราจะส่ง reducer ทั้งสองตัวไปยัง `combineReducer` เพื่อที่จะสร้างเป็น `rootReducer`
 
 ```js
 const rootReducer = combineReducers({
@@ -223,18 +221,18 @@ const rootReducer = combineReducers({
 
 ### Selectors
 
-Before moving to the React components we have to mention the concept of a *selector*. From the previous section we know that our state is usually divided into different parts. We have dedicated reducers to update the data but when it comes to fetching it we still have a single object. Here is the place where the selectors come in handy. The selector is a function that accepts the whole state object and extracts only the information that we need. For example in our small app we need two of those:
+ก่อนจะเริ่มในส่วนถัดไป React components ที่เราได้กล่าวไว้ในส่วน concept ของ *selector* จาก section ที่แล้ว เรารู้แล้วว่า state ของเราถูกแบ่งออกเป็นหลาย ๆ ส่วน เราได้ให้ reducer จัดการเกี่ยวกับการ update data แต่เมื่อไหร่ที่มีการเรียก data เรายังคงมี state object ตัวเดียวอยู่ ซึ่งส่วนนี้ selector จะเป็นตัวช่วยจัดการ โดย selector จะเป็น function ที่รับ state object และเลือก return เฉพาะ data ที่เราต้องการ ยกตัวอย่างเช่น app เล็ก ๆ ของเราต้องการแค่ selector สองตัวนี้
 
 ```js
 const getCounterValue = state => state.counter.value;
 const getVisibility = state => state.visible;
 ```
 
-A counter app is too small to see the real power of writing such helpers. However, in a big project is quite different. And it is not just about saving a few lines of code. Neither is about readability. Selectors come with these stuff but they are also contextual and may contain logic. Since they have access to the whole state they are able to answer business logic related questions. Like for example "Is the user authorize to do X while being on page Y". This may be done in a single selector.
+counter app เล็กเกินกว่าที่จะเห็นประสิทธิภาพจริง ๆ ของการเขียนตัวช่วยพวกนี้ได้ แต่ใน project ใหญ่ ๆ จะต่างกันกันมาก ไม่ใช่แค่เพียงการที่เขียนโค้ดน้อยลงหรืออ่านง่าย เพราะ selector อาจมาพร้อมกับส่วนอื่น ๆ ที่อาจจะมี logic อยู่เนื่องจาก selector สามารถเข้าถึง state ได้ทั้งหมดทำให้สามารถใส่ business logic เพื่อตอบคำถามอย่างเช่น "user มีสิทธิ์ที่จะทำ X ในขณะที่อยู่หน้า Y ได้หรือไม่" ซึ่งสามารถจัดการได้ใน selector เดียว
 
 ### React components
 
-Let's first deal with the UI that manages the visibility of the counter.
+เรามาเริ่มจัดการกับ UI และส่วนจัดการ visibility ของ counter กันก่อน
 
 ```js
 function Visibility({ changeVisibility }) {
@@ -258,9 +256,9 @@ const VisibilityConnected = connect(
 )(Visibility);
 ```
 
-We have two buttons `Visible` and `Hidden`. They both fire `CHANGE_VISIBILITY` action but the first one passes `true` as a value while the second one `false`. The `VisibilityConnected` component class gets created as a result of the wiring done via Redux's `connect`. Notice that we pass `null` as `mapStateToProps` because we don't need any of the data in the store. We just need to `dispatch` an action.
+เราต้องการปุ่มสองปุ่มคือ `Visible` กับ `Hidden` ซึ่งทั้งสองปุ่มจะส่ง action `CHANGE_VISIBILITY` แต่ปุ่ม Visible จะส่งค่า `true` ส่วนปุ่ม Hidden จะส่งค่า `false` โดยที่ component class `VisibilityConnected` จะถูกสร้างมาจากการเชื่อมต่อ Redux ด้วย `connect` สังเกตว่าเราส่งค่า `null` เป็นแทน `mapStateToProps` เพราะว่าเราไม่ได้ต้องการ data อะไรจาก store เราแค่ต้องการ `dispatch` action เท่านั้น
 
-The second component is slightly more complicated. It is named `Counter` and renders two buttons and the counter value.
+component ที่สองจะซับซ้อนขั้นมากเล็กน้อย โดยที่มันมีชื่อว่า `Counter` และ render ปุ่มสองปุ่มและตัวแสดง counter
 
 ```js
 function Counter({ value, add, subtract }) {
@@ -284,12 +282,11 @@ const CounterConnected = connect(
 )(Counter);
 ```
 
-We now need both `mapStateToProps` and `mapDispatchToProps` because we want to read data from the store and dispatch actions. Our component receives three props - `value`, `add` and `subtract`. 
+คราวนี้เราต้องส่งทั้ง `mapStateToProps` และ `mapDispatchToProps` เพราะว่าเราต้องมีการอ่าน data จาก store และ dispatch action โดย component ของเราจะรับค่า props สามตัวคือ `value`, `add` และ `subtract`
 
-The very last bit is an `App` component where we compose the application.
+และสุดท้าย `App` component ที่ ๆ เราจะสร้าง application
 
 ```js
-function App({ visible }) {
   return (
     <div>
       <VisibilityConnected />
@@ -304,14 +301,14 @@ const AppConnected = connect(
 )(App);
 ```
 
-We again need to `connect` our component because we want to control the visibility of the counter. The `getVisibility` selector returns a boolean that indicates weather `CounterConnected` will be rendered or not.
+เราต้องเรียกใช้ `connect` กับ component อีกครั้ง เพราะเราต้องการที่จะควบคุม visibility ของ counter โดยที่ `getVisibility` selector จะ return ค่า boolean ที่จะเป็นตัวกำหนด `CounterConnected` ว่าจะ render หรือไม่
 
-## Final thoughts
+## ข้อคิด
 
-Redux is a wonderful pattern. Over the years the JavaScript community developed the idea and enhanced it with couple of new terms. I think a typical redux application looks more like this:
+Redux เป็น pattern ที่ดี หลายปีแล้วที่ JavaScript community พัฒนาแนวคิดและเพิ่มประสิทธิภาพในหลาย ๆ ด้าน ผมคิดว่ารูปแบบ redux application จะมีหน้าตาใกล้เคียงภาพต่อไปนี้
 
 ![Redux architecture](redux-reallife.jpg)
 
-*By the way we didn't mention the side effects management. It is a whole new story with its own ideas and solutions.*
+*อย่างไรก็ตาม เราไม่ได้กล่าวถึงเรื่องการจัดการ side effects ซึ่งถือว่าเป็นเรื่องใหม่ที่มีแนวคิดและวิธีแก้ปัญหาของมันเอง*
 
-We can conclude that Redux itself is a pretty simple pattern. It teaches very useful techniques but unfortunately it is very often not enough. Sooner or later we have to introduce more concepts/patterns. Which of course is not that bad. We just have to plan for it.
+เราสามารถสรุปได้ว่า Redux นั้นเป็น pattern ที่เรียบง่าย แถมยังสอนเทคนิคที่มีประโยชน์มาก แต่ในบางครั้งก็ยังไม่พอ ไม่เร็วก็ช้าเราจะมีแนวคิดหรือ pattern ใหม่ ๆ ซึ่งนั่นไม่ใช้เรื่องแย่ เราแค่ต้องเตรียมพร้อมสำหรับมัน
