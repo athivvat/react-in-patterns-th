@@ -31,7 +31,7 @@ class Switcher extends React.Component {
 };
 ```
 
-โค้ดชุดจะสามารถทำงานได้ตรงตามที่เราต้องการ เพราะ `_handleButtonClick` นั้นเป็น *function* และเราก็ส่ง *function* เข้าไปใน attribute ชื่อ `onClick`
+โค้ดชุดนี้จะสามารถทำงานได้ตรงตามที่เราต้องการ เพราะ `_handleButtonClick` นั้นเป็น *function* และเราก็ส่ง *function* เข้าไปใน attribute ชื่อ `onClick`
 
 **แต่!!** เนื่องจากตัวโค้ดไม่ได้อยู่ใน `context` (บริบท) เดียวกัน ส่งผลให้เวลาที่เราต้องการเรียกถึงตัวแปร `this` ข้างในฟังก์ชัน `_handleButtonClick` เพื่อเรียกถึงคอมโพเนนท์ `Switcher` จะทำให้เกิด Error ขึ้นมาทันที
 
