@@ -79,7 +79,7 @@ class Tags extends React.Component {
 ```
 
 
-โดยการส่งค่ากลับมาเป็น `false` เสมออย่างนี้ เรากล่าวว่า component ของเราจะไม่ re-render อีก การใช้งานเมธอด `shouldComponentUpdate` เพื่อให้ React รู้ว่าต้องมีการ `render` ใหม่หรือไม่ นั่นเป็นสิ่งที่เราต้องทำเพราะว่า เราจะใช้ React เพื่อวางโครงสร้างเว็บ แต่หลังจากนั้นเราไม่ต้องการที่จะให้มันมายุ่งเกี่ยวกับการ `render` ใหม่อีก
+โดยการส่งค่ากลับมาเป็น `false` เสมออย่างนี้ เรากล่าวว่า component ของเราจะไม่ re-render อีก การใช้งาน method `shouldComponentUpdate` เพื่อให้ React รู้ว่าต้องมีการ `render` ใหม่หรือไม่ นั่นเป็นสิ่งที่เราต้องทำเพราะว่า เราจะใช้ React เพื่อวางโครงสร้างเว็บ แต่หลังจากนั้นเราไม่ต้องการที่จะให้มันมายุ่งเกี่ยวกับการ `render` ใหม่อีก
 
 ## การเตรียมพร้อมสำหรับส่วนขยาย
 
@@ -108,7 +108,7 @@ class Tags extends React.Component {
   ...
 ```
 
-ตัวโค้ดที่อยู่ด้านบนกับเมธอด `shouldComponentUpdate` ทำให้ React จะ render ตัว `<ul>`  ที่มีสองอัน (<ul> และ </ul>) หลังจากนั้นตัว *tag-it* จะแปลงมันให้เป็น widget สำหรับการแก้ไขตัว tag
+ตัวโค้ดที่อยู่ด้านบนกับ method `shouldComponentUpdate` ทำให้ React จะ render ตัว `<ul>`  ที่มีสองอัน (<ul> และ </ul>) หลังจากนั้นตัว *tag-it* จะแปลงมันให้เป็น widget สำหรับการแก้ไขตัว tag
 
 ## การควบคุมส่วนขยายด้วย React
 
@@ -162,7 +162,7 @@ class Tags extends React.Component {
   ...
 ```
 
-`.tagit('createTag', newProps.newTag)` คือโค้ดที่เป็น pure jQuery; `componentWillReceiveProps` คือ lifecycle method ที่เหมาะสมสำหรับการเรียกเมธอดที่มาจาก third-party library
+`.tagit('createTag', newProps.newTag)` คือโค้ดที่เป็น pure jQuery; `componentWillReceiveProps` คือ lifecycle method ที่เหมาะสมสำหรับการเรียก method ที่มาจาก third-party library
 
 นี่คือโค้ดที่สมบูรณ์ของ component `Tags`:
 
