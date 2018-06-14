@@ -54,7 +54,7 @@ class App extends React.Component {
 };
 ```
 
-จากตัวอย่างข้างบนนั้น element `<input>` ค่อนข้างจะไร้ประโยชน์ เพราะถ้ายูสเซอร์อัพเดทค่าของ input ตัว component `App` นั้นจะไม่รับรู้อะไรเลย จะต้องใช้ตัวอ้างอิง [`Refs`](https://reactjs.org/docs/glossary.html#refs) เพื่อที่จะดึงข้อมูลจาก input โดยตรง
+จากตัวอย่างข้างบนนั้น element `<input>` ค่อนข้างจะไร้ประโยชน์ เพราะถ้า user อัพเดทค่าของ input ตัว component `App` นั้นจะไม่รับรู้อะไรเลย จะต้องใช้ตัวอ้างอิง [`Refs`](https://reactjs.org/docs/glossary.html#refs) เพื่อที่จะดึงข้อมูลจาก input โดยตรง
 
 ```js
 class App extends React.Component {
