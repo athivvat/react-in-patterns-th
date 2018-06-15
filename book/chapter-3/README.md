@@ -1,17 +1,20 @@
-# Event handlers
+# การจัดการ Event
 
-React provides a series of attributes for handling events. The solution is almost the same as the one used in the standard DOM. There are some differences like using camel case or the fact that we pass a function but overall it is pretty similar.
+React นั้นได้มีการเตรียม attributes ต่าง ๆ ที่ใช้สำหรับการจัดการกับ event ไว้เรียบร้อยแล้ว ซึ่งวิธีใช้ทั่วไปนั้นแทบจะเหมือนกับวิธีการจัดการ event ใน DOM ที่เราคุ้นเคยเลย โดยจะมีความแตกต่างกันเพียงเล็กน้อย เช่น การใช้ `camelCase` เป็นชื่อ attribute หรือการส่ง function แทนที่จะเป็น string เป็นต้น
 
 ```js
 const theLogoIsClicked = () => alert('Clicked');
 
+// onClick event
 <Logo onClick={ theLogoIsClicked } />
+
+// onChange event
 <input
   type='text'
   onChange={event => theInputIsChanged(event.target.value) } />
 ```
 
-Usually we handle events in the component that contains the elements dispatching the events. Like in the example below, we have a click handler and we want to run a function or a method of the same component:
+ส่วนใหญ่แล้วเรามักจะจัดการ event กันภายในคอมโพเนนท์ที่สร้าง event นั้นขึ้นมา เช่นในตัวอย่างข้างล่าง เรามี `button` อยู่ในคอมโพเนนท์ `Switcher` แล้วเราต้องการให้การคลิกที่ `button` ไปรันคำสั่งชื่อ `_handleButtonClick` ที่อยู่ในคอมโพเนนท์ `Switcher`
 
 ```js
 class Switcher extends React.Component {
@@ -28,7 +31,9 @@ class Switcher extends React.Component {
 };
 ```
 
-That's all fine because `_handleButtonClick` is a function and we indeed pass a function to the `onClick` attribute. The problem is that as it is the code doesn't keep the same context. So, if we have to use `this` inside `_handleButtonClick` to refer the current `Switcher` component we will get an error.
+โค้ดชุดนี้จะสามารถทำงานได้ตรงตามที่เราต้องการ เพราะ `_handleButtonClick` นั้นเป็น *function* และเราก็ส่ง *function* เข้าไปใน attribute ชื่อ `onClick`
+
+**แต่!!** เนื่องจากตัวโค้ดไม่ได้อยู่ใน `context` (บริบท) เดียวกัน ส่งผลให้เวลาที่เราต้องการเรียกถึงตัวแปร `this` ข้างในฟังก์ชัน `_handleButtonClick` เพื่อเรียกถึงคอมโพเนนท์ `Switcher` จะทำให้เกิด Error ขึ้นมาทันที
 
 ```js
 class Switcher extends React.Component {
@@ -45,13 +50,13 @@ class Switcher extends React.Component {
   }
   _handleButtonClick() {
     console.log(`Button is clicked inside ${ this.state.name }`);
-    // leads to
+    // ไม่สามารถเรียก this.state.name ได้ เพราะหา this ไม่เจอ เนื่องจาก context ของ this ไม่ตรงกัน
     // Uncaught TypeError: Cannot read property 'state' of null
   }
 };
 ```
 
-What we normally do is to use `bind`:
+เราสามารถแก้ได้โดยการใช้ `bind`
 
 ```js
 <button onClick={ this._handleButtonClick.bind(this) }>
@@ -59,7 +64,7 @@ What we normally do is to use `bind`:
 </button>
 ```
 
-However, this means that the `bind` function is called again and again because we may render the button many times. A better approach would be to create the bindings in the constructor of the component:
+เสียแต่ว่าฟังก์ชัน `bind` ของเรานั้นจะถูกเรียกซ้ำไปซ้ำมาอยู่บ่อยๆ เพราะว่าคอมโพเนนท์ `button` อาจถูก render ใหม่หลายๆครั้ง (หรือที่เราเรียกกันว่า re-render) วิธีที่ดีกว่านี้ก็คือการเปลี่ยนไป `bind` ที่ `constructor` ของคอมโพเนนท์นั้นทีเดียวเลย
 
 <span class="new-page"></span>
 
@@ -68,6 +73,7 @@ class Switcher extends React.Component {
   constructor(props) {
     super(props);
     this.state = { name: 'React in patterns' };
+    // ทำการ binding ที่นี่แทน
     this._buttonClick = this._handleButtonClick.bind(this);
   }
   render() {
@@ -83,9 +89,9 @@ class Switcher extends React.Component {
 };
 ```
 
-Facebook by the way [recommend](https://facebook.github.io/react/docs/reusable-components.html#no-autobinding) the same technique while dealing with functions that need the context of the same component.
+Facebook (ผู้สร้าง React) เองก็ยัง [แนะนำ](https://reactjs.org/docs/handling-events.html) เทคนิคเดียวกันนี้เวลาที่ต้องจัดการกับฟังก์ชันที่ใช้ context เดียวกันภายในคอมโพเนนท์
 
-The constructor is also a nice place for partially executing our handlers. For example, we have a form but want to handle every input in a single function.
+Constructor ยังถือเป็นที่ที่ดีสำหรับการสร้าง handler ที่มีค่าบางอย่างพร้อมแล้วอีกด้วย ยกตัวอย่างเช่น เมื่อเรามี `<form>` ที่มีหลาย `<input>` อยู่ข้างใน แต่เราต้องการจัดการการทำงานเมื่อ `<input>` ถูกเปลี่ยนในฟังก์ชัน `_onFieldChange(field, event)` เพียงที่เดียว
 
 <span class="new-page"></span>
 
@@ -94,8 +100,7 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     this._onNameChanged = this._onFieldChange.bind(this, 'name');
-    this._onPasswordChanged =
-      this._onFieldChange.bind(this, 'password');
+    this._onPasswordChanged = this._onFieldChange.bind(this, 'password');
   }
   render() {
     return (
@@ -111,6 +116,6 @@ class Form extends React.Component {
 };
 ```
 
-## Final thoughts
+## ข้อคิด
 
-There is not much to learn about event handling in React. The authors of the library did a good job in keeping what's already there. Since we are using HTML-like syntax it makes total sense that we have also a DOM-like event handling.
+การจัดการ event ใน React นั้นอาจดูเหมือนไม่มีอะไรใหม่ให้ศึกษาสักเท่าไหร่ เพราะคนสร้าง React นั้นถือว่าทำไว้ดีแล้วในเรื่องของการนำสิ่งที่มีอยู่แล้วมาใช้ ในเมื่อตัวไลบรารี่เองมีการใช้ syntax ที่เหมือนกับ HTML เดิมอยู่แล้ว จึงไม่ใช่เรื่องแปลกอะไรที่จะมีการจัดการ event เหมือนใน DOM
