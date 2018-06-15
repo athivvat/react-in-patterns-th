@@ -1,7 +1,7 @@
-# In brief
 
-This cookbook is targeting developers that already have basic understanding of what React is and how it works. It's not meant to be used as a complete how-to guide but as an introduction to popular concepts/design patterns. Paradigms that more or less are introduced by the community. It points you to an abstract thinking. For example, instead of talking about Flux, it talks about data flow. Instead of talking about higher-order components it talks about composition.
+# เนื้อหาโดยสังเขป
 
-The book is highly opinioned. It represents my own understanding of the described patterns and it is possible that they have a different interpretation around the web. Have this in mind when arguing with someone and using this book as an argument.
-
-Also notice that English is not my native language. If you see a typo or something sounds weird please contribute here [github.com/krasimir/react-in-patterns](https://github.com/krasimir/react-in-patterns/tree/master/book). If you read from a printed version of this book then feel free to use a pen ¯\\_(ツ)_/¯ 
+  หนังสือเล่มนี้เล็งเป้าหมายไปที่นักเขียนโปรแกรมที่มีความรู้ความเข้าใจพื้นฐานรวมถึงการทำงานของ React อยู่แล้ว โดยที่ไม่ได้หวังว่าจะหนังสือเล่มนี้จะเป็นหนังสือที่กำหนดแนวทางในการเขียนโปรแกรม แต่หวังว่าจะเป็นจุดเริ่มต้นในการศึกษา แนวคิด/รูปแบบ ของการเขียน React
+  ตัวอย่างไม่มากก็น้อยที่ถูกนำเสนอโดยชุมชนนักพัฒนาชี้ให้เห็นถึงการคิดแบบเชิงนามธรรม เช่น แทนที่จะพูดเกี่ยวกับ Flux หนังสือเล่มนี้จะพูดถึง data flow หรือแทนที่จะพูดถึง higher-order components หนังสือเล่มนี้จะพูดถึง composition แทน
+  
+  หนังสือเล่มนี้ค่อนข้างเป็นมุมมองส่วนตัว ซึ่งแสดงถึงความเข้าใจของผู้เขียนต่อรูปแบบการเขียนโปรแกรมที่ถูกกล่าวถึง เพราะฉะนั้นเป็นไปได้ที่จะมีการตีความที่แตกต่างแบบอื่น ๆ อยู่ทั่วไปในอินเตอร์เน็ต ขอให้ผู้อ่านทั้งหลายโปรดระลึกถึงสิ่งนี้ไว้ด้วยหากท่านจะใช้หนังสือเล่มนี้เป็นข้ออ้างอิงในการโต้แย้งใด ๆ
