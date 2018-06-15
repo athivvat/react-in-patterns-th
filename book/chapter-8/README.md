@@ -1,28 +1,29 @@
 # Flux
 
-I'm obsessed by making my code simpler. I didn't say *smaller* because having less code doesn't mean that is simple and easy to work with. I believe that big part of the problems in the software industry come from the unnecessary complexity. Complexity which is a result of our own abstractions. You know, we (the programmers) like to abstract. We like placing things in black boxes and hope that these boxes work together.
+ผมมักจะเขียนโค้ดทำให้มันดูง่าย ผมไม่ได้หมายความว่าเขียนโค้ดให้น้อย เพราะการเขียนโค้ดให้น้อยมันก็ไม่ได้หมายความว่ามันจะทำงานง่าย ผมเชื่อว่าปัญหาที่ใหญ่ในวงการของการพัฒนาซอฟต์แวร์นั้นมาจากความซับซ้อนที่ไม่จำเป็น ความซับซ้อนนี้เป็นผลมาจากงานของของเราเองซึ่งมันเป็นสิ่งที่เป็นนามธรรม เหมือนกับการที่เราอะไรใส่อะไรบางอย่างในกล่องดำ (black box) และเราก็คาดหวังว่ามันจะทำงานร่วมกัน
 
-[Flux](http://facebook.github.io/flux/) is an architectural design pattern for building user interfaces. It was introduced by Facebook at their [F8](https://youtu.be/nYkdrAPrdcw?t=568) conference. Since then, lots of companies adopted the idea and it seems like a good pattern for building front-end apps. Flux is very often used with [React](http://facebook.github.io/react/). Another library released by Facebook. I myself use React+Flux/Redux in my [daily job](http://antidote.me/) and I could say that it is simple and really flexible. The pattern helps creating apps faster and at the same time keeps the code well organized.
+[Flux](http://facebook.github.io/flux/) เป็นรูปแบบหนึ่งของการออกแบบสถาปัตยกรรมสำหรับการสร้างส่วนติดต่อผู้ใช้ ถูกเผยแพร่โดย Facebook ในงานสัมนา [F8](https://youtu.be/nYkdrAPrdcw?t=568) หลังจากนั้นหลายบริษัทได้นำไปใช้และดูเหมือนว่ามันวิธีการที่ดีในการพัฒนา Front-end apps รูปแบบ Flux ถูกนำมาใช้ควบคู่กับ React บ่อยมาก ตัวผมเองได้ใช้ React+Flux/Redux ในงานประจำของผม และผมบอกได้เลยว่ามันง่ายและยืดหยุ่นจริงๆ รูปแบบดังกล่าวช่วยให้สร้างแอปได้เร็วขึ้นและในเวลาเดียวกัน ก็ช่วยให้โค้ดดูเป็นระเบียบเรียบร้อยมากขึ้น
 
-## Flux architecture and its main characteristics
+## สถาปัตยกรรม Flux และลักษณะสำคัญ
 
 ![Basic flux architecture](./fluxiny_basic_flux_architecture.jpg)
 
-The main actor in this pattern is the *dispatcher*. It acts as a hub for all the events in the system. Its job is to receive notifications that we call *actions* and pass them to all the *stores*. The store decides if it is interested or not and reacts by changing its internal state/data. That change is triggering re-rendering of the *views* which are (in our case) React components. If we have to compare Flux to the well known MVC we may say that the store is similar to the model. It keeps the data and its mutations.
+พระเอกของ Flux คือ *dispatcher* คอยทำหน้าที่เป็นจุดเชื่อมกันสำหรับ event ทั้งหมดของระบบ หน้าที่ของมันคือรอรับการแจ้งเตือนเมื่อเราได้เรียก *action* และส่งไปยัง *store* เพื่อทำการตรสจสอบว่าจะต้องทำการเปลี่ยนแปลงของ state หรือไม่ เมื่อมีการเปลี่ยนแปลงเกิดขึ้นก็ทำการ render *view* (React components) ใหม่ ถ้าเราเปรียบเทียบ Flux กับ MVC อาจจะพูดได้ว่า store เปรียบเสมือนกับ model ที่คอยเก็บข้อมูลและวิธีการในการเปลี่ยนแปลงข้อมูล
 
-The actions are coming to the dispatcher either from the views or from other parts of the system, like services. For example a module that performs a HTTP request. When it receives the result it may fire an action saying that the request was successful.
+Action ที่มายัง dispatcher นั้นมาจากทั้งส่วนของ view และส่วนอื่น ๆ ของระบบ เปรียบเสมือนกับเป็นบริการ (service) ยกตัวอย่างเช่นโมดูลที่ทำการร้องขอ HTTP เมื่อได้รับการตอบกลับมาจะทำการดำเนินการบางอย่าง เพื่อทำการบอกว่าการร้องขอนั้นได้สำเร็จแล้ว
 
-## Implementing a Flux architecture
 
-As every other popular concept Flux also has some [variations](https://medium.com/social-tables-tech/we-compared-13-top-flux-implementations-you-won-t-believe-who-came-out-on-top-1063db32fe73). Very often to understand something we have to implement it. In the next few sections we will create a library that provides helpers for building the Flux pattern.
+## การใช้งานสถาปัตยกรรม Flux
 
-### The dispatcher
+เช่นเดียวกับแนวคิดยอดนิยมอื่น ๆ Flux ก็มีรูปแบบการนำไปใช้ที่[หลากหลาย](https://medium.com/social-tables-tech/we-compared-13-top-flux-implementations-you-won-t-believe-who-came-out-on-top-1063db32fe73) โดยทั่วไปวิธีที่ดีที่สุดในการทำความเข้าใจกับเทคโนโลยีคือการนำไปปฏิบัติ ในส่วนต่อไปนี้เราจะสร้างไลบรารีที่มีฟังก์ชัน helper เพื่อสร้างรูปแบบ Flux
 
-In most of the cases we need a single dispatcher. Because it acts as a glue for the rest of the parts it makes sense that we have only one. The dispatcher needs to know about two things - actions and stores. The actions are simply forwarded to the stores so we don't necessary have to keep them. The stores however should be tracked inside the dispatcher so we can loop through them:
+### Dispatcher
+
+ในหลายกรณีเราจำเป็นต้องมี dispatcher อันเดียว เพราะมันทำหน้าที่เป็นตัวเชื่อมกันกับตัวอื่น ๆ ที่เหลือให้เหมือนกับว่าเพียงแค่อันเดียว dispatcher จะรู้จักกับสองสิ่งนี้คือ action และ store ตัว actions นั้นถูกส่งแค่ไปหา stores เฉยๆ ทำให้เราไม่จำเป็นต้องเก็บมันไว้ ส่วน store สามารถถูก track ได้ภายใน dispatcher เพื่อสามารถดำเนินการกับข้อมูลได้:
 
 ![the dispatcher](./fluxiny_the_dispatcher.jpg)
 
-That's what I started with:
+ผมจะเริ่มต้นด้วย:
 
 ```js
 var Dispatcher = function () {
@@ -42,7 +43,7 @@ var Dispatcher = function () {
 };
 ```
 
-The first thing that we notice is that we *expect* to see an `update` method in the passed stores. It will be nice to throw an error if such method is not there:
+สิ่งแรกที่ควรทราบก็คือเราคาดว่า method update จะมีอยู่ใน store ที่ได้รับมา หากไม่มีควรจะทำการส่ง error กลับไป:
 
 ```js
 register: function (store) {
@@ -56,28 +57,29 @@ register: function (store) {
 
 <br />
 
-### Bounding the views and the stores
+### ผูก view กับ store
 
-The next logical step is to connect our views to the stores so we re-render when the state in the stores is changed.
+ขั้นตอนต่อไปคือการเชื่อมต่อส่วนผู้ใช้กับ store เพื่อให้เราสามารถแสดงผลใหม่เมื่อสถานะของ store มีการเปลี่ยนแปลง
 
 ![Bounding the views and the stores](./fluxiny_store_change_view.jpg)
 
 
-#### Using a helper
+#### การใช้งาน helper
 
-Some of the flux implementations available out there provide a helper function that does the job. For example:
+การใช้งาน Flux ในบางรูปแบบจะมีฟังก์ชัน helper ในการทำงาน ตัวอย่างเช่น
 
 ```js
 Framework.attachToStore(view, store);
 ```
-
-However, I don't quite like this approach. To make `attachStore` works we expect to see a specific API in the view and in the store. We kind of strictly define new public methods. Or in other words we say "Your views and store should have such APIs so we are able to wire them together". If we go down this road then we will probably define our own base classes which could be extended so we don't bother the developer with Flux details. Then we say "All your classes should extend our classes". This doesn't sound good either because the developer may decide to switch to another Flux provider and has to amend everything.
+อย่างไรก็ตามผมไม่ชอบวิธีนี้มากนัก เพื่อให้ `attachToStore` ทำงานได้อย่างถูกต้องเราจำเป็นต้องใช้ API แบบพิเศษใน view และ store ดังนั้นเราจำเป็นต้องกำหนด public method ใหม่อย่างเข้มงวด หรือพูดอีกอย่างหนึ่งคือ view และ store ของคุณควรมี API ดังกล่าวเพื่อให้สามารถเชื่อมต่อกันได้
+ถ้าเราใช้วิธีนี้เราอาจจะกำหนดคลาสหลักที่เป็นส่วยขยายเพื่อที่จะไม่สร้างความสับสนกับรายละเอียดของ Flux ให้กับผู้พัฒนา กลายเป็นว่าทุกคลาสควรจะ extend มาจากคลาสของเรา
+มันไม่ใช่ความคิดที่ดีเพราะผู้พัฒนาอาจตัดสินใจเปลี่ยนไปใช้ Flux รูปแบบอื่น และต้องการแก้ไขทุกอย่าง
 
 <br /><br />
 
-#### With a mixin
+#### การใช้งาน mixin
 
-What if we use React's [mixins](https://facebook.github.io/react/docs/reusable-components.html#mixins).
+เกิดอะไรขึ้นถ้าเราใช้ [mixins](https://facebook.github.io/react/docs/reusable-components.html#mixins)
 
 ```js
 var View = React.createClass({
@@ -85,22 +87,21 @@ var View = React.createClass({
   ...
 });
 ```
+นี่เป็นวิธีที่ดีในการกำหนดลักษณะการทำงานสำหรับ component ดังนั้นในทางทฤษฎีเราอาจสร้าง mixin มาผูกกับ component ของเรา ถ้าพูดตามตรงผมไม่คิดว่านี่เป็นความคิดที่ดี และ[ดูเหมือนว่าไม่ใช่แค่ผมที่คิดแบบนี้](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) เหตุผลที่ผมไม่ชอบ mixin คือมันปรับเปลี่ยน components โดยวิธีที่ไม่สามารถคาดเดาได้ ผมไม่รู้ว่าเกิดอะไรขึ้นเบื้องหลังการทำงานของมัน ดังนั้นผมจึงข้ามวิธีการนี้
 
-That's a "nice" way to define behavior of existing React component. So, in theory we may create a mixin that does the bounding for us. To be honest, I don't think that this is a good idea. And [it looks](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) like it's not only me. My reason of not liking mixins is that they modify the components in a non-predictable way. I have no idea what is going on behind the scenes. So I'm crossing this option.
+#### การใช้งาน context
 
-#### Using a context
+อีกเทคนิคหนึ่งที่อาจตอบโจทย์ได้คือ [context](https://facebook.github.io/react/docs/context.html) เป็นวิธีที่จะ pass props ไปยัง component ย่อยโดยไม่จำเป็นต้องส่งลงไปทีละขั้น Facebook แนะนำให้ใช้ context ในกรณีที่เราส่งข้อมูลไปยัง component ย่อยที่ถูกซ้อนกันหลายชั้น
 
-Another technique that may answer the question is React's [context](https://facebook.github.io/react/docs/context.html). It is a way to pass props to child components without the need to specify them in every level of the tree. Facebook suggests context in the cases where we have data that has to reach deeply nested components.
+> บางครั้ง คุณต้องการส่งข้อมูลไปยัง component โดยไม่ต้อง pass props ในแต่ละระดับด้วยตนเอง context จะช่วยให้คุณทำแบบนั้นได้ง่ายขึ้น
 
-> Occasionally, you want to pass data through the component tree without having to pass the props down manually at every level. React's "context" feature lets you do this.
-
-I see similarity with the mixins here. The context is defined somewhere at the top and magically serves props for all the children below. It's not immediately clear where the data comes from.
+ผมเห็นความคล้ายคลึงกันกับ mixins ตัว context ถูกกำหนดไว้ที่ไหนสักที่ด้านบน component และคอยส่งข้อมูลไปยัง component ย่อยทุกตัวอย่างน่าอัศจรรย์ โดยที่ไม่รู้ว่าข้อมูลมาจากที่ไหน
 
 <br /><br /><br />
 
-#### Higher-Order components concept
+#### แนวคิด Higher-Order components
 
-Higher-Order components pattern is [introduced](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775) by Sebastian Markb&#229;ge and it's about creating a wrapper component that returns ours. While doing it it has the opportunity to send properties or apply additional logic. For example:
+รูปแบบ Higher-Order components ถูก[เสนอ](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775)โดย Sebastian Markb&#229;ge จะจะเกี่ยวกับการสร้าง wrapper component ที่จะรีเทิร์น component ออกมา โดยที่สามารถเพิ่มคุณสมบัติให้มันการเดินการบางอย่างเข้าไปด้วย ตัวอย่างเช่น:
 
 ```js
 function attachToStore(Component, store, consumer) {
@@ -127,7 +128,7 @@ function attachToStore(Component, store, consumer) {
 };
 ```
 
-`Component` is the view that we want attached to the `store`. The `consumer` function says what part of the store's state should be fetched and send to the view. A simple usage of the above function could be:
+`Component` คือ view ที่เราต้องการจะแนบกับ `store` ฟังก์ชั่น `consumer` จะระบุว่าควรเก็บอะไรใน store และส่งไปที่ view การใช้ฟังก์ชันข้างต้นอย่างง่ายเป็นดังนี้:
 
 ```js
 class MyView extends React.Component {
@@ -140,13 +141,14 @@ ProfilePage = connectToStores(MyView, store, (props, store) => ({
 
 ```
 
-That is an interesting pattern because it shifts the responsibilities. It is the view fetching data from the store and not the store pushing something to the view. This of course has its own pros and cons. It is nice because it makes the store dummy. A store that only mutates the data and says "Hey, my state is changed". It is not responsible for sending anything to anyone. The downside of this approach is maybe the fact that we have one more component (the wrapper) involved. We also need the three things - view, store and consumer to be in one place so we can establish the connection.
+นี่เป็นรูปแบบที่น่าสนใจ view จะดึงข้อมูลจาก store ไม่ใช่ให้ store กำหนดว่าจะส่งอะไรออกไป และแน่นอนว่ามันมีทั้งข้อดีและข้อเสีย
+ข้อดีคือ ทำให้ง่ายต่อการจัดเก็บ ซึ่ง store จะทำหน้่าที่เพียงแค่เปลี่ยนแปลงข้อมูลและคอยบอกว่าข้อมูลได้ถูกแก้ไขแล้ว มันไม่ได้มีหน้าที่รับผิดชอบต่อการส่งข้อมูลอีกต่อไป ข้อเสียของวิธีการนี้คือ อาจเป็นไปได้ว่าเราจะมี component (wrapper) หลาย ๆ อันที่เกี่ยวข้อง นอกจากนี้เรายังต้องมีสามสิ่งนี้คือ view, store และ consumer วางไว้ในที่เดียวกัน เพื่อให้เแต่ละส่วนสามารถเชื่อมต่อกันได้
 
-#### My choice
+#### ตัวเลือกของผม
 
-The last option above, higher-order components, is really close to what I'm searching for. I like the fact that the view decides what it needs. That *knowledge* anyway exists in the component so it makes sense to keep it there. That's also why the functions that generate higher-order components are usually kept in the same file as the view. What if we can use similar approach but not passing the store at all. Or in other words, a function that accepts only the consumer. And that function is called every time when there is a change in the store.
+ผมเลือกวิธีสุดท้าย higher-order components มีความใกล้เคียงกับสิ่งที่ผมต้องการแล้ว ให้ view กำหนดสิ่งที่ต้องการ ความเข้าใจที่มีอยู่เกี่ยวกับคอมโพเนนต์นั้นเหมาะสมเก็บไว้ที่นั่น นั่นคือเหตุผลว่าฟังก์ชั่นที่สร้าง higher-order components จะถูกเก็บไว้ในไฟล์เดียวกับ view ถ้าเราใช้วิธีการแบบเดียวกันแต่ไม่ส่ง store ไป หรือกล่าวอีกนัยหนึ่งฟังก์ชั่นจะรับเฉพาะ consumer เท่านั้น และฟังก์ชันนี้จะถูกเรียกทุกครั้งเมื่อ store มีการเปลี่ยนแปลง
 
-So far our implementation interacts with the store only in the `register` method.
+ถึงตอนนี้การใช้งานของเรามีเพียงการโต้ตอบกับ store เท่านั้นใน method `register`
 
 ```js
 register: function (store) {
@@ -158,13 +160,13 @@ register: function (store) {
 }
 ```
 
-By using `register` we keep a reference to the store inside the dispatcher. However, `register` returns nothing. And instead of nothing it may return a **subscriber** that will accept our consumer functions.
+โดยใช้ `register` เราจะอ้างอิงไปยัง store ภายใน dispatcher อย่างไรก็ตาม `register` จะไม่มีการส่งข้อมูลอะไรกลับไป หรือเราอาจจะให้มันส่ง **subscriber** ที่รับฟังก์ชั่น consumer กลับไป
 
 ![Fluxiny - connect store and view](./fluxiny_store_view.jpg)
 
-I decided to send the whole store to the consumer function and not the data that the store keeps. Like in the higher-order components pattern the view should say what it needs by using store's getters. This makes the store really simple and there is no trace of presentational logic.
+ผมเลือกส่งทั้ง store ไปยังฟังก์ชัน consumer แทนที่จะส่งแค่ข้อมูลที่เก็บไว้นนั้น เช่นเดียวกันในรูปแบบ higher-order components ส่วน view ควรใช้ getter ของ store เพื่อเรียกสิ่งที่ต้องการ ทำให้ใช้ store ค่อนข้างง่ายและไม่มีร่องรอยของ presentational logic
 
-Here is how the register method looks like after the changes:
+นี่คือ method register ที่เปลี่ยนแปลง:
 
 ```js
 register: function (store) {
@@ -185,9 +187,9 @@ register: function (store) {
 }
 ```
 
-The last bit in the story is how the store says that its internal state is changed. It's nice that we collect the consumer functions but right now there is no code that execute them.
+สิ่งสุดท้ายที่จะทำให้เสร็จสมบูรณ์คือ ทำให้ store แจ้งเมื่อข้อมูลมีการเปลี่ยนแปลง เราได้รวบรวมฟังก์ชัน consumer ไว้แล้ว แต่ตอนนี้ยังไม่มีการใช้งาน
 
-According to the basic principles of the flux architecture the stores change their state in response of actions. In the `update` method we send the `action` but we could also send a function `change`. Calling that function should trigger the consumers:
+ตามหลักการพื้นฐานของสถาปัตยกรรม Flux นั้น store จะเปลี่ยนสถานะเพื่อตอบสนองต่อ actions ใน method `update` เราจะส่ง `action` แต่เรายังสามารถส่งฟังก์ชัน `change` การเรียกฟังก์ชันนี้เพื่อให้เกิดการทำงานขึ้นที่ consumer:
 
 ```js
 register: function (store) {
@@ -220,9 +222,9 @@ dispatch: function (action) {
 }
 ```
 
-*Notice how we push `change` together with `store` inside the `_stores` array. Later in the `dispatch` method we call `update` by passing the `action` and the `change` function.*
+*ถ้าหากว่าเรา push `change` กับ `store` ใน array `_stores` หลังจากนั้นให้ `dispatch` เรียก method `update` และส่ง `action` กับ `change` ไปในฟังก์ชัน*
 
-A common use case is to render the view with the initial state of the store. In the context of our implementation this means firing all the consumers at least once when they land in the library. This could be easily done in the `subscribe` method:
+การใช้งานทั่วไป เพื่อสร้าง view และกำหนดสถานะเริ่มต้นของ store ในบริบทของการใช้งานของเราหมายถึง consumer จะถูกเรียกใช้อย่างน้อยหนึ่งครั้งเมื่อเรียกใช้งาน library ซึ่งสามารถทำได้อย่างง่ายใน method `subscribe`:
 
 ```js
 var subscribe = function (consumer, noInit) {
@@ -231,7 +233,7 @@ var subscribe = function (consumer, noInit) {
 };
 ```
 
-Of course sometimes this is not needed so we added a flag which is by default falsy. Here is the final version of our dispatcher:
+แน่นอนว่าบางครั้งเราไม่จำเป็นที่จะต้องกำหนดตัวแปร flag ขึ้นมาให้เป็นค่า false และนี่ก็เป็นหน้าตา dispatcher ที่เสร็จแล้ว:
 
 <span class="new-page"></span>
 
@@ -274,9 +276,9 @@ var Dispatcher = function () {
 
 <span class="new-page"></span>
 
-## The actions
+## Actions
 
-You probably noticed that we didn't talk about the actions. What are they? The convention is that they should be simple objects having two properties - `type` and `payload`:
+คุณอาจจะเห็นว่าเรายังไม่ได้พูดถึง action แล้ว actions คืออะไร? โดยทั่วไปมันเป็นแค่ object ที่มีเพียง `type` และ `payload`:
 
 ```js
 {
@@ -288,9 +290,9 @@ You probably noticed that we didn't talk about the actions. What are they? The c
 }
 ```
 
-The `type` says what exactly the action is and the `payload` contains the information associated with the event. And in some cases we may leave the `payload` empty.
+`type` จะเป็นตัวบอกว่า action นั้นทำอะไร ส่วน payload จะเก็บข้อมูลที่เกี่ยวกับ event บางกรณีไม่จำเป็นต้องมีก็ได้
 
-It's interesting that the `type` is well known in the beginning. We know what type of actions should be floating in our app, who is dispatching them and which of the stores are interested. Thus, we can apply [partial application](http://krasimirtsonev.com/blog/article/a-story-about-currying-bind) and avoid passing the action object here and there. For example:
+สิ่งที่น่าสนใจคือ `type` ที่ได้กล่าวไปแล้วในตอนต้น และที่สำคัญคือเราควรจะรู้ว่าต้องมี action อะไรในแอปพลิเคชันของเราบ้าง และตัวไหนที่คอยทำการ dispatch ไปยัง store ดังนั้นเราจึงสามารถประยุกต์ใช้[บางส่วน](http://krasimirtsonev.com/blog/article/a-story-about-currying-bind)ได้ และหลีกเลี่ยงการส่ง object action ตัวอย่างเช่น
 
 ```js
 var createAction = function (type) {
@@ -307,19 +309,19 @@ var createAction = function (type) {
 }
 ```
 
-`createAction` leads to the following benefits:
+`createAction` มีข้อดีดังนี้:
 
-* We no more need to remember the exact type of the action. We now have a function which we call passing only the payload.
-* We no more need an access to the dispatcher which is a huge benefit. Otherwise, think about how we have to pass it to every single place where we need to dispatch an action.
-* In the end we don't have to deal with objects but with functions which is much nicer. The objects are *static* while the functions describe a *process*.
+* เราไม่จำเป็นต้องจำ type ของ action อีกต่อไป ตอนนี้เรามีฟังก์ชันที่เราเรียกผ่าน payload เท่านั้น
+* เราไม่จำเป็นต้องเข้าถึง dispatcher อีกต่อไปซึ่งเป็นประโยชน์อย่างมาก มิเช่นนั้นคุณต้องพิจารณาวิธีส่งข้อมูลทุกครั้งที่ใช้งาน dispatch
+* ข้อสุดท้ายเราไม่ต้องจัดการ object อีกต่อไป เราแค่เรียกฟังก์ชันซึ่งดีกว่ามาก ซึ่งเป็น *static* objects ขณะที่ฟังก์ชันอธิบายถึง *process*
 
 ![Fluxiny actions creators](./fluxiny_action_creator.jpg)
 
-This approach for creating actions is actually really popular and functions like the one above are usually called *action creators*.
+วิธีการสร้าง actions ด้วยวิธีนี้นี้เป็นที่นิยมมาก ฟังก์ชั่นด้านบนเรียกว่า *action creators*.
 
-## The final code
+## โค้ดที่สมบูรณ์
 
-In the section above we successfully hide the dispatcher while submitting actions. We may do it again for the store's registration:
+ในส่วนก่อนหน้า dispatcher ถูกซ่อนอยู่ในขณะที่เราดำเนินการ action เราอาจดำเนินการอีกครั้งเพื่อทำการ registry store:
 
 ```js
 var createSubscriber = function (store) {
@@ -327,7 +329,7 @@ var createSubscriber = function (store) {
 }
 ```
 
-And instead of exporting the dispatcher we may export only these two functions `createAction` and `createSubscriber`. Here is how the final code looks like:
+และแทนที่จะ export dispatcher เราอาจ export เฉพาะสองฟังก์ชันนี้คือ `createAction` และ `createSubscriber` นี่คือโค้ดที่สมบูรณ์
 
 ```js
 var Dispatcher = function () {
@@ -391,17 +393,17 @@ module.exports = {
 
 ```
 
-If we add the support of AMD, CommonJS and global usage we end up with 66 lines of code, 1.7KB plain or 795 bytes after minification JavaScript.
+ถ้าเราเพิ่มการสนับสนุน AMD, CommonJS และการใช้งาน global โค้ดที่สมบูรณ์จะมีทั้งหมด 66 บรรทัด ขนาดไฟล์ 1.7KB และถ้าบีบอัดเหลือ 795 bytes โดยการ minifying JavaScript
 
-## Wrapping up
+## Wrapper
 
-We have a module that provides two helpers for building a Flux project. Let's write a simple counter app that doesn't involve React so we see the pattern in action.
+เรามีโมดูล helper สองอันสำหรับการสร้าง Flux เราจะลองเขียนแอปนับจำนวนแบบง่าย ๆ โดยที่ไม่ใช้ React เพื่อให้เราเห็นรูปแบบการทำงาน
 
 <span class="new-page"></span>
 
-### The markup
+### Markup
 
-We'll need some UI to interact with it so:
+เราจำเป็นต้องมี UI เพื่อโต้ตอบกับข้อมูลดังกล่าว:
 
 ```html
 <div id="counter">
@@ -411,9 +413,9 @@ We'll need some UI to interact with it so:
 </div>
 ```
 
-The `span` will be used for displaying the current value of our counter. The buttons will change that value.
+`span` ใช้เพื่อแสดงค่าจำนวนปัจจุบัน เมื่อมีการคลิกปุ่มจะเปลี่ยนจำนวนค่า
 
-### The view
+### View
 
 ```js
 const View = function (subscribeToStore, increase, decrease) {
@@ -433,23 +435,22 @@ const View = function (subscribeToStore, increase, decrease) {
 };
 ```
 
-It accepts a store subscriber function and two action function for increasing and decreasing the value. The first few lines of the view are just fetching the DOM elements.
+view จะได้รับฟังก์ชั่น store subscriber และ action สำหรับการ เพิ่มค่า / ลดค่า ในบรรทัดแรก ๆ นั้นเป็นเพียงแค่การ fetch DOM elements
 
-After that we define a `render` function which puts the value inside the `span` tag. `updateState` will be called every time when the store changes. So, we pass these two functions to `subscribeToStore` because we want to get the view updated and we want to get an initial rendering. Remember how our consumers are called at least once by default.
+หลังจากนั้นเราได้กำหนดฟังก์ชัน `render` ซึ่งมีหน้าที่ในการแสดงค่าลงในแท็ก span และฟังก์ชัน `updateState` ซึ่งจะถูกเรียกใช้เมื่อ store มีการเปลี่ยนแปลง เราได้ส่งสองฟังก์ชั่นนั้นไปใน `subscribeToStore` เนื่องจากเราต้องการให้ view มีการเปลี่ยนแปลงข้อมูล จำไว้ว่าฟังก์ชั่น consumer จะถูกเรียกอย่างน้อยหนึ่งครั้ง
 
-The last bit is calling the action functions when we press the buttons.
+สิ่งสุดท้ายที่ต้องทำคือผูก action กับ button element
 
-### The store
+### Store
 
-Every action has a type. It's a good practice to create constants for these types so we don't deal with raw strings.
-
+ทุก action จะมี type การประกาศให้เป็นตัวแปรค่าคงที่วิธีที่ดีที่สุด เนื่องจากเราไม่ต้องมีการประมวลผลกับมัน
 
 ```js
 const INCREASE = 'INCREASE';
 const DECREASE = 'DECREASE';
 ```
 
-Very often we have only one instance of every store. For the sake of simplicity we'll create ours as a singleton.
+โดยปกติเรามักจะมีเพียงหนึ่ง store เท่านั้น เพื่อความง่ายเรา store ให้มีเพียงอันเดียว
 
 ```js
 const CounterStore = {
@@ -468,11 +469,10 @@ const CounterStore = {
 };
 ```
 
-`_data` is the internal state of the store. `update` is the well known method that our dispatcher calls. We process the action inside and say `change()` when we are done. `getValue` is a public method used by the view so it reaches the needed info. In our case this is just the value of the counter.
+`_data` คือ state ที่อยู่ใน store ส่วน `update` นั้นอย่างที่เราได้ทราบกันไปแล้วว่าจะถูกเรียกโดย dispatcher และเราจะ process action ภายในนั้น และฟังก์ชัน `change()` จะถูกเรียกเมื่อข้อมูลได้มีการเปลี่ยนแปลง ส่วน`getValue` นั้นเป็น public method จะถูกเรียกโดย view เมื่อต้องการเรียกข้อมูล ในกรณีนี้เป็นเพียงแค่ข้อมูลจำนวนนับ
 
-### Wiring all the pieces
-
-So, we have the store waiting for actions from the dispatcher. We have the view defined. Let's create the store subscriber, the actions and run everything.
+### เชื่อมทุกส่วนเข้าด้วยกัน
+ตอนนี้เรามี store ที่รอ action จาก the dispatcher และได้สร้าง view ไว้แล้ว เหลือเพียงสร้าง store subscriber มาเริ่มทำให้มันทำงานได้กันเถอะ
 
 ```js
 const { createAction, createSubscriber } = Fluxiny.create();
@@ -485,10 +485,11 @@ const actions = {
 View(counterStoreSubscriber, actions.increase, actions.decrease);
 ```
 
-And that's it. Our view is subscribed to the store and it renders by default because one of our consumers is actually the `render` method.
+และตอนนี้ view ได้ subscribe store เรียบร้อยแล้ว และจะ render โดย default เพราะ method `render` เป็นหนึ่งใน consumer
 
-### A live demo
+### Live demo
 
-A live demo could be seen in the following JSBin [http://jsbin.com/koxidu/embed?js,output](http://jsbin.com/koxidu/embed?js,output). If that's not enough and it seems too simple for you please checkout the example in Fluxiny repository [https://github.com/krasimir/fluxiny/tree/master/example](https://github.com/krasimir/fluxiny/tree/master/example). It uses React as a view layer.
+สามารถดูตัวอย่าง live demo ที่เว็บ JSBin [http://jsbin.com/koxidu/embed?js,output](http://jsbin.com/koxidu/embed?js,output) 
+ถ้าคุณคิดว่าตัวอย่างนี้ยังไม่เพียงพอสามารถไปดูตัวอย่างเพิ่มเติมใน repository Fluxiny [https://github.com/krasimir/fluxiny/tree/master/example](https://github.com/krasimir/fluxiny/tree/master/example) ซึ่งได้ใช้ React ในการสร้าง view
 
-*The Flux implementation discussed in this section is available here [github.com/krasimir/fluxiny](https://github.com/krasimir/fluxiny). Feel free to use it in a browser [directly](https://github.com/krasimir/fluxiny/tree/master/lib) or as a [npm dependency](https://www.npmjs.com/package/fluxiny).*
+*การใช้ Flux ที่กล่าวถึงในบทนี้จะอยู่ที่นี่ [github.com/krasimir/fluxiny](https://github.com/krasimir/fluxiny) สามารถใช้งานได้[โดยตรง](https://github.com/krasimir/fluxiny/tree/master/lib)ในเบราว์เซอร์ หรือผ่าน [npm dependency](https://www.npmjs.com/package/fluxiny)*
