@@ -1,8 +1,8 @@
-# Presentational and container components
+# Presentational component และ Container component
 
-Every beginning is difficult. React is no exception and as beginners we also have lots of questions. Where I'm supposed to put my data, how to communicate changes or how to manage state? The answers of these questions are very often a matter of context and sometimes just practice and experience with the library. However, there is a pattern which is used widely and helps organizing React based applications - splitting the component into presentation and container.
+ในการเริ่มต้นทุก ๆ อย่าง มักจะยากเสมอ React เองนั้น ไม่มีการดักจับข้อผิดพลาดและในฐานะผู้เริ่มต้นพวกเราทุกคนต่างก็มีคำถามมากมาย เราจะเอา Data ไปไว้ที่ไหน? การสื่อสารมีการเปลี่ยนแปลงอย่างไร?แล้วะจัดการกับ state ของข้อมูลยังไง คำถามเหล่านี้เป็นเรื่องสำคัญมาก ๆ ทั้งบริบทและหน้าที่แม้ในบางครั้งก็ต้องอาศัยประสบการณ์และการฝึกฝนกับเจ้า React อย่างไรก็ตามยังมีรูปแบบที่ถูกนำมาใช้อย่างแพร่หลายและมันยังช่วยจัดระเบียบพื้นฐานแอพพลิเคชั่นที่พัฒนาจาก React ไปจนถึงการแยก Component ต่าง ๆ ไม่ว่าจะเป็น Presentational component และ Container component
 
-Let's start with a simple example that illustrates the problem and then split the component into container and presentation. We will use a `Clock` component. It accepts a [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) object as a prop and displays the time in real time.
+เรามาเริ่มต้นกับตัวอย่างง่าย ๆ ซึ่งจะแสดงให้เห็นถึงปัญหา ในการแยก Component ให้อยู่ใน Container และ Presentation  `Clock` ซึ่งรับ Object [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) ในรูปแบบของ prop และส่วนที่แสดงผลเวลาในเวลา ณ ตอนนี้
 
 ```js
 class Clock extends React.Component {
@@ -43,21 +43,24 @@ class Clock extends React.Component {
 
 ReactDOM.render(<Clock time={ new Date() }/>, ...);
 ```
+ใน constructor ของ Component นั้นเราได้เริ่มต้น state ของ Component ซึ่งในกรณีนี้เป็นเพียงแค่ค่า `Date` ณ ตอนนี้ โดยใช้ `setInteval` ซึ่งมีการเปลี่ยนแปลง state ทุก ๆ วินาที และตัว Component เองนั้นก็ยังมีการ render ทุกๆครั้งเมื่อ state นั้นเปลี่ยนแปลงค่า เพื่อให้มันดูเหมือนนาฬิกาจริงๆ เราได้ใช้ตัวช่วย 2 method คือ `_formatTime` และ `_UpdateTime`
+อันดับแรกคือการ Extract ชั่วโมง นาที และวินาที และเพื่อที่จะแน่ใจกับมันต้องติดตามรูปแบบตัวเลขของมัน
+`_updateTime` คือการทำให้ Object `time`เปลี่ยนแปลงค่าให้เป็นปัจุบัน ในทุกๆ 1วินาที
+ 
+## ปัญหาที่เกิดขึ้น
 
-In the constructor of the component we initialize the component's state which in our case is just the current `time` value. By using `setInterval` we update the state every second and the component is re-rendered. To make it looks like a real clock we use two helper methods - `_formatTime` and `_updateTime`. The first one is about extracting hours, minutes and seconds and making sure that they are following the two-digits format. `_updateTime` is mutating the current `time` object by one second.
+ทั้งสอง Component ของเรา ดูเหมือนจะมีภาระหน้าที่ที่มากเกินไป
+* มันอัพเดท state ด้วยตัวมันเอง การเปลี่ยนแปลงเวลาภายใน Component นั้น อาจจะไม่ใช่ความคิดที่ดีเพราะ `Clock` มันจะรู้แค่ค่า Typo เท่านั้น อ้าวแล้วถ้ามีส่วนอื่นของระบบซึ่งข้อมูลมันต้องแบ่งบันซึ่งกันและกัน และมันยากที่แยกมันละ
+* `_formatTime` คือการ Extract ข้อมูลที่ต้องใช้งานจาก object `date` และเพื่อให้แน่ใจว่ามันจะมีค่าตัวเลขสองหลักที่จะแสดงผลออกมาเสมอ
+อย่างไรก็ตาม เรายังสามารถที่จะ Extract ในส่วนที่เป็นฟังก์ชั่นได้ดี เพราะเมื่อมันสัมพันธ์กับชนิดของ  object `time`  จาก object `date` มาเป็น prop ซึ่งเป็นที่รู้จักในฐานะของความเฉพาะของข้อมูล และในบางเวลา มันก็เป็นที่รู้จักในนามของการจำลองภาพ
 
-## The problems
 
-There are couple of things happening in our component. It looks like it has too many responsibilities.
+## การแยกส่วนย่อยของ Container
 
-* It mutates the state by itself. Changing the time inside the component may not be a good idea because then only `Clock` knows the current value. If there is another part of the system that depends on this data it will be difficult to share it.
-* `_formatTime` is actually doing two things - it extracts the needed information from the date object and makes sure that the values are always presented by two digits. That's fine but it will be nice if the extracting is not part of the function because then it is bound to the type of the `time` object (coming as a prop). I.e. knows specifics about the shape of the data and at the same time deals with the visualization of it.
+Containers หรือเป็นที่รู้จักในนามของข้อมูลซึ่งมีรูปร่างและที่มาซึ่งหลายคนคงทราบถึงรายละเอียดและการทำงานของมัน หรือจะเรียกอีกอย่างว่า bussiness logic ซึ่งมันได้รับ รูปแบบและข้อมูลที่ดูเหมือนง่ายโดยการใช้ Presentational component, เราได้ใช้ [higher-order components]  (https://github.com/krasimir/react-in-patterns/tree/master/patterns/higher-order-components) ในการสร้าง container บ่อยมากเพราะมันให้พื้นที่ buffer ซึ่งเราจะสามารถเพิ่มการจัดการข้อมูลด้วยตัวเองได้  
 
-## Extracting the container
 
-Containers know about data, its shape and where it comes from. They know details about how the things work or the so called *business logic*. They receive information and format it so like is easy to be used by the presentational component. Very often we use [higher-order components](https://github.com/krasimir/react-in-patterns/tree/master/patterns/higher-order-components) to create containers because they provide a buffer space where we can insert custom logic.
-
-Here's how our `ClockContainer` looks like:
+นี่คือ `ClockContainer` ลองดูที่
 
 <span class="new-page"></span>
 
@@ -94,14 +97,14 @@ export default class ClockContainer extends React.Component {
   }
 };
 ```
+จะเห็นได้ว่ามันยังคงรับ `Date` (object) รายละเอียดของข้อมูลที่เป็นเวลา (`getHours`, `getMinutes` และ `getSeconds`) จาก ลูป `setInterval` ในตอนจบของการ render ใน Component presentational นั้น จะส่งผ่านตัวเลข 3 ตัวก็คือ ชั่วโมง นาที และวินาที มันดูเหมือนจะไม่มีมีอะไรเกิดขึ้นในการมองหาเพียงแค่ `bussiness logic`เท่านั้น
 
-It still accepts `time` (a date object), does the `setInterval` loop and knows details about the data (`getHours`, `getMinutes` and `getSeconds`). In the end renders the presentational component and passes three numbers for hours, minutes and seconds. There is nothing about how the things look like. Only *business logic*.
+
 
 ## Presentational component
+Presentational Component เป็นสิ่งที่ดูน่าสนใจ มันยังต้องการการปรับแต่งเพิ่มเติมในการทำให้หน้าต่าง ๆ ดูสวยงามยกตัวอย่าง Component ต่าง ๆ ที่ไม่ได้มีความสัมพันธ์กับสิ่งใด ๆ ก็ตามและยังไม่ได้เกี่ยวข้องกับ dependencies ใด ๆ บ่อยครั้งมากที่ต้องมีการดำเนินการกับมัน ในฐานนะ [stateless functional components](https://facebook.github.io/react/blog/2015/10/07/react-v0.14.html#stateless-functional-components) ซึ่งมันไม่ได้มี state ภายในของมันเอง
 
-Presentational components are concerned with how the things look. They have the additional markup needed for making the page pretty. Such components are not bound to anything and have no dependencies. Very often implemented as a [stateless functional components](https://facebook.github.io/react/blog/2015/10/07/react-v0.14.html#stateless-functional-components) they don't have internal state.
-
-In our case the presentational component contains only the two-digits check and returns the `<h1>` tag:
+ในกรณีของเรา มีแค่ Presentational component เท่านั้น ซึ่งมีการตรวจสอบตัวเลขสองหลัก ละ return ออกมา ใน tag `<h1>` 
 
 ```js
 // Clock/Clock.jsx
@@ -116,14 +119,16 @@ export default function Clock(props) {
 };
 ```
 
-## Benefits
 
-Splitting the components in containers and presentation increases the reusability of the components. Our `Clock` function/component may exist in application that doesn't change the time or it's not working with JavaScript's [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) object. That's because it is pretty *dummy*. No details about the data are required.
+## ประโยชน์ที่ได้รับ
+การแยก component ต่าง ๆ นั้น ทั้งใน container component และ presentation component และนำ Component มาใช้อีกครั้งบ่อย ๆ นั้น 
+จากการยกตัวอย่างของเรา `Clock` คือฟังก์ชั่นหรือ Component ในเวลาเดียวกัน อาจจะมีมีอยู่ใน application ซึ่งมันไม่เปลี่ยนแปลงเวลา หรือไม่ทำงานด้วย Oject [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) ใน Javascirpt เพราะว่ามันคือ *dummy* ที่สวยงาม และไม่มีรายละเอียดเกี่ยวกับข้อมูลที่จำเป็น
+  
+Container ต่าง ๆ ที่ encapsulate logic และเราอาจจะใช้มันร่วมกันซึ่งมันยากต่อการ render ออกมาเพราะข้อมูลมันไม่มีจุดรั่วเกี่ยวกับส่วนจำลองการที่นำมายกตัวอย่างที่ดีของการใช้ container โดยไม่สนใจว่ามันจะมีลักษณะต่าง ๆ ยังไงเราหวังว่ามันจะเปลี่ยนจากนาฬิกาดิติตอลไปเป็นนาฬิกาอนาล็อกได้ง่ายเพียงเท่านั้นมันยังจะถูกที่แทนด้วย Component `Clock` ใน method `render`
 
-The containers encapsulate logic and we may use them together with different renderers because they don't leak information about the visual part. The approach that we took above is a good example of how the container doesn't care about how the things look like. We may easily switch from digital to analog clock and the only one change will be to replace the `<Clock>` component in the `render` method.
+แม้แต่การทดสอบยังสามารถที่ทำได้ง่ายขึ้น Component ต่าง ๆ ยังมีหน้าที่ที่น้อยลง หรือไม่มีเลย อีกทั้งยังไม่จำเป็นต้องกังวลกับเรื่อง UI
+Presentational component ต่าง ๆ นั้นมีการ render สิ่งต่าง ๆ ออกมาได้อย่างดิบ ๆ และ ยังเราเดาถึงผลของการออกแบบหน้าตาได้
 
-Even the testing becomes easier because the components have less responsibilities. Containers are not concern with UI. Presentational components are pure renderers and it is enough to run expectations on the resulted markup.
-
-## Final thoughts
-
-The concept of container and presentation is not new at all but it fits really nicely with React. It makes our applications better structured, easy to manage and scale.
+## ข้อคิด
+ข้อคิดของ container และ presentation นั้นไม่ใช่เรื่องใหม่ แต่ทุกอย่างเป็นเรื่องที่เหมาะกับ React จริง ๆ ซึ่งมันสามารถสร้างโครงสร้าง
+Application ของเราให้ดีขึ้นีกทั้งยังมาสามารถจัดการและปรับปรุงขอบเขตได้ง่าย 
