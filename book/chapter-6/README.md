@@ -57,7 +57,7 @@ ReactDOM.render(<Clock time={ new Date() }/>, ...);
 
 ## การแยกส่วนย่อยของ Container
 
-Containers หรือเป็นที่รู้จักในนามของข้อมูลซึ่งมีรูปร่างและที่มาซึ่งหลายคนคงทราบถึงรายละเอียดและการทำงานของมัน หรือจะเรียกอีกอย่างว่า bussiness logic ซึ่งมันได้รับ รูปแบบและข้อมูลที่ดูเหมือนง่ายโดยการใช้ Presentational component, เราได้ใช้ [higher-order components]  (https://github.com/krasimir/react-in-patterns/tree/master/patterns/higher-order-components) ในการสร้าง container บ่อยมากเพราะมันให้พื้นที่ buffer ซึ่งเราจะสามารถเพิ่มการจัดการข้อมูลด้วยตัวเองได้  
+Containers หรือเป็นที่รู้จักในนามของข้อมูลซึ่งมีรูปร่างและที่มาซึ่งหลายคนคงทราบถึงรายละเอียดและการทำงานของมัน หรือจะเรียกอีกอย่างว่า bussiness logic ซึ่งมันได้รับ รูปแบบและข้อมูลที่ดูเหมือนง่ายโดยการใช้ Presentational component, เราได้ใช้ [higher-order components] (../chapter-4#higher-order-component) ในการสร้าง container บ่อยมากเพราะมันให้พื้นที่ buffer ซึ่งเราจะสามารถเพิ่มการจัดการข้อมูลด้วยตัวเองได้  
 
 
 นี่คือ `ClockContainer` ลองดูที่
